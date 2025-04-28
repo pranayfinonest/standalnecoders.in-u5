@@ -399,14 +399,10 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
               <div className="relative w-full bg-gray-50 dark:bg-gray-900" style={{ height: "400px" }}>
-                <Image
+                <img
                   src="/yogendra-singh.png"
                   alt="Yogendra Singh - Founder & CEO"
-                  width={400}
-                  height={400}
-                  className="mx-auto h-full object-contain"
-                  priority
-                  unoptimized
+                  className="h-full w-auto mx-auto object-contain"
                 />
               </div>
               <div className="p-8">
@@ -428,14 +424,11 @@ export default function AboutUs() {
 
             <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
               <div className="relative w-full bg-gray-50 dark:bg-gray-900" style={{ height: "400px" }}>
-                <Image
-                  src="/neeraj-photo.png"
+                {/* Direct embedded image using img tag with src attribute pointing to the blob URL */}
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG-20250428-WA0016.jpg-gahs0DjvTQDhrpXHGwzvCi30D6DJBm.jpeg"
                   alt="Neeraj - Co-founder & CTO"
-                  width={400}
-                  height={400}
-                  className="mx-auto h-full object-contain"
-                  priority
-                  unoptimized
+                  className="h-full w-auto mx-auto object-contain"
                 />
               </div>
               <div className="p-8">
