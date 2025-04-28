@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/_not-found",
+        destination: "/404",
+        permanent: false,
+      },
+    ]
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -11,4 +20,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+module.exports = nextConfig
