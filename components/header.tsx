@@ -54,8 +54,6 @@ export default function Header() {
     router.push("/auth/login")
   }
 
-  // Update the navLinks array to include the booking link
-
   const navLinks = [
     { name: "Home", href: "/" },
     {
@@ -82,17 +80,13 @@ export default function Header() {
   }
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md" : "bg-white dark:bg-gray-900"
-      }`}
-    >
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-gradient flex items-center">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 font-extrabold">
-            Standalone
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white"}`}>
+      <div className="container-custom py-4 flex justify-between items-center">
+        <Link href="/" className="flex items-center">
+          <span className="text-2xl font-bold">
+            <span className="text-blue-600">Standalone</span>
+            <span className="text-gray-900">Coders</span>
           </span>
-          <span className="text-gray-900 dark:text-white">Coders</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -103,15 +97,13 @@ export default function Header() {
                 <button
                   onClick={toggleServices}
                   className={`flex items-center font-medium transition-colors ${
-                    isActive(link.href)
-                      ? "text-blue-600 dark:text-blue-400"
-                      : "hover:text-blue-600 dark:hover:text-blue-400"
+                    isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                   }`}
                 >
                   {link.name}
                   <ChevronDown className="ml-1 w-4 h-4" />
                 </button>
-                <div className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white dark:bg-gray-900 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="absolute left-0 mt-2 w-64 rounded-lg shadow-lg bg-white ring-1 ring-black/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
                   <div className="py-1">
                     {link.items.map((item) => (
                       <Link
@@ -120,9 +112,7 @@ export default function Header() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`block px-4 py-2 text-sm ${
-                          isActive(item.href)
-                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                          isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:bg-gray-50"
                         }`}
                       >
                         {item.name}
@@ -138,9 +128,7 @@ export default function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`font-medium transition-colors ${
-                  isActive(link.href)
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "hover:text-blue-600 dark:hover:text-blue-400"
+                  isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                 }`}
               >
                 {link.name}
@@ -150,10 +138,7 @@ export default function Header() {
 
           {/* Add login/logout button */}
           {mounted && (
-            <button
-              onClick={isLoggedIn ? handleLogout : handleLogin}
-              className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
+            <button onClick={isLoggedIn ? handleLogout : handleLogin} className="primary-button">
               {isLoggedIn ? (
                 <>
                   <LogOut className="w-4 h-4 mr-2" /> Logout
@@ -181,7 +166,7 @@ export default function Header() {
           )}
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -191,7 +176,7 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <nav className="md:hidden bg-white dark:bg-gray-900 py-4 px-6 shadow-lg">
+        <nav className="md:hidden bg-white py-4 px-6 shadow-lg">
           <ul className="space-y-4">
             {navLinks.map((link) =>
               link.dropdown ? (
@@ -199,9 +184,7 @@ export default function Header() {
                   <button
                     onClick={toggleServices}
                     className={`flex items-center font-medium w-full text-left ${
-                      isActive(link.href)
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "hover:text-blue-600 dark:hover:text-blue-400"
+                      isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                     }`}
                   >
                     {link.name}
@@ -216,9 +199,7 @@ export default function Header() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`block font-medium ${
-                              isActive(item.href)
-                                ? "text-blue-600 dark:text-blue-400"
-                                : "hover:text-blue-600 dark:hover:text-blue-400"
+                              isActive(item.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                             }`}
                             onClick={() => setIsMenuOpen(false)}
                           >
@@ -236,9 +217,7 @@ export default function Header() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`block font-medium ${
-                      isActive(link.href)
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "hover:text-blue-600 dark:hover:text-blue-400"
+                      isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >

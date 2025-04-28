@@ -64,29 +64,26 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute top-20 right-20 w-72 h-72 bg-blue-400/5 dark:bg-blue-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-300/5 dark:bg-blue-400/5 rounded-full blur-3xl"></div>
-
-      <div className="container mx-auto px-4">
+    <section id="contact" className="section-spacing bg-white">
+      <div className="container-custom">
         <div className="text-center mb-16">
-          <span className="inline-block py-1 px-3 mb-4 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full">
+          <div className="badge mx-auto mb-4">
+            <span className="w-2 h-2 rounded-full bg-blue-600 mr-2"></span>
             Get In Touch
-          </span>
-          <h2 className="section-heading mb-6">Contact Us</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          </div>
+          <h2 className="section-title">Contact Us</h2>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mt-6">
             Ready to discuss your project? Get in touch today and let's talk about how we can help.
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden gradient-border">
+        <div className="max-w-5xl mx-auto modern-card overflow-hidden">
           <div className="grid md:grid-cols-5">
-            <div className="md:col-span-2 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white p-8 flex flex-col justify-center">
+            <div className="md:col-span-2 bg-blue-600 text-white p-8 flex flex-col justify-center">
               <h3 className="text-2xl font-bold mb-8">Get In Touch</h3>
               <div className="space-y-8">
                 <div className="flex items-start">
-                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                  <div className="bg-white/10 p-3 rounded-full mr-4">
                     <Phone className="w-6 h-6" />
                   </div>
                   <div>
@@ -95,7 +92,7 @@ export default function Contact() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                  <div className="bg-white/10 p-3 rounded-full mr-4">
                     <Mail className="w-6 h-6" />
                   </div>
                   <div>
@@ -104,7 +101,7 @@ export default function Contact() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                  <div className="bg-white/10 p-3 rounded-full mr-4">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
@@ -117,30 +114,28 @@ export default function Contact() {
 
             <div className="md:col-span-3 p-8">
               {submitSuccess ? (
-                <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-lg mb-6 border border-green-200 dark:border-green-800">
-                  <div className="flex items-center">
-                    <svg
-                      className="w-5 h-5 mr-2 text-green-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                    Thank you for your message! We'll get back to you soon.
-                  </div>
+                <div className="bg-green-50 text-green-800 p-4 rounded-lg mb-6 border border-green-200 flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  Thank you for your message! We'll get back to you soon.
                 </div>
               ) : null}
 
               <form onSubmit={handleSubmit} target="_blank">
                 <div className="mb-6">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="name" className="form-label">
                     Name
                   </label>
                   <input
@@ -149,16 +144,14 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-                    } bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                    className={`form-input ${errors.name ? "border-red-500" : ""}`}
                     placeholder="Your name"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                 </div>
 
                 <div className="mb-6">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="email" className="form-label">
                     Email
                   </label>
                   <input
@@ -167,16 +160,14 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-                    } bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                    className={`form-input ${errors.email ? "border-red-500" : ""}`}
                     placeholder="Your email"
                   />
                   {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                 </div>
 
                 <div className="mb-6">
-                  <label htmlFor="details" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="details" className="form-label">
                     Project Details
                   </label>
                   <textarea
@@ -185,21 +176,15 @@ export default function Contact() {
                     value={formData.details}
                     onChange={handleChange}
                     rows={4}
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.details ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-                    } bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                    className={`form-input ${errors.details ? "border-red-500" : ""}`}
                     placeholder="Tell us about your project"
                   ></textarea>
                   {errors.details && <p className="mt-1 text-sm text-red-500">{errors.details}</p>}
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-                >
+                <button type="submit" disabled={isSubmitting} className="primary-button w-full">
                   {isSubmitting ? (
-                    <span className="flex items-center">
+                    <span className="flex items-center justify-center">
                       <svg
                         className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                         xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +208,7 @@ export default function Contact() {
                       Processing...
                     </span>
                   ) : (
-                    <span className="flex items-center">
+                    <span className="flex items-center justify-center">
                       Submit <Send className="ml-2 w-4 h-4" />
                     </span>
                   )}

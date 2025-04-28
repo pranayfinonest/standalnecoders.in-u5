@@ -27,17 +27,16 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400"></div>
-      <div className="absolute top-20 right-20 w-72 h-72 bg-blue-900/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-800/10 rounded-full blur-3xl"></div>
-
-      <div className="container mx-auto px-4">
+    <footer className="bg-gray-50 text-gray-700 pt-16 pb-8 border-t border-gray-200">
+      <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="text-xl font-bold mb-6 text-gradient">StandaloneCoders.in</h3>
-            <p className="text-gray-400 mb-6">
+            <h3 className="text-xl font-bold mb-6">
+              <span className="text-blue-600">Standalone</span>
+              <span className="text-gray-900">Coders</span>
+              <span className="text-gray-500">.in</span>
+            </h3>
+            <p className="text-gray-700 mb-6">
               Providing cybersecurity, AI, digital marketing, and complete technology solutions.
             </p>
             <div className="flex space-x-4">
@@ -47,7 +46,7 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors p-2 bg-gray-800/50 rounded-full hover:bg-gray-800"
+                  className="text-gray-600 hover:text-blue-600 transition-colors p-2 bg-white rounded-full shadow-sm hover:shadow"
                   aria-label={link.name}
                 >
                   {link.icon}
@@ -57,7 +56,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6">Quick Links</h3>
+            <h3 className="text-xl font-bold mb-6 text-gray-900">Quick Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
@@ -65,10 +64,10 @@ export default function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center"
+                    className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
                   >
                     <svg
-                      className="w-4 h-4 mr-2"
+                      className="w-4 h-4 mr-2 text-blue-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -84,7 +83,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6">Services</h3>
+            <h3 className="text-xl font-bold mb-6 text-gray-900">Services</h3>
             <ul className="space-y-3">
               {serviceLinks.map((link, index) => (
                 <li key={index}>
@@ -92,10 +91,10 @@ export default function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center"
+                    className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
                   >
                     <svg
-                      className="w-4 h-4 mr-2"
+                      className="w-4 h-4 mr-2 text-blue-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -111,26 +110,26 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6">Contact</h3>
-            <address className="text-gray-400 not-italic space-y-3">
+            <h3 className="text-xl font-bold mb-6 text-gray-900">Contact</h3>
+            <address className="text-gray-700 not-italic space-y-3">
               <p className="flex items-start">
-                <MapPin className="w-5 h-5 mr-2 mt-1 text-blue-400" />
+                <MapPin className="w-5 h-5 mr-2 mt-1 text-blue-500" />
                 Jaipur, Rajasthan, India 302001
               </p>
               <p className="flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                <Phone className="w-5 h-5 mr-2 text-blue-500" />
                 +91 6378110608
               </p>
               <p className="flex items-center">
-                <Mail className="w-5 h-5 mr-2 text-blue-400" />
+                <Mail className="w-5 h-5 mr-2 text-blue-500" />
                 Yogendra6378@gmail.com
               </p>
             </address>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center">
-          <p className="text-gray-400">© {currentYear} StandaloneCoders.in. All rights reserved.</p>
+        <div className="border-t border-gray-200 pt-8 text-center">
+          <p className="text-gray-600">© {currentYear} StandaloneCoders.in. All rights reserved.</p>
         </div>
       </div>
     </footer>

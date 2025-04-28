@@ -4,56 +4,53 @@ import { ArrowRight } from "lucide-react"
 
 export default function Hero() {
   return (
-    <section className="relative py-24 overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 z-0"></div>
-      <div className="absolute inset-0 bg-[url('/grid-pattern.png')] bg-center opacity-5 z-0"></div>
-
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-blue-400/10 dark:bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-300/10 dark:bg-blue-400/10 rounded-full blur-3xl"></div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center">
-          <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <span className="inline-block py-1 px-3 mb-6 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full animate-fade-in">
+    <section className="section-spacing bg-gradient-to-b from-blue-50 to-white overflow-hidden">
+      <div className="container-custom relative">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+          <div className="lg:w-1/2 animate-fade-in">
+            <div className="badge mb-6">
+              <span className="w-2 h-2 rounded-full bg-blue-600 mr-2"></span>
               Technology Solutions Provider
-            </span>
-            <h1 className="mb-6 leading-tight animate-fade-in">
-              <span className="text-gradient">StandaloneCoders</span>.in
+            </div>
+
+            <h1 className="mb-6 text-gray-900">
+              <span className="text-blue-600">Innovative</span> Technology Solutions for{" "}
+              <span className="text-blue-600">Modern</span> Business
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 animate-fade-in-delay max-w-xl">
-              Delivering expert solutions in Cybersecurity, AI, Digital Marketing, and comprehensive Technology
-              Services.
+
+            <p className="text-xl text-gray-700 mb-8 max-w-xl">
+              Delivering expert solutions in Cybersecurity, AI, Digital Marketing, and comprehensive Technology Services
+              tailored to your business needs.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-delay-2">
-              <Link
-                href="#contact"
-                className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-              >
+
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in animate-delay-200">
+              <Link href="#contact" className="primary-button group" target="_blank" rel="noopener noreferrer">
                 Request a Quote
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
-                href="#services"
-                className="px-8 py-4 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 font-medium rounded-lg shadow-lg hover:shadow-xl border border-blue-200 dark:border-gray-700 transition-all"
-              >
+
+              <Link href="#services" className="outline-button" target="_blank" rel="noopener noreferrer">
                 Explore Services
               </Link>
             </div>
           </div>
-          <div className="lg:w-1/2 animate-float relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg blur opacity-30 dark:opacity-40"></div>
+
+          <div className="lg:w-1/2 animate-scale-in animate-delay-300">
             <div className="relative">
-              <Image
-                src="/digital-transformation-blueprint.png"
-                alt="Digital Transformation"
-                width={600}
-                height={600}
-                className="w-full h-auto rounded-lg shadow-2xl"
-                priority
-              />
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-200 rounded-2xl blur-xl opacity-50"></div>
+              <div className="relative bg-white rounded-xl overflow-hidden shadow-md">
+                <Image
+                  src="/digital-transformation-blueprint.png"
+                  alt="Digital Transformation"
+                  width={600}
+                  height={600}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-blue-100 rounded-xl rotate-12"></div>
+              <div className="absolute -top-6 -left-6 w-16 h-16 bg-blue-200 rounded-xl -rotate-12"></div>
             </div>
           </div>
         </div>
