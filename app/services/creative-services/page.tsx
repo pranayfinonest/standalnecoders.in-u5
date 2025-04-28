@@ -1,113 +1,80 @@
-import ServiceDetail from "@/components/service-detail"
-
 export default function CreativeServicesPage() {
   return (
-    <ServiceDetail
-      title="Creative Services"
-      description="Professional creative solutions to enhance your brand and visual communication. Our creative services are designed to help you stand out in a crowded marketplace with compelling visuals and engaging content."
-      features={[
-        "Video Editing & Production",
-        "Graphic Design & Branding",
-        "Banner & Advertisement Creation",
-        "Website Design & UI/UX",
-        "Content Creation & Copywriting",
-        "Social Media Visual Assets",
-        "Animation & Motion Graphics",
-        "Photography & Image Editing",
-      ]}
-      process={[
-        {
-          step: 1,
-          title: "Creative Brief",
-          description:
-            "We begin by understanding your brand, target audience, and project objectives to establish clear creative direction.",
-        },
-        {
-          step: 2,
-          title: "Concept Development",
-          description:
-            "Our creative team develops concepts and initial designs based on your brief, providing options for your feedback.",
-        },
-        {
-          step: 3,
-          title: "Creation & Refinement",
-          description:
-            "Based on your feedback, we create and refine the final deliverables, ensuring they meet your expectations and objectives.",
-        },
-        {
-          step: 4,
-          title: "Delivery & Support",
-          description:
-            "We deliver the final assets in appropriate formats and provide support for implementation and any adjustments needed.",
-        },
-      ]}
-      packages={[
-        {
-          name: "Essential Creative",
-          price: "₹20,000",
-          description: "Basic creative services for small businesses",
-          features: [
-            "Logo Design OR Basic Video Edit",
-            "Social Media Templates (5)",
-            "Basic Banner Design",
-            "Simple Content Creation",
-          ],
-        },
-        {
-          name: "Professional Creative",
-          price: "₹45,000",
-          description: "Comprehensive creative package for businesses",
-          features: [
-            "Logo Design & Brand Guidelines",
-            "Video Editing (up to 3 minutes)",
-            "Social Media Templates (10)",
-            "Banner & Ad Designs",
-            "Content Creation (5 pieces)",
-            "Basic Animation",
-          ],
-          popular: true,
-        },
-        {
-          name: "Premium Creative",
-          price: "₹90,000+",
-          description: "Advanced creative solutions for established brands",
-          features: [
-            "Complete Brand Identity Package",
-            "Professional Video Production",
-            "Comprehensive Social Media Kit",
-            "Custom Illustrations & Graphics",
-            "Advanced Animation & Motion Graphics",
-            "Full Content Strategy & Creation",
-          ],
-        },
-      ]}
-      faqs={[
-        {
-          question: "How long does a typical creative project take?",
-          answer:
-            "Project timelines vary based on complexity and scope. Simple designs might take a few days, while comprehensive brand identities or video productions could take several weeks. We'll provide a detailed timeline during the initial consultation.",
-        },
-        {
-          question: "Do you provide source files for the designs?",
-          answer:
-            "Yes, we provide source files for most projects, allowing you to make future adjustments or work with other designers. Specific deliverables will be outlined in your project agreement.",
-        },
-        {
-          question: "How many revisions are included in your creative services?",
-          answer:
-            "Our standard packages include two rounds of revisions after the initial concept presentation. Additional revisions can be accommodated at an hourly rate if needed.",
-        },
-        {
-          question: "Can you work with our existing brand guidelines?",
-          answer:
-            "We can work within your existing brand guidelines to ensure consistency across all materials. If you don't have formal guidelines, we can help develop them as part of our services.",
-        },
-      ]}
-      cta={{
-        title: "Elevate Your Brand with Creative Excellence",
-        description:
-          "Ready to make your brand stand out with professional creative services? Contact us today to discuss your project.",
-      }}
-    />
+    <div className="container mx-auto px-4 py-16">
+      <h1 className="text-4xl font-bold mb-8">Creative Services</h1>
+      <div className="prose max-w-none dark:prose-invert">
+        <p className="text-lg mb-6">
+          At StandaloneCoders, our creative team combines artistic vision with strategic thinking to deliver compelling
+          visual assets and content that elevate your brand. We focus on creating memorable experiences that resonate
+          with your target audience and drive engagement.
+        </p>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Our Creative Services Include:</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Brand Identity & Design</h3>
+            <p>
+              We create distinctive brand identities that communicate your values and resonate with your audience. Our
+              services include logo design, visual identity systems, brand guidelines, and brand strategy to ensure
+              consistency across all touchpoints.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Web & UI/UX Design</h3>
+            <p>
+              Our web and UI/UX design services focus on creating intuitive, engaging, and visually appealing digital
+              experiences. We combine aesthetics with functionality to design websites and applications that delight
+              users and achieve your business objectives.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Content Creation</h3>
+            <p>
+              From compelling copywriting to engaging videos and graphics, we create content that tells your story and
+              connects with your audience. Our content strategy ensures that every piece of content serves your broader
+              marketing and business goals.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Digital & Print Design</h3>
+            <p>
+              We design a wide range of digital and print materials, including social media graphics, email templates,
+              brochures, packaging, and marketing collateral. Our designs are not only visually striking but also
+              strategically aligned with your brand and objectives.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-semibold mt-10 mb-4">Why Choose Our Creative Services?</h2>
+        <ul className="list-disc pl-6 space-y-2 mb-8">
+          <li>Talented team of designers, writers, and creative strategists</li>
+          <li>Strategic approach that aligns creativity with business goals</li>
+          <li>Collaborative process that values your input and vision</li>
+          <li>Attention to detail and commitment to quality</li>
+          <li>Versatility across different media and platforms</li>
+          <li>Focus on results and measurable impact</li>
+        </ul>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg mb-8">
+          <h3 className="text-xl font-semibold mb-3">Ready to Elevate Your Brand?</h3>
+          <p className="mb-4">
+            Contact us today to discuss your creative needs. Whether you're looking to refresh your brand, design a new
+            website, or create engaging content, our creative team is ready to bring your vision to life.
+          </p>
+          <a
+            href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
   )
 }

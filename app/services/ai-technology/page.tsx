@@ -1,114 +1,78 @@
-import ServiceDetail from "@/components/service-detail"
-
 export default function AITechnologyPage() {
   return (
-    <ServiceDetail
-      title="AI & Technology Solutions"
-      description="Cutting-edge AI and technology implementations to transform your business operations, enhance efficiency, and drive innovation. Our solutions are designed to help you leverage the power of artificial intelligence and modern technology."
-      features={[
-        "AI Implementation & Integration",
-        "Prompt Engineering & Optimization",
-        "Custom Software Development",
-        "CRM Implementation & Management",
-        "Business Process Automation",
-        "Data Analysis & Visualization",
-        "Cloud Solutions & Migration",
-        "Technology Consulting & Strategy",
-      ]}
-      process={[
-        {
-          step: 1,
-          title: "Requirements Analysis",
-          description:
-            "We begin by understanding your business challenges, processes, and goals to identify opportunities for AI and technology solutions.",
-        },
-        {
-          step: 2,
-          title: "Solution Design",
-          description:
-            "Our team designs a tailored solution that addresses your specific needs, leveraging appropriate technologies and methodologies.",
-        },
-        {
-          step: 3,
-          title: "Development & Implementation",
-          description:
-            "We develop and implement the solution, ensuring seamless integration with your existing systems and processes.",
-        },
-        {
-          step: 4,
-          title: "Training & Support",
-          description:
-            "We provide comprehensive training for your team and ongoing support to ensure you get the maximum value from your technology investment.",
-        },
-      ]}
-      packages={[
-        {
-          name: "Starter Tech",
-          price: "₹40,000",
-          description: "Basic technology solutions for small businesses",
-          features: [
-            "Basic AI Integration",
-            "CRM Setup & Configuration",
-            "Process Automation (1 workflow)",
-            "Technology Assessment",
-            "Basic Training & Documentation",
-          ],
-        },
-        {
-          name: "Business Tech",
-          price: "₹90,000",
-          description: "Comprehensive solutions for growing businesses",
-          features: [
-            "Advanced AI Implementation",
-            "Custom Software Development",
-            "Process Automation (3 workflows)",
-            "Data Analysis & Reporting",
-            "Cloud Migration Assistance",
-            "Comprehensive Training",
-          ],
-          popular: true,
-        },
-        {
-          name: "Enterprise Tech",
-          price: "₹2,00,000+",
-          description: "Advanced solutions for large organizations",
-          features: [
-            "Enterprise-grade AI Solutions",
-            "Custom Software Ecosystem",
-            "Complete Business Process Automation",
-            "Advanced Data Analytics",
-            "Full Cloud Integration",
-            "Dedicated Support & Maintenance",
-          ],
-        },
-      ]}
-      faqs={[
-        {
-          question: "How can AI benefit my specific business?",
-          answer:
-            "AI can benefit businesses in numerous ways, from automating repetitive tasks to providing insights from data analysis. We'll assess your specific operations to identify where AI can create the most value, whether through cost reduction, efficiency improvements, or new capabilities.",
-        },
-        {
-          question: "Do I need technical expertise to use your AI solutions?",
-          answer:
-            "No, our solutions are designed to be user-friendly, and we provide comprehensive training and documentation. Our goal is to make advanced technology accessible to all businesses, regardless of their technical expertise.",
-        },
-        {
-          question: "How long does implementation typically take?",
-          answer:
-            "Implementation timelines vary based on the complexity of the solution and your organization's size. Simple integrations may take a few weeks, while comprehensive enterprise solutions could take several months. We'll provide a detailed timeline during the planning phase.",
-        },
-        {
-          question: "Can your solutions integrate with our existing systems?",
-          answer:
-            "Yes, we design our solutions to integrate with your existing systems whenever possible. During the requirements analysis phase, we'll assess your current technology stack and design integrations to ensure a seamless experience.",
-        },
-      ]}
-      cta={{
-        title: "Transform Your Business with Technology",
-        description:
-          "Ready to harness the power of AI and modern technology? Contact us today to discuss how our solutions can transform your business operations.",
-      }}
-    />
+    <div className="container mx-auto px-4 py-16">
+      <h1 className="text-4xl font-bold mb-8">AI & Technology Solutions</h1>
+      <div className="prose max-w-none dark:prose-invert">
+        <p className="text-lg mb-6">
+          At StandaloneCoders, we harness the power of artificial intelligence and cutting-edge technology to help
+          businesses innovate, automate processes, and gain competitive advantages. Our solutions are designed to solve
+          complex problems and drive digital transformation.
+        </p>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Our AI & Technology Services Include:</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Custom AI Solutions</h3>
+            <p>
+              We develop tailored AI solutions that address your specific business challenges. From predictive analytics
+              and natural language processing to computer vision and recommendation systems, our AI implementations
+              deliver measurable results.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Data Analytics & Business Intelligence</h3>
+            <p>
+              Transform your raw data into actionable insights with our data analytics services. We help you collect,
+              process, and visualize data to make informed business decisions and identify growth opportunities.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Process Automation</h3>
+            <p>
+              Streamline your operations and reduce costs with our process automation solutions. We identify repetitive
+              tasks and implement intelligent automation to improve efficiency, accuracy, and employee productivity.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3">Custom Software Development</h3>
+            <p>
+              Our team of experienced developers creates custom software solutions that align with your business goals.
+              From web and mobile applications to enterprise systems, we deliver high-quality software that solves your
+              unique challenges.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-semibold mt-10 mb-4">Why Choose Our AI & Technology Services?</h2>
+        <ul className="list-disc pl-6 space-y-2 mb-8">
+          <li>Expertise in cutting-edge technologies and methodologies</li>
+          <li>Focus on practical solutions with measurable business impact</li>
+          <li>Scalable implementations that grow with your business</li>
+          <li>Collaborative approach to understand your unique challenges</li>
+          <li>Ongoing support and knowledge transfer</li>
+          <li>Commitment to ethical AI and responsible innovation</li>
+        </ul>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg mb-8">
+          <h3 className="text-xl font-semibold mb-3">Ready to Transform Your Business with Technology?</h3>
+          <p className="mb-4">
+            Contact us today to discuss how our AI and technology solutions can help your business innovate and grow.
+            We'll work with you to understand your challenges and develop a tailored approach to address them.
+          </p>
+          <a
+            href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
   )
 }

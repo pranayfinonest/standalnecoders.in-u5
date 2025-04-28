@@ -45,6 +45,8 @@ export default function Footer() {
                 <a
                   key={index}
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors p-2 bg-gray-800/50 rounded-full hover:bg-gray-800"
                   aria-label={link.name}
                 >
@@ -61,6 +63,8 @@ export default function Footer() {
                 <li key={index}>
                   <Link
                     href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-gray-400 hover:text-blue-400 transition-colors flex items-center"
                   >
                     <svg
@@ -86,6 +90,8 @@ export default function Footer() {
                 <li key={index}>
                   <Link
                     href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-gray-400 hover:text-blue-400 transition-colors flex items-center"
                   >
                     <svg

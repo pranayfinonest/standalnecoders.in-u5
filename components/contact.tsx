@@ -138,7 +138,7 @@ export default function Contact() {
                 </div>
               ) : null}
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} target="_blank">
                 <div className="mb-6">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Name

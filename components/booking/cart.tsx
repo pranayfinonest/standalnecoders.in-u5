@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, CreditCard, Trash2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, CreditCard, Trash2, FileText, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 
 export default function Cart() {
   const router = useRouter()
@@ -112,8 +113,16 @@ export default function Cart() {
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="flex justify-between">
-                        <h3 className="font-bold text-lg">{item.template.name}</h3>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-bold text-lg">{item.template.name}</h3>
+                          {item.pricingOption === "fixed" && (
+                            <Badge className="bg-green-500 hover:bg-green-600 mt-1">Complete Package</Badge>
+                          )}
+                          {item.pricingOption === "quotation" && (
+                            <Badge className="bg-blue-500 hover:bg-blue-600 mt-1">Custom Quotation</Badge>
+                          )}
+                        </div>
                         <p className="font-bold">₹{item.price.toLocaleString()}</p>
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">{item.template.description}</p>
@@ -122,30 +131,50 @@ export default function Cart() {
                         <p className="text-sm">
                           <span className="font-medium">Business:</span> {item.customizations.businessName}
                         </p>
-                        {item.customizations.selectedTechnology &&
-                          item.customizations.selectedTechnology.length > 0 && (
-                            <p className="text-sm">
-                              <span className="font-medium">Technologies:</span>{" "}
-                              {item.customizations.selectedTechnology.length} selected
+
+                        {item.pricingOption === "fixed" ? (
+                          <div className="flex items-start mt-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 mt-0.5" />
+                            <p className="text-sm text-green-700 dark:text-green-400">
+                              All-inclusive package with essential features
                             </p>
-                          )}
-                        {item.customizations.selectedFeatures && item.customizations.selectedFeatures.length > 0 && (
-                          <p className="text-sm">
-                            <span className="font-medium">Features:</span> {item.customizations.selectedFeatures.length}{" "}
-                            selected
-                          </p>
-                        )}
-                        {item.customizations.additionalPages.length > 0 && (
-                          <p className="text-sm">
-                            <span className="font-medium">Additional Pages:</span>{" "}
-                            {item.customizations.additionalPages.join(", ")}
-                          </p>
-                        )}
-                        {item.customizations.selectedAddOns && item.customizations.selectedAddOns.length > 0 && (
-                          <p className="text-sm">
-                            <span className="font-medium">Add-ons:</span> {item.customizations.selectedAddOns.length}{" "}
-                            selected
-                          </p>
+                          </div>
+                        ) : item.pricingOption === "quotation" ? (
+                          <div className="flex items-start mt-2">
+                            <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400 mr-2 mt-0.5" />
+                            <p className="text-sm text-blue-700 dark:text-blue-400">
+                              Custom quotation with budget: ₹{item.customizations.customBudget.toLocaleString()}
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            {item.customizations.selectedTechnology &&
+                              item.customizations.selectedTechnology.length > 0 && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Technologies:</span>{" "}
+                                  {item.customizations.selectedTechnology.length} selected
+                                </p>
+                              )}
+                            {item.customizations.selectedFeatures &&
+                              item.customizations.selectedFeatures.length > 0 && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Features:</span>{" "}
+                                  {item.customizations.selectedFeatures.length} selected
+                                </p>
+                              )}
+                            {item.customizations.additionalPages.length > 0 && (
+                              <p className="text-sm">
+                                <span className="font-medium">Additional Pages:</span>{" "}
+                                {item.customizations.additionalPages.join(", ")}
+                              </p>
+                            )}
+                            {item.customizations.selectedAddOns && item.customizations.selectedAddOns.length > 0 && (
+                              <p className="text-sm">
+                                <span className="font-medium">Add-ons:</span>{" "}
+                                {item.customizations.selectedAddOns.length} selected
+                              </p>
+                            )}
+                          </>
                         )}
                       </div>
 

@@ -36,3 +36,39 @@ export async function verifyPayment(
     return { success: false, error: "Failed to verify payment" }
   }
 }
+
+export async function createOrder(amount: number, currency = "INR", receipt?: string, notes?: any) {
+  try {
+    // Create a Razorpay order
+    const response = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString("base64")}`,
+      },
+      body: JSON.stringify({
+        amount: amount, // Razorpay expects amount in paise
+        currency,
+        receipt,
+        notes,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("Razorpay API error:", errorData)
+      return null
+    }
+
+    const order = await response.json()
+
+    return {
+      id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+    }
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error)
+    return null
+  }
+}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight, Info, Plus, Trash2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, Info, Plus, Trash2, CheckCircle2, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,6 +13,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useToast } from "@/hooks/use-toast"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Slider } from "@/components/ui/slider"
 
 // Mock template data - in a real app, this would come from an API
 const templates = [
@@ -64,6 +66,13 @@ const templates = [
     description: "Fully customized website designed from scratch",
     image: "/modern-portfolio-design.png",
     basePrice: 35000,
+  },
+  {
+    id: "complete",
+    name: "Complete Website Package",
+    description: "All-inclusive website with essential features at a fixed price",
+    image: "/templates/complete-package.png",
+    basePrice: 19999,
   },
 ]
 
@@ -143,6 +152,22 @@ const featureOptions = {
   ],
 }
 
+// Complete package features (included in the ₹19,999 package)
+const completePackageFeatures = [
+  "Responsive Design for All Devices",
+  "5 Custom Pages",
+  "Contact Form with Email Notifications",
+  "Basic SEO Setup",
+  "Social Media Integration",
+  "Google Analytics Integration",
+  "Content Management System",
+  "1 Year Free Hosting",
+  "Free Domain for 1 Year",
+  "SSL Certificate",
+  "24/7 Customer Support",
+  "Mobile-Friendly Design",
+]
+
 export default function CustomizeForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -166,6 +191,9 @@ export default function CustomizeForm() {
     selectedFeatures: [],
     selectedAddOns: [],
     specialRequirements: "",
+    pricingOption: selectedTemplate.id === "complete" ? "fixed" : "custom",
+    customBudget: 20000,
+    customRequirements: "",
   })
 
   const [newPage, setNewPage] = useState("")
@@ -174,6 +202,16 @@ export default function CustomizeForm() {
 
   // Calculate total price whenever relevant form data changes
   useEffect(() => {
+    if (formData.pricingOption === "fixed" && selectedTemplate.id === "complete") {
+      setTotalPrice(19999)
+      return
+    }
+
+    if (formData.pricingOption === "quotation") {
+      setTotalPrice(formData.customBudget)
+      return
+    }
+
     let price = selectedTemplate.basePrice
 
     // Add price for additional pages (₹3000 per page)
@@ -210,7 +248,10 @@ export default function CustomizeForm() {
     formData.selectedTechnology,
     formData.selectedAddOns,
     formData.selectedFeatures,
+    formData.pricingOption,
+    formData.customBudget,
     selectedTemplate.basePrice,
+    selectedTemplate.id,
   ])
 
   const handleChange = (e) => {
@@ -274,6 +315,13 @@ export default function CustomizeForm() {
     }))
   }
 
+  const handleBudgetChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      customBudget: value[0],
+    }))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
@@ -284,6 +332,7 @@ export default function CustomizeForm() {
       template: selectedTemplate,
       customizations: formData,
       price: totalPrice,
+      pricingOption: formData.pricingOption,
     }
 
     // Get existing cart or initialize empty array
@@ -324,17 +373,437 @@ export default function CustomizeForm() {
                     <div className="flex-1">
                       <h2 className="text-xl font-bold">{selectedTemplate.name}</h2>
                       <p className="text-gray-600 dark:text-gray-400 mb-4">{selectedTemplate.description}</p>
-                      <p className="font-medium">Base Price: ₹{selectedTemplate.basePrice.toLocaleString()}</p>
+
+                      {selectedTemplate.id === "complete" ? (
+                        <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-md border border-green-200 dark:border-green-800 mt-2">
+                          <p className="font-medium text-green-700 dark:text-green-400 flex items-center">
+                            <CheckCircle2 className="h-4 w-4 mr-2" /> Fixed Price: ₹19,999
+                          </p>
+                          <p className="text-sm text-green-600 dark:text-green-500 mt-1">
+                            All-inclusive package with essential features
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="font-medium">Base Price: ₹{selectedTemplate.basePrice.toLocaleString()}</p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Accordion type="single" collapsible defaultValue="business-info">
-                <AccordionItem value="business-info">
-                  <AccordionTrigger>Business Information</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 p-1">
+              {/* Pricing Options */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-bold mb-4">Pricing Options</h2>
+
+                  <RadioGroup
+                    value={formData.pricingOption}
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, pricingOption: value }))}
+                    className="space-y-4"
+                  >
+                    {selectedTemplate.id === "complete" && (
+                      <div className="flex items-start space-x-2 p-4 border rounded-md bg-green-50 dark:bg-green-900/10">
+                        <RadioGroupItem value="fixed" id="pricing-fixed" />
+                        <div className="grid gap-1.5 leading-none">
+                          <Label htmlFor="pricing-fixed" className="text-base font-medium">
+                            Complete Website Package - ₹19,999
+                          </Label>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            All-inclusive website with essential features at a fixed price
+                          </p>
+                          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {completePackageFeatures.map((feature, index) => (
+                              <div key={index} className="flex items-center text-sm">
+                                <CheckCircle2 className="h-3.5 w-3.5 text-green-600 dark:text-green-400 mr-2" />
+                                <span>{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-start space-x-2 p-4 border rounded-md">
+                      <RadioGroupItem
+                        value="custom"
+                        id="pricing-custom"
+                        disabled={selectedTemplate.id === "complete" && formData.pricingOption === "fixed"}
+                      />
+                      <div className="grid gap-1.5 leading-none">
+                        <Label htmlFor="pricing-custom" className="text-base font-medium">
+                          Custom Build - ₹{selectedTemplate.basePrice.toLocaleString()} base price
+                        </Label>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Customize your website with specific features and add-ons
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-2 p-4 border rounded-md">
+                      <RadioGroupItem value="quotation" id="pricing-quotation" />
+                      <div className="grid gap-1.5 leading-none w-full">
+                        <Label htmlFor="pricing-quotation" className="text-base font-medium">
+                          Custom Quotation - Set your budget
+                        </Label>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Tell us your budget and requirements, and we'll create a custom solution
+                        </p>
+
+                        {formData.pricingOption === "quotation" && (
+                          <div className="mt-4 space-y-4">
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <Label>Your Budget: ₹{formData.customBudget.toLocaleString()}</Label>
+                              </div>
+                              <Slider
+                                defaultValue={[20000]}
+                                min={10000}
+                                max={100000}
+                                step={1000}
+                                value={[formData.customBudget]}
+                                onValueChange={handleBudgetChange}
+                              />
+                              <div className="flex justify-between text-xs text-gray-500">
+                                <span>₹10,000</span>
+                                <span>₹100,000</span>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="customRequirements">Your Requirements</Label>
+                              <Textarea
+                                id="customRequirements"
+                                name="customRequirements"
+                                placeholder="Describe what you need in your website, including any specific features or functionality"
+                                value={formData.customRequirements}
+                                onChange={handleChange}
+                                rows={4}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </RadioGroup>
+                </CardContent>
+              </Card>
+
+              {formData.pricingOption !== "quotation" && formData.pricingOption !== "fixed" && (
+                <Accordion type="single" collapsible defaultValue="business-info">
+                  <AccordionItem value="business-info">
+                    <AccordionTrigger>Business Information</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4 p-1">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="businessName">Business Name *</Label>
+                            <Input
+                              id="businessName"
+                              name="businessName"
+                              value={formData.businessName}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="businessType">Business Type/Industry *</Label>
+                            <Input
+                              id="businessType"
+                              name="businessType"
+                              value={formData.businessType}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="contactEmail">Contact Email *</Label>
+                            <Input
+                              id="contactEmail"
+                              name="contactEmail"
+                              type="email"
+                              value={formData.contactEmail}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="contactPhone">Contact Phone</Label>
+                            <Input
+                              id="contactPhone"
+                              name="contactPhone"
+                              value={formData.contactPhone}
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="websiteGoals">Website Goals *</Label>
+                          <Textarea
+                            id="websiteGoals"
+                            name="websiteGoals"
+                            placeholder="What are the main goals for your website? (e.g., generate leads, sell products, showcase portfolio)"
+                            value={formData.websiteGoals}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="technology">
+                    <AccordionTrigger>Technology & Features</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-6 p-1">
+                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                          <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="tech">Technologies</TabsTrigger>
+                            <TabsTrigger value="features">Features</TabsTrigger>
+                            <TabsTrigger value="add-ons">Add-ons</TabsTrigger>
+                          </TabsList>
+
+                          <TabsContent value="tech" className="mt-4">
+                            <div className="space-y-4">
+                              <h3 className="font-medium">Select Technologies</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                Choose the technologies you want for your website development.
+                              </p>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {technologies.map((tech) => (
+                                  <div key={tech.id} className="flex items-start space-x-3 p-3 border rounded-md">
+                                    <Checkbox
+                                      id={`tech-${tech.id}`}
+                                      checked={formData.selectedTechnology.includes(tech.id)}
+                                      onCheckedChange={() => handleTechnologyToggle(tech.id)}
+                                    />
+                                    <div className="flex-1">
+                                      <Label htmlFor={`tech-${tech.id}`} className="font-medium">
+                                        {tech.name} - ₹{tech.price.toLocaleString()}
+                                      </Label>
+                                      <p className="text-sm text-gray-500 dark:text-gray-400">{tech.description}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="features" className="mt-4">
+                            <div className="space-y-4">
+                              <h3 className="font-medium">Select Website Features</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                Choose the features you want to include in your website.
+                              </p>
+
+                              <h4 className="text-sm font-medium mt-4 mb-2">Business Features</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {featureOptions.business.map((feature) => (
+                                  <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
+                                    <Checkbox
+                                      id={`feature-${feature.id}`}
+                                      checked={formData.selectedFeatures.includes(feature.id)}
+                                      onCheckedChange={() => handleFeatureToggle(feature.id)}
+                                    />
+                                    <div className="flex-1">
+                                      <Label htmlFor={`feature-${feature.id}`} className="font-medium">
+                                        {feature.name} - ₹{feature.price.toLocaleString()}
+                                      </Label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <h4 className="text-sm font-medium mt-4 mb-2">E-Commerce Features</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {featureOptions.ecommerce.map((feature) => (
+                                  <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
+                                    <Checkbox
+                                      id={`feature-${feature.id}`}
+                                      checked={formData.selectedFeatures.includes(feature.id)}
+                                      onCheckedChange={() => handleFeatureToggle(feature.id)}
+                                    />
+                                    <div className="flex-1">
+                                      <Label htmlFor={`feature-${feature.id}`} className="font-medium">
+                                        {feature.name} - ₹{feature.price.toLocaleString()}
+                                      </Label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <h4 className="text-sm font-medium mt-4 mb-2">General Features</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {featureOptions.general.map((feature) => (
+                                  <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
+                                    <Checkbox
+                                      id={`feature-${feature.id}`}
+                                      checked={formData.selectedFeatures.includes(feature.id)}
+                                      onCheckedChange={() => handleFeatureToggle(feature.id)}
+                                    />
+                                    <div className="flex-1">
+                                      <Label htmlFor={`feature-${feature.id}`} className="font-medium">
+                                        {feature.name} - ₹{feature.price.toLocaleString()}
+                                      </Label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="add-ons" className="mt-4">
+                            <div className="space-y-4">
+                              <h3 className="font-medium">Select Add-ons</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                Enhance your website with these additional services and features.
+                              </p>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {addOns.map((addOn) => (
+                                  <div key={addOn.id} className="flex items-start space-x-3 p-3 border rounded-md">
+                                    <Checkbox
+                                      id={`addon-${addOn.id}`}
+                                      checked={formData.selectedAddOns.includes(addOn.id)}
+                                      onCheckedChange={() => handleAddOnToggle(addOn.id)}
+                                    />
+                                    <div className="flex-1">
+                                      <Label htmlFor={`addon-${addOn.id}`} className="font-medium">
+                                        {addOn.name} - ₹{addOn.price.toLocaleString()}
+                                      </Label>
+                                      <p className="text-sm text-gray-500 dark:text-gray-400">{addOn.description}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </TabsContent>
+                        </Tabs>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="design-preferences">
+                    <AccordionTrigger>Design Preferences</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4 p-1">
+                        <div className="space-y-2">
+                          <Label htmlFor="colorPreferences">Color Preferences</Label>
+                          <Textarea
+                            id="colorPreferences"
+                            name="colorPreferences"
+                            placeholder="Describe your preferred color scheme or specific colors to use"
+                            value={formData.colorPreferences}
+                            onChange={handleChange}
+                          />
+                        </div>
+
+                        <div className="flex items-start space-x-2">
+                          <Checkbox
+                            id="existingBranding"
+                            name="existingBranding"
+                            checked={formData.existingBranding}
+                            onCheckedChange={(checked) =>
+                              setFormData((prev) => ({ ...prev, existingBranding: checked === true }))
+                            }
+                          />
+                          <div className="grid gap-1.5 leading-none">
+                            <Label
+                              htmlFor="existingBranding"
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              I have existing branding materials (logo, style guide, etc.)
+                            </Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              You'll be able to upload these during the checkout process
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="pages-content">
+                    <AccordionTrigger>Pages & Content</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4 p-1">
+                        <div>
+                          <Label className="mb-2 block">Additional Pages</Label>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                            Your template includes standard pages. Add any additional pages you need (₹3,000 per page).
+                          </p>
+
+                          <div className="flex gap-2 mb-4">
+                            <Input
+                              placeholder="Page name (e.g., FAQ, Team, Gallery)"
+                              value={newPage}
+                              onChange={(e) => setNewPage(e.target.value)}
+                              className="flex-1"
+                            />
+                            <Button type="button" onClick={handleAddPage} size="sm">
+                              <Plus className="h-4 w-4 mr-1" /> Add
+                            </Button>
+                          </div>
+
+                          {formData.additionalPages.length > 0 ? (
+                            <ul className="space-y-2">
+                              {formData.additionalPages.map((page, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded-md"
+                                >
+                                  <span>{page}</span>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRemovePage(index)}
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                  </Button>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                              No additional pages added yet
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="special-requirements">
+                    <AccordionTrigger>Special Requirements</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4 p-1">
+                        <div className="space-y-2">
+                          <Label htmlFor="specialRequirements">Additional Requirements or Notes</Label>
+                          <Textarea
+                            id="specialRequirements"
+                            name="specialRequirements"
+                            placeholder="Any special features, functionality, or other requirements not covered above"
+                            value={formData.specialRequirements}
+                            onChange={handleChange}
+                            rows={5}
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )}
+
+              {formData.pricingOption === "fixed" && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold mb-4">Business Information</h2>
+                    <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="businessName">Business Name *</Label>
@@ -393,246 +862,64 @@ export default function CustomizeForm() {
                         />
                       </div>
                     </div>
-                  </AccordionContent>
-                </AccordionItem>
+                  </CardContent>
+                </Card>
+              )}
 
-                <AccordionItem value="technology">
-                  <AccordionTrigger>Technology & Features</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-6 p-1">
-                      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                        <TabsList className="grid w-full grid-cols-3">
-                          <TabsTrigger value="tech">Technologies</TabsTrigger>
-                          <TabsTrigger value="features">Features</TabsTrigger>
-                          <TabsTrigger value="add-ons">Add-ons</TabsTrigger>
-                        </TabsList>
-
-                        <TabsContent value="tech" className="mt-4">
-                          <div className="space-y-4">
-                            <h3 className="font-medium">Select Technologies</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                              Choose the technologies you want for your website development.
-                            </p>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {technologies.map((tech) => (
-                                <div key={tech.id} className="flex items-start space-x-3 p-3 border rounded-md">
-                                  <Checkbox
-                                    id={`tech-${tech.id}`}
-                                    checked={formData.selectedTechnology.includes(tech.id)}
-                                    onCheckedChange={() => handleTechnologyToggle(tech.id)}
-                                  />
-                                  <div className="flex-1">
-                                    <Label htmlFor={`tech-${tech.id}`} className="font-medium">
-                                      {tech.name} - ₹{tech.price.toLocaleString()}
-                                    </Label>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">{tech.description}</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </TabsContent>
-
-                        <TabsContent value="features" className="mt-4">
-                          <div className="space-y-4">
-                            <h3 className="font-medium">Select Website Features</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                              Choose the features you want to include in your website.
-                            </p>
-
-                            <h4 className="text-sm font-medium mt-4 mb-2">Business Features</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {featureOptions.business.map((feature) => (
-                                <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
-                                  <Checkbox
-                                    id={`feature-${feature.id}`}
-                                    checked={formData.selectedFeatures.includes(feature.id)}
-                                    onCheckedChange={() => handleFeatureToggle(feature.id)}
-                                  />
-                                  <div className="flex-1">
-                                    <Label htmlFor={`feature-${feature.id}`} className="font-medium">
-                                      {feature.name} - ₹{feature.price.toLocaleString()}
-                                    </Label>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-
-                            <h4 className="text-sm font-medium mt-4 mb-2">E-Commerce Features</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {featureOptions.ecommerce.map((feature) => (
-                                <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
-                                  <Checkbox
-                                    id={`feature-${feature.id}`}
-                                    checked={formData.selectedFeatures.includes(feature.id)}
-                                    onCheckedChange={() => handleFeatureToggle(feature.id)}
-                                  />
-                                  <div className="flex-1">
-                                    <Label htmlFor={`feature-${feature.id}`} className="font-medium">
-                                      {feature.name} - ₹{feature.price.toLocaleString()}
-                                    </Label>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-
-                            <h4 className="text-sm font-medium mt-4 mb-2">General Features</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {featureOptions.general.map((feature) => (
-                                <div key={feature.id} className="flex items-start space-x-3 p-3 border rounded-md">
-                                  <Checkbox
-                                    id={`feature-${feature.id}`}
-                                    checked={formData.selectedFeatures.includes(feature.id)}
-                                    onCheckedChange={() => handleFeatureToggle(feature.id)}
-                                  />
-                                  <div className="flex-1">
-                                    <Label htmlFor={`feature-${feature.id}`} className="font-medium">
-                                      {feature.name} - ₹{feature.price.toLocaleString()}
-                                    </Label>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </TabsContent>
-
-                        <TabsContent value="add-ons" className="mt-4">
-                          <div className="space-y-4">
-                            <h3 className="font-medium">Select Add-ons</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                              Enhance your website with these additional services and features.
-                            </p>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {addOns.map((addOn) => (
-                                <div key={addOn.id} className="flex items-start space-x-3 p-3 border rounded-md">
-                                  <Checkbox
-                                    id={`addon-${addOn.id}`}
-                                    checked={formData.selectedAddOns.includes(addOn.id)}
-                                    onCheckedChange={() => handleAddOnToggle(addOn.id)}
-                                  />
-                                  <div className="flex-1">
-                                    <Label htmlFor={`addon-${addOn.id}`} className="font-medium">
-                                      {addOn.name} - ₹{addOn.price.toLocaleString()}
-                                    </Label>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">{addOn.description}</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </TabsContent>
-                      </Tabs>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="design-preferences">
-                  <AccordionTrigger>Design Preferences</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 p-1">
-                      <div className="space-y-2">
-                        <Label htmlFor="colorPreferences">Color Preferences</Label>
-                        <Textarea
-                          id="colorPreferences"
-                          name="colorPreferences"
-                          placeholder="Describe your preferred color scheme or specific colors to use"
-                          value={formData.colorPreferences}
-                          onChange={handleChange}
-                        />
-                      </div>
-
-                      <div className="flex items-start space-x-2">
-                        <Checkbox
-                          id="existingBranding"
-                          name="existingBranding"
-                          checked={formData.existingBranding}
-                          onCheckedChange={(checked) =>
-                            setFormData((prev) => ({ ...prev, existingBranding: checked === true }))
-                          }
-                        />
-                        <div className="grid gap-1.5 leading-none">
-                          <Label
-                            htmlFor="existingBranding"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          >
-                            I have existing branding materials (logo, style guide, etc.)
-                          </Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            You'll be able to upload these during the checkout process
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="pages-content">
-                  <AccordionTrigger>Pages & Content</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 p-1">
-                      <div>
-                        <Label className="mb-2 block">Additional Pages</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                          Your template includes standard pages. Add any additional pages you need (₹3,000 per page).
-                        </p>
-
-                        <div className="flex gap-2 mb-4">
+              {formData.pricingOption === "quotation" && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold mb-4">Business Information</h2>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="businessName">Business Name *</Label>
                           <Input
-                            placeholder="Page name (e.g., FAQ, Team, Gallery)"
-                            value={newPage}
-                            onChange={(e) => setNewPage(e.target.value)}
-                            className="flex-1"
+                            id="businessName"
+                            name="businessName"
+                            value={formData.businessName}
+                            onChange={handleChange}
+                            required
                           />
-                          <Button type="button" onClick={handleAddPage} size="sm">
-                            <Plus className="h-4 w-4 mr-1" /> Add
-                          </Button>
                         </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="businessType">Business Type/Industry *</Label>
+                          <Input
+                            id="businessType"
+                            name="businessType"
+                            value={formData.businessType}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
 
-                        {formData.additionalPages.length > 0 ? (
-                          <ul className="space-y-2">
-                            {formData.additionalPages.map((page, index) => (
-                              <li
-                                key={index}
-                                className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded-md"
-                              >
-                                <span>{page}</span>
-                                <Button type="button" variant="ghost" size="sm" onClick={() => handleRemovePage(index)}>
-                                  <Trash2 className="h-4 w-4 text-red-500" />
-                                </Button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-                            No additional pages added yet
-                          </p>
-                        )}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="contactEmail">Contact Email *</Label>
+                          <Input
+                            id="contactEmail"
+                            name="contactEmail"
+                            type="email"
+                            value={formData.contactEmail}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="contactPhone">Contact Phone</Label>
+                          <Input
+                            id="contactPhone"
+                            name="contactPhone"
+                            value={formData.contactPhone}
+                            onChange={handleChange}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="special-requirements">
-                  <AccordionTrigger>Special Requirements</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 p-1">
-                      <div className="space-y-2">
-                        <Label htmlFor="specialRequirements">Additional Requirements or Notes</Label>
-                        <Textarea
-                          id="specialRequirements"
-                          name="specialRequirements"
-                          placeholder="Any special features, functionality, or other requirements not covered above"
-                          value={formData.specialRequirements}
-                          onChange={handleChange}
-                          rows={5}
-                        />
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                  </CardContent>
+                </Card>
+              )}
 
               <div className="flex justify-end">
                 <Button type="submit" size="lg">
@@ -650,110 +937,124 @@ export default function CustomizeForm() {
                 <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span>Template Base Price</span>
-                    <span>₹{selectedTemplate.basePrice.toLocaleString()}</span>
-                  </div>
-
-                  {formData.selectedTechnology.length > 0 && (
-                    <div>
-                      <div className="flex justify-between font-medium">
-                        <span>Technologies</span>
-                        <span>
-                          ₹
-                          {formData.selectedTechnology
-                            .reduce((total, techId) => {
-                              const tech = technologies.find((t) => t.id === techId)
-                              return total + (tech ? tech.price : 0)
-                            }, 0)
-                            .toLocaleString()}
-                        </span>
-                      </div>
-                      <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
-                        {formData.selectedTechnology.map((techId) => {
-                          const tech = technologies.find((t) => t.id === techId)
-                          return tech ? (
-                            <li key={tech.id} className="flex justify-between">
-                              <span>{tech.name}</span>
-                              <span>₹{tech.price.toLocaleString()}</span>
-                            </li>
-                          ) : null
-                        })}
-                      </ul>
+                  {formData.pricingOption === "fixed" ? (
+                    <div className="flex justify-between font-medium">
+                      <span>Complete Website Package</span>
+                      <span>₹19,999</span>
                     </div>
-                  )}
+                  ) : formData.pricingOption === "quotation" ? (
+                    <div className="flex justify-between font-medium">
+                      <span>Custom Quotation</span>
+                      <span>₹{formData.customBudget.toLocaleString()}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-between">
+                        <span>Template Base Price</span>
+                        <span>₹{selectedTemplate.basePrice.toLocaleString()}</span>
+                      </div>
 
-                  {formData.selectedFeatures.length > 0 && (
-                    <div>
-                      <div className="flex justify-between font-medium">
-                        <span>Features</span>
-                        <span>
-                          ₹
-                          {formData.selectedFeatures
-                            .reduce((total, featureId) => {
+                      {formData.selectedTechnology.length > 0 && (
+                        <div>
+                          <div className="flex justify-between font-medium">
+                            <span>Technologies</span>
+                            <span>
+                              ₹
+                              {formData.selectedTechnology
+                                .reduce((total, techId) => {
+                                  const tech = technologies.find((t) => t.id === techId)
+                                  return total + (tech ? tech.price : 0)
+                                }, 0)
+                                .toLocaleString()}
+                            </span>
+                          </div>
+                          <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
+                            {formData.selectedTechnology.map((techId) => {
+                              const tech = technologies.find((t) => t.id === techId)
+                              return tech ? (
+                                <li key={tech.id} className="flex justify-between">
+                                  <span>{tech.name}</span>
+                                  <span>₹{tech.price.toLocaleString()}</span>
+                                </li>
+                              ) : null
+                            })}
+                          </ul>
+                        </div>
+                      )}
+
+                      {formData.selectedFeatures.length > 0 && (
+                        <div>
+                          <div className="flex justify-between font-medium">
+                            <span>Features</span>
+                            <span>
+                              ₹
+                              {formData.selectedFeatures
+                                .reduce((total, featureId) => {
+                                  const allFeatures = [
+                                    ...featureOptions.business,
+                                    ...featureOptions.ecommerce,
+                                    ...featureOptions.general,
+                                  ]
+                                  const feature = allFeatures.find((f) => f.id === featureId)
+                                  return total + (feature ? feature.price : 0)
+                                }, 0)
+                                .toLocaleString()}
+                            </span>
+                          </div>
+                          <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
+                            {formData.selectedFeatures.map((featureId) => {
                               const allFeatures = [
                                 ...featureOptions.business,
                                 ...featureOptions.ecommerce,
                                 ...featureOptions.general,
                               ]
                               const feature = allFeatures.find((f) => f.id === featureId)
-                              return total + (feature ? feature.price : 0)
-                            }, 0)
-                            .toLocaleString()}
-                        </span>
-                      </div>
-                      <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
-                        {formData.selectedFeatures.map((featureId) => {
-                          const allFeatures = [
-                            ...featureOptions.business,
-                            ...featureOptions.ecommerce,
-                            ...featureOptions.general,
-                          ]
-                          const feature = allFeatures.find((f) => f.id === featureId)
-                          return feature ? (
-                            <li key={feature.id} className="flex justify-between">
-                              <span>{feature.name}</span>
-                              <span>₹{feature.price.toLocaleString()}</span>
-                            </li>
-                          ) : null
-                        })}
-                      </ul>
-                    </div>
-                  )}
+                              return feature ? (
+                                <li key={feature.id} className="flex justify-between">
+                                  <span>{feature.name}</span>
+                                  <span>₹{feature.price.toLocaleString()}</span>
+                                </li>
+                              ) : null
+                            })}
+                          </ul>
+                        </div>
+                      )}
 
-                  {formData.additionalPages.length > 0 && (
-                    <div className="flex justify-between">
-                      <span>Additional Pages ({formData.additionalPages.length})</span>
-                      <span>₹{(formData.additionalPages.length * 3000).toLocaleString()}</span>
-                    </div>
-                  )}
+                      {formData.additionalPages.length > 0 && (
+                        <div className="flex justify-between">
+                          <span>Additional Pages ({formData.additionalPages.length})</span>
+                          <span>₹{(formData.additionalPages.length * 3000).toLocaleString()}</span>
+                        </div>
+                      )}
 
-                  {formData.selectedAddOns.length > 0 && (
-                    <div>
-                      <div className="flex justify-between font-medium">
-                        <span>Add-ons</span>
-                        <span>
-                          ₹
-                          {formData.selectedAddOns
-                            .reduce((total, addOnId) => {
+                      {formData.selectedAddOns.length > 0 && (
+                        <div>
+                          <div className="flex justify-between font-medium">
+                            <span>Add-ons</span>
+                            <span>
+                              ₹
+                              {formData.selectedAddOns
+                                .reduce((total, addOnId) => {
+                                  const addOn = addOns.find((a) => a.id === addOnId)
+                                  return total + (addOn ? addOn.price : 0)
+                                }, 0)
+                                .toLocaleString()}
+                            </span>
+                          </div>
+                          <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
+                            {formData.selectedAddOns.map((addOnId) => {
                               const addOn = addOns.find((a) => a.id === addOnId)
-                              return total + (addOn ? addOn.price : 0)
-                            }, 0)
-                            .toLocaleString()}
-                        </span>
-                      </div>
-                      <ul className="mt-2 space-y-1 text-sm text-gray-500 dark:text-gray-400">
-                        {formData.selectedAddOns.map((addOnId) => {
-                          const addOn = addOns.find((a) => a.id === addOnId)
-                          return addOn ? (
-                            <li key={addOn.id} className="flex justify-between">
-                              <span>{addOn.name}</span>
-                              <span>₹{addOn.price.toLocaleString()}</span>
-                            </li>
-                          ) : null
-                        })}
-                      </ul>
-                    </div>
+                              return addOn ? (
+                                <li key={addOn.id} className="flex justify-between">
+                                  <span>{addOn.name}</span>
+                                  <span>₹{addOn.price.toLocaleString()}</span>
+                                </li>
+                              ) : null
+                            })}
+                          </ul>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   <div className="border-t pt-4 mt-4">
@@ -765,17 +1066,48 @@ export default function CustomizeForm() {
                   </div>
                 </div>
 
-                <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
-                  <div className="flex items-start">
-                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h3 className="font-medium text-blue-600 dark:text-blue-400">Need Help?</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        Our team is available to assist with your website customization. Contact us for any questions.
-                      </p>
+                {formData.pricingOption === "quotation" && (
+                  <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
+                    <div className="flex items-start">
+                      <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium text-blue-600 dark:text-blue-400">Custom Quotation</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          Our team will review your requirements and budget, and provide a detailed quotation within 24
+                          hours.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {formData.pricingOption === "fixed" && (
+                  <div className="mt-6 bg-green-50 dark:bg-green-900/20 p-4 rounded-md">
+                    <div className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium text-green-600 dark:text-green-400">All-Inclusive Package</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          Get a complete website with all essential features at a fixed price of ₹19,999.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {formData.pricingOption === "custom" && (
+                  <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
+                    <div className="flex items-start">
+                      <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium text-blue-600 dark:text-blue-400">Need Help?</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          Our team is available to assist with your website customization. Contact us for any questions.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

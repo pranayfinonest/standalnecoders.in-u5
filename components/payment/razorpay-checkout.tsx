@@ -2,165 +2,161 @@
 
 import { useState } from "react"
 import Script from "next/script"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { verifyPayment } from "@/app/actions/payment"
-import { useToast } from "@/hooks/use-toast"
-
-interface RazorpayCheckoutProps {
-  amount: number
-  currency?: string
-  name: string
-  description: string
-  customerName: string
-  customerEmail: string
-  customerPhone: string
-  notes?: Record<string, string>
-  onSuccess?: (data: any) => void
-  onError?: (error: any) => void
-}
-
-declare global {
-  interface Window {
-    Razorpay: any
-  }
-}
+import { createOrder } from "@/app/actions/payment"
+import { getRazorpayKey } from "@/app/actions/razorpay"
 
 export default function RazorpayCheckout({
   amount,
-  currency = "INR",
   name,
   description,
-  customerName,
-  customerEmail,
-  customerPhone,
-  notes = {},
   onSuccess,
   onError,
-}: RazorpayCheckoutProps) {
+  prefill = {},
+  notes = {},
+  openInNewTab = true,
+}) {
   const [isLoading, setIsLoading] = useState(false)
   const [isScriptLoaded, setIsScriptLoaded] = useState(false)
-  const router = useRouter()
-  const { toast } = useToast()
+
+  const handleScriptLoad = () => {
+    setIsScriptLoaded(true)
+  }
 
   const handlePayment = async () => {
+    if (!isScriptLoaded) {
+      console.error("Razorpay script not loaded")
+      return
+    }
+
+    setIsLoading(true)
+
     try {
-      setIsLoading(true)
+      // Create order on the server
+      const order = await createOrder(amount * 100) // Convert to paise
 
-      // Create a Razorpay order
-      const response = await fetch("/api/razorpay", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount,
-          currency,
-          receipt: `receipt_${Date.now()}`,
-          notes,
-        }),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || "Failed to create order")
+      if (!order || !order.id) {
+        throw new Error("Failed to create order")
       }
 
-      const { id: orderId, key } = await response.json()
-
-      // Initialize Razorpay checkout
+      // Initialize payment
+      const keyResponse = await getRazorpayKey()
       const options = {
-        key,
-        amount: amount * 100, // Razorpay expects amount in paise
-        currency,
-        name,
-        description,
-        order_id: orderId,
+        key: keyResponse.keyId,
+        amount: amount * 100, // in paise
+        currency: "INR",
+        name: "StandaloneCoders",
+        description: description || "Website Development Services",
+        order_id: order.id,
+        handler: (response) => {
+          setIsLoading(false)
+          if (onSuccess) onSuccess(response)
+        },
         prefill: {
-          name: customerName,
-          email: customerEmail,
-          contact: customerPhone,
+          name: prefill.name || "",
+          email: prefill.email || "",
+          contact: prefill.contact || "",
         },
-        notes,
+        notes: {
+          ...notes,
+        },
         theme: {
-          color: "#6366f1", // Indigo color to match the site theme
-        },
-        handler: async (response: any) => {
-          try {
-            // Verify the payment
-            const result = await verifyPayment(
-              response.razorpay_payment_id,
-              response.razorpay_order_id,
-              response.razorpay_signature,
-            )
-
-            if (result.success) {
-              // Clear the cart
-              localStorage.setItem("cart", "[]")
-
-              // Show success toast
-              toast({
-                title: "Payment successful!",
-                description: `Your order #${result.orderId} has been confirmed.`,
-              })
-
-              // Call the success callback if provided
-              if (onSuccess) {
-                onSuccess(result)
-              }
-
-              // Redirect to confirmation page
-              router.push(`/booking/confirmation?orderId=${result.orderId}`)
-            } else {
-              throw new Error(result.error || "Payment verification failed")
-            }
-          } catch (error) {
-            console.error("Payment verification error:", error)
-            toast({
-              title: "Payment verification failed",
-              description: "There was an error verifying your payment. Please contact support.",
-              variant: "destructive",
-            })
-
-            if (onError) {
-              onError(error)
-            }
-          }
+          color: "#3B82F6",
         },
         modal: {
           ondismiss: () => {
             setIsLoading(false)
-            toast({
-              title: "Payment cancelled",
-              description: "You have cancelled the payment process.",
-            })
           },
+          escape: true,
+          confirm_close: true,
         },
       }
 
       const razorpay = new window.Razorpay(options)
-      razorpay.open()
+
+      if (openInNewTab) {
+        // Open in new tab by creating a form and submitting it
+        const form = document.createElement("form")
+        form.method = "POST"
+        form.action = "https://api.razorpay.com/v1/checkout/embedded"
+        form.target = "_blank"
+
+        const keyResponse = await getRazorpayKey()
+        const keyInput = document.createElement("input")
+        keyInput.type = "hidden"
+        keyInput.name = "key_id"
+        keyInput.value = keyResponse.keyId
+
+        const orderIdInput = document.createElement("input")
+        orderIdInput.type = "hidden"
+        orderIdInput.name = "order_id"
+        orderIdInput.value = order.id
+
+        const amountInput = document.createElement("input")
+        amountInput.type = "hidden"
+        amountInput.name = "amount"
+        amountInput.value = (amount * 100).toString()
+
+        const nameInput = document.createElement("input")
+        nameInput.type = "hidden"
+        nameInput.name = "name"
+        nameInput.value = "StandaloneCoders"
+
+        const descriptionInput = document.createElement("input")
+        descriptionInput.type = "hidden"
+        descriptionInput.name = "description"
+        descriptionInput.value = description || "Website Development Services"
+
+        const prefillNameInput = document.createElement("input")
+        prefillNameInput.type = "hidden"
+        prefillNameInput.name = "prefill[name]"
+        prefillNameInput.value = prefill.name || ""
+
+        const prefillEmailInput = document.createElement("input")
+        prefillEmailInput.type = "hidden"
+        prefillEmailInput.name = "prefill[email]"
+        prefillEmailInput.value = prefill.email || ""
+
+        const prefillContactInput = document.createElement("input")
+        prefillContactInput.type = "hidden"
+        prefillContactInput.name = "prefill[contact]"
+        prefillContactInput.value = prefill.contact || ""
+
+        form.appendChild(keyInput)
+        form.appendChild(orderIdInput)
+        form.appendChild(amountInput)
+        form.appendChild(nameInput)
+        form.appendChild(descriptionInput)
+        form.appendChild(prefillNameInput)
+        form.appendChild(prefillEmailInput)
+        form.appendChild(prefillContactInput)
+
+        document.body.appendChild(form)
+        form.submit()
+        document.body.removeChild(form)
+
+        // Handle success callback after payment
+        window.addEventListener("message", (e) => {
+          if (e.data && e.data.razorpay_payment_id) {
+            onSuccess(e.data)
+          }
+        })
+      } else {
+        // Open in same window
+        razorpay.open()
+      }
     } catch (error) {
       console.error("Payment error:", error)
-      toast({
-        title: "Payment failed",
-        description: error.message || "There was an error processing your payment. Please try again.",
-        variant: "destructive",
-      })
-
-      if (onError) {
-        onError(error)
-      }
-    } finally {
       setIsLoading(false)
+      if (onError) onError(error)
     }
   }
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={() => setIsScriptLoaded(true)} />
-      <Button onClick={handlePayment} disabled={isLoading || !isScriptLoaded} className="w-full" size="lg">
-        {isLoading ? "Processing..." : "Pay with Razorpay"}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={handleScriptLoad} strategy="lazyOnload" />
+      <Button onClick={handlePayment} disabled={isLoading || !isScriptLoaded} className="w-full">
+        {isLoading ? "Processing..." : "Pay Now"}
       </Button>
     </>
   )
