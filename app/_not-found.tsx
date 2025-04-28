@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-export default function NotFound() {
+export default function AppNotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
       <div className="text-center max-w-md">
