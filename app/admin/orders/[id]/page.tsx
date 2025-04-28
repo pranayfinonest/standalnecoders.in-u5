@@ -1,17 +1,21 @@
-import AdminLayout from "@/components/admin/admin-layout"
+import { Suspense } from "react"
 import AdminOrderDetail from "@/components/admin/admin-order-detail"
 
-export const metadata = {
-  title: "Order Details | StandaloneCoders Admin",
-  description: "View and manage order details in the admin panel.",
-}
+export const dynamic = "force-static"
 
-export default function AdminOrderDetailPage({ params }) {
-  const orderId = params.id
-
+export default function AdminOrderDetailPage({ params }: { params: { id: string } }) {
   return (
-    <AdminLayout>
-      <AdminOrderDetail orderId={orderId} />
-    </AdminLayout>
+    <Suspense
+      fallback={
+        <div className="container mx-auto px-4 py-12 flex justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      }
+    >
+      <AdminOrderDetail orderId={params.id} />
+    </Suspense>
   )
 }

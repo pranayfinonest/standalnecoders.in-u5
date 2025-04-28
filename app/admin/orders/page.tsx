@@ -1,15 +1,21 @@
-import AdminLayout from "@/components/admin/admin-layout"
+import { Suspense } from "react"
 import OrderManagement from "@/components/admin/order-management"
 
-export const metadata = {
-  title: "Order Management | StandaloneCoders Admin",
-  description: "Manage orders of StandaloneCoders website.",
-}
+export const dynamic = "force-static"
 
-export default function OrdersPage() {
+export default function AdminOrdersPage() {
   return (
-    <AdminLayout>
+    <Suspense
+      fallback={
+        <div className="container mx-auto px-4 py-12 flex justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      }
+    >
       <OrderManagement />
-    </AdminLayout>
+    </Suspense>
   )
 }

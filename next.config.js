@@ -5,12 +5,6 @@ const nextConfig = {
     domains: ["placeholder.svg"],
     unoptimized: true,
   },
-  async redirects() {
-    return []
-  },
-  async rewrites() {
-    return []
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
