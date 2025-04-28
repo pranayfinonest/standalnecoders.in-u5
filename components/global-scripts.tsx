@@ -4,33 +4,34 @@ import { useEffect } from "react"
 
 export default function GlobalScripts() {
   useEffect(() => {
-    // Function to make all links open in new tabs
-    const makeLinksOpenInNewTab = () => {
+    // Function to ensure links open in the same tab
+    const makeLinksOpenInSameTab = () => {
       // Get all links on the page
       const links = document.querySelectorAll("a")
 
       // Loop through each link
       links.forEach((link) => {
-        // Skip links that already have target attribute set
-        if (link.hasAttribute("target")) return
-
         // Skip anchor links (links that start with #)
         if (link.getAttribute("href")?.startsWith("#")) return
 
-        // Set target and rel attributes
-        link.setAttribute("target", "_blank")
-        link.setAttribute("rel", "noopener noreferrer")
+        // Skip links that need to open in new tabs (if you have any specific ones)
+        if (link.classList.contains("external-link")) return
+
+        // Remove target attribute if it exists
+        if (link.hasAttribute("target")) {
+          link.removeAttribute("target")
+        }
       })
     }
 
     // Run once on mount
-    makeLinksOpenInNewTab()
+    makeLinksOpenInSameTab()
 
     // Set up a mutation observer to handle dynamically added links
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === "childList") {
-          makeLinksOpenInNewTab()
+          makeLinksOpenInSameTab()
         }
       })
     })

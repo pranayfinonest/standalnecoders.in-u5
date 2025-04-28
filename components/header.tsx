@@ -109,8 +109,6 @@ export default function Header() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className={`block px-4 py-2 text-sm ${
                           isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:bg-gray-50"
                         }`}
@@ -125,8 +123,6 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`font-medium transition-colors ${
                   isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                 }`}
@@ -196,8 +192,6 @@ export default function Header() {
                         <li key={item.name}>
                           <Link
                             href={item.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className={`block font-medium ${
                               isActive(item.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                             }`}
@@ -214,8 +208,6 @@ export default function Header() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className={`block font-medium ${
                       isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                     }`}
