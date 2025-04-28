@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Rocket, Zap, Users, Code, ArrowRight, Sparkles } from "lucide-react"
+import { Rocket, Zap, Users, Code, ArrowRight, Sparkles, Shield, BarChart, Award } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import ProductDemo from "./product-demo"
@@ -65,6 +65,24 @@ export default function AboutUs() {
     },
   ]
 
+  const clientBenefits = [
+    {
+      icon: <Shield className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+      title: "Trusted Partnership",
+      description: "We build long-term relationships based on trust, transparency, and consistent delivery of value.",
+    },
+    {
+      icon: <BarChart className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+      title: "Measurable Results",
+      description: "Our solutions are designed to deliver tangible business outcomes with clear ROI for our clients.",
+    },
+    {
+      icon: <Award className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+      title: "Quality Assurance",
+      description: "We maintain rigorous quality standards throughout our development and delivery processes.",
+    },
+  ]
+
   return (
     <section id="about" className="py-20 bg-white dark:bg-gray-900">
       {/* Hero Section */}
@@ -108,6 +126,9 @@ export default function AboutUs() {
                     alt="StandaloneCoders Team"
                     fill
                     className="object-cover rounded-lg shadow-lg"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    quality={85}
+                    priority
                   />
                 </div>
               </div>
@@ -116,8 +137,40 @@ export default function AboutUs() {
         </div>
       </div>
 
-      {/* Product Demo Section */}
+      {/* Client Focus Section */}
       <div className="bg-gray-50 dark:bg-gray-800/50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 mb-4">
+                <Users className="w-6 h-6" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Client-Focused Approach</h2>
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+                We prioritize our clients' success through dedicated service and exceptional solutions.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {clientBenefits.map((benefit, index) => (
+                <div
+                  key={index}
+                  className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-all border-t-4 border-blue-600"
+                >
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
+                    {benefit.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{benefit.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{benefit.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Product Demo Section */}
+      <div className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -149,7 +202,7 @@ export default function AboutUs() {
       </div>
 
       {/* Mission Section */}
-      <div className="py-20">
+      <div className="bg-gray-50 dark:bg-gray-800/50 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 mb-4">
@@ -163,7 +216,7 @@ export default function AboutUs() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
                 <svg
                   className="w-6 h-6 text-blue-600 dark:text-blue-400"
@@ -186,7 +239,7 @@ export default function AboutUs() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
                 <svg
                   className="w-6 h-6 text-blue-600 dark:text-blue-400"
@@ -209,7 +262,7 @@ export default function AboutUs() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
                 <svg
                   className="w-6 h-6 text-blue-600 dark:text-blue-400"
@@ -270,7 +323,7 @@ export default function AboutUs() {
             ))}
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
             {values.map(
               (value) =>
                 activeValue === value.id && (
@@ -316,7 +369,7 @@ export default function AboutUs() {
                       <div className="w-10 h-10 rounded-full bg-blue-600 dark:bg-blue-500 border-4 border-white dark:border-gray-800 z-10"></div>
                     </div>
                     <div className={`md:w-1/2 ${index % 2 === 0 ? "md:pr-12" : "md:pl-12"}`}>
-                      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                         <div className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-2">
                           {milestone.year}
                         </div>
@@ -332,52 +385,75 @@ export default function AboutUs() {
         </div>
       </div>
 
-      {/* Team Section */}
+      {/* Leadership Section */}
       <div id="team" className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Meet Our Team</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              A passionate group of tech enthusiasts building the future.
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Leadership</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Our leadership team brings together expertise in technology, business strategy, and industry knowledge to
+              drive innovation and deliver exceptional results.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((member) => (
-              <div
-                key={member}
-                className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all"
-              >
-                <div className="relative h-64">
-                  <Image
-                    src={`/team-member-${member}.png`}
-                    alt={`Team Member ${member}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">Team Member</h3>
-                  <p className="text-blue-600 dark:text-blue-400 mb-3">Co-Founder & Developer</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    Passionate about building innovative solutions that solve real-world problems.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
+              <div className="relative w-full bg-gray-50 dark:bg-gray-900" style={{ height: "400px" }}>
+                <Image
+                  src="/yogendra-singh.png"
+                  alt="Yogendra Singh - Founder & CEO"
+                  width={400}
+                  height={400}
+                  className="mx-auto h-full object-contain"
+                  priority
+                  unoptimized
+                />
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-2">Yogendra Singh</h3>
+                <p className="text-blue-600 dark:text-blue-400 text-lg mb-4">Founder & CEO</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Yogendra is a visionary tech entrepreneur with extensive experience in software development and
+                  business strategy. His leadership has been instrumental in establishing StandaloneCoders as a trusted
+                  technology partner for businesses across industries.
+                </p>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300 italic">
+                    "Our mission is to make cutting-edge technology accessible to businesses of all sizes, helping them
+                    thrive in the digital age."
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
 
-          <div className="mt-12 text-center">
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              We're always looking for talented individuals to join our team.
-            </p>
-            <Link
-              href="#contact"
-              className="px-6 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium rounded-lg inline-flex items-center transition-all"
-            >
-              Join Our Team
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Link>
+            <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
+              <div className="relative w-full bg-gray-50 dark:bg-gray-900" style={{ height: "400px" }}>
+                <Image
+                  src="/neeraj-photo.png"
+                  alt="Neeraj - Co-founder & CTO"
+                  width={400}
+                  height={400}
+                  className="mx-auto h-full object-contain"
+                  priority
+                  unoptimized
+                />
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-2">Neeraj</h3>
+                <p className="text-blue-600 dark:text-blue-400 text-lg mb-4">Co-Founder & CTO</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Neeraj is the technical mastermind behind our solutions with deep expertise in cybersecurity, software
+                  architecture, and emerging technologies. His technical leadership ensures our clients receive robust,
+                  scalable, and future-proof solutions.
+                </p>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300 italic">
+                    "We build technology solutions that not only solve today's challenges but are designed to adapt and
+                    evolve with our clients' needs."
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -388,13 +464,13 @@ export default function AboutUs() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to innovate with us?</h2>
             <p className="text-xl text-blue-100 mb-8">
-              Let's discuss how our startup can help your business grow with technology.
+              Let's discuss how our expertise can help your business grow with technology.
             </p>
             <Link
               href="#contact"
               className="px-8 py-4 bg-white text-blue-600 font-medium rounded-lg shadow-lg hover:shadow-xl transition-all inline-flex items-center"
             >
-              Get Started
+              Schedule a Consultation
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
           </div>

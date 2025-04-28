@@ -7,15 +7,29 @@ import { ArrowRight, Calendar, CheckCircle, FileText, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/hooks/use-toast"
 
 export default function OrderConfirmation() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { toast } = useToast()
   const orderId = searchParams.get("orderId")
   const [order, setOrder] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [currentUserEmail, setCurrentUserEmail] = useState("")
 
   useEffect(() => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
+    if (!isLoggedIn) {
+      router.push("/auth/login")
+      return
+    }
+
+    // Get current user email
+    const userData = JSON.parse(localStorage.getItem("user") || "{}")
+    setCurrentUserEmail(userData.email || "")
+
     if (!orderId) {
       router.push("/booking/dashboard")
       return
@@ -26,13 +40,24 @@ export default function OrderConfirmation() {
     const foundOrder = orders.find((o) => o.id === orderId)
 
     if (foundOrder) {
-      setOrder(foundOrder)
+      // Only allow access if this order belongs to the current user
+      if (foundOrder.customer && foundOrder.customer.email === userData.email) {
+        setOrder(foundOrder)
+      } else {
+        // Order doesn't belong to current user
+        toast({
+          title: "Access denied",
+          description: "You don't have permission to view this order.",
+          variant: "destructive",
+        })
+        router.push("/booking/dashboard")
+      }
     } else {
       router.push("/booking/dashboard")
     }
 
     setIsLoading(false)
-  }, [orderId, router])
+  }, [orderId, router, toast])
 
   if (isLoading) {
     return (
