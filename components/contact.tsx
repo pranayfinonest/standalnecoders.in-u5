@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Phone, Mail, Send } from "lucide-react"
+import { Phone, Mail, Send, MapPin } from "lucide-react"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -64,32 +64,52 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="contact" className="py-24 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-blue-400/5 dark:bg-blue-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-300/5 dark:bg-blue-400/5 rounded-full blur-3xl"></div>
+
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Contact Us</h2>
+          <span className="inline-block py-1 px-3 mb-4 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full">
+            Get In Touch
+          </span>
+          <h2 className="section-heading mb-6">Contact Us</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Ready to start your project? Get in touch with us today and let's discuss how we can help.
+            Ready to discuss your project? Get in touch today and let's talk about how we can help.
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden">
+        <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden gradient-border">
           <div className="grid md:grid-cols-5">
-            <div className="md:col-span-2 bg-blue-600 dark:bg-blue-800 text-white p-8 flex flex-col justify-center">
-              <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
-              <div className="space-y-6">
+            <div className="md:col-span-2 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white p-8 flex flex-col justify-center">
+              <h3 className="text-2xl font-bold mb-8">Get In Touch</h3>
+              <div className="space-y-8">
                 <div className="flex items-start">
-                  <Phone className="w-6 h-6 mr-4 mt-1" />
+                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                    <Phone className="w-6 h-6" />
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Phone</h4>
-                    <p>+91 98765 43210</p>
+                    <p>+91 6378110608</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <Mail className="w-6 h-6 mr-4 mt-1" />
+                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                    <Mail className="w-6 h-6" />
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Email</h4>
-                    <p>info@standalonecoders.in</p>
+                    <p>Yogendra6378@gmail.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="bg-white/20 p-3 rounded-full mr-4">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Address</h4>
+                    <p>Jaipur Rajasthan</p>
                   </div>
                 </div>
               </div>
@@ -97,8 +117,24 @@ export default function Contact() {
 
             <div className="md:col-span-3 p-8">
               {submitSuccess ? (
-                <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-lg mb-6">
-                  Thank you for your message! We'll get back to you soon.
+                <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-lg mb-6 border border-green-200 dark:border-green-800">
+                  <div className="flex items-center">
+                    <svg
+                      className="w-5 h-5 mr-2 text-green-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    Thank you for your message! We'll get back to you soon.
+                  </div>
                 </div>
               ) : null}
 
@@ -160,7 +196,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">
