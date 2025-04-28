@@ -114,7 +114,7 @@ export default function Cart() {
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <h3 className="font-bold text-lg">{item.template.name}</h3>
-                        <p className="font-bold">₹{item.price}</p>
+                        <p className="font-bold">₹{item.price.toLocaleString()}</p>
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">{item.template.description}</p>
 
@@ -122,13 +122,26 @@ export default function Cart() {
                         <p className="text-sm">
                           <span className="font-medium">Business:</span> {item.customizations.businessName}
                         </p>
+                        {item.customizations.selectedTechnology &&
+                          item.customizations.selectedTechnology.length > 0 && (
+                            <p className="text-sm">
+                              <span className="font-medium">Technologies:</span>{" "}
+                              {item.customizations.selectedTechnology.length} selected
+                            </p>
+                          )}
+                        {item.customizations.selectedFeatures && item.customizations.selectedFeatures.length > 0 && (
+                          <p className="text-sm">
+                            <span className="font-medium">Features:</span> {item.customizations.selectedFeatures.length}{" "}
+                            selected
+                          </p>
+                        )}
                         {item.customizations.additionalPages.length > 0 && (
                           <p className="text-sm">
                             <span className="font-medium">Additional Pages:</span>{" "}
                             {item.customizations.additionalPages.join(", ")}
                           </p>
                         )}
-                        {item.customizations.selectedAddOns.length > 0 && (
+                        {item.customizations.selectedAddOns && item.customizations.selectedAddOns.length > 0 && (
                           <p className="text-sm">
                             <span className="font-medium">Add-ons:</span> {item.customizations.selectedAddOns.length}{" "}
                             selected
@@ -186,7 +199,7 @@ export default function Cart() {
                     <span>
                       Subtotal ({cartItems.length} {cartItems.length === 1 ? "item" : "items"})
                     </span>
-                    <span>₹{calculateTotal()}</span>
+                    <span>₹{calculateTotal().toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between">
@@ -198,7 +211,7 @@ export default function Cart() {
 
                   <div className="flex justify-between font-bold text-lg">
                     <span>Estimated Total</span>
-                    <span>₹{calculateTotal()}</span>
+                    <span>₹{calculateTotal().toLocaleString()}</span>
                   </div>
                 </div>
 

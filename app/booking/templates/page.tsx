@@ -4,7 +4,7 @@ import Footer from "@/components/footer"
 
 export const metadata = {
   title: "Website Templates | StandaloneCoders",
-  description: "Browse our collection of professional website templates for your business.",
+  description: "Browse our collection of professional website templates starting at ₹15,000.",
 }
 
 export default function TemplatesPage() {
@@ -21,8 +21,11 @@ export default function TemplatesPage() {
               </span>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Choose Your Perfect Design</h1>
               <p className="text-xl text-gray-700 dark:text-gray-300">
-                Browse our collection of professionally designed website templates and find the perfect starting point
-                for your online presence.
+                Browse our collection of professionally designed website templates starting at ₹15,000 and find the
+                perfect starting point for your online presence.
+              </p>
+              <p className="mt-4 text-lg text-blue-600 dark:text-blue-400">
+                Customize technologies and features to meet your specific business needs
               </p>
             </div>
           </div>

@@ -25,8 +25,8 @@ const templates = [
     description: "Professional template for established businesses",
     image: "/templates/business-template.png",
     category: "business",
-    features: ["Responsive", "Contact Form", "About Page", "Services Section"],
-    price: 599,
+    features: ["Responsive Design", "Contact Form", "About Page", "Services Section"],
+    price: 15000,
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ const templates = [
     image: "/templates/ecommerce-template.png",
     category: "ecommerce",
     features: ["Product Catalog", "Shopping Cart", "Payment Integration", "Order Management"],
-    price: 899,
+    price: 25000,
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ const templates = [
     image: "/templates/portfolio-template.png",
     category: "portfolio",
     features: ["Project Gallery", "About Section", "Skills Display", "Contact Form"],
-    price: 499,
+    price: 18000,
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ const templates = [
     image: "/templates/blog-template.png",
     category: "blog",
     features: ["Article Layout", "Categories", "Search Function", "Author Profiles"],
-    price: 549,
+    price: 16000,
   },
   {
     id: 5,
@@ -62,7 +62,7 @@ const templates = [
     image: "/templates/startup-template.png",
     category: "business",
     features: ["Hero Section", "Feature Highlights", "Pricing Table", "Newsletter Signup"],
-    price: 649,
+    price: 20000,
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ const templates = [
     image: "/templates/restaurant-template.png",
     category: "business",
     features: ["Menu Display", "Reservation System", "Gallery", "Location Map"],
-    price: 699,
+    price: 22000,
   },
 ]
 
@@ -165,9 +165,9 @@ export default function WebsiteTemplates() {
                           </ul>
                         </div>
                         <div>
-                          <h4 className="font-medium mb-2">Price</h4>
-                          <p className="text-2xl font-bold">₹{template.price}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">One-time payment</p>
+                          <h4 className="font-medium mb-2">Starting Price</h4>
+                          <p className="text-2xl font-bold">₹{template.price.toLocaleString()}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Customizable options available</p>
                           <Button className="mt-4 w-full" asChild>
                             <Link href={`/booking/customize?template=${template.id}`}>Select & Customize</Link>
                           </Button>
@@ -184,7 +184,7 @@ export default function WebsiteTemplates() {
                 <Badge variant="outline">{template.category}</Badge>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{template.description}</p>
-              <p className="font-bold">₹{template.price}</p>
+              <p className="font-bold">Starting at ₹{template.price.toLocaleString()}</p>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex justify-between">
               <Button variant="outline" size="sm" asChild>
@@ -225,7 +225,7 @@ export default function WebsiteTemplates() {
           specific needs and brand.
         </p>
         <Button asChild>
-          <Link href="/booking/custom">
+          <Link href="/booking/customize?template=custom">
             Request Custom Design <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
