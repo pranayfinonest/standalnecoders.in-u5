@@ -9,35 +9,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/new-path", request.url))
   }
 
-  // Check if the request is for a non-existent page
-  const pathname = request.nextUrl.pathname
-
-  // List of known routes to exclude from 404 handling
-  const knownRoutes = [
-    "/",
-    "/about",
-    "/contact",
-    "/services",
-    "/booking",
-    "/dashboard",
-    "/admin",
-    "/auth",
-    "/api",
-    "/_next",
-    "/favicon.ico",
-    "/robots.txt",
-    "/sitemap.xml",
-    "/404",
-  ]
-
-  // Check if the pathname starts with any known route
-  const isKnownRoute = knownRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))
-
-  // If it's not a known route, redirect to the static 404 page
-  if (!isKnownRoute) {
-    return NextResponse.rewrite(new URL("/404", request.url))
-  }
-
   return NextResponse.next()
 }
 

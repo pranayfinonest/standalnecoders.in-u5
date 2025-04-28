@@ -1,22 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: ["placeholder.svg"],
+    unoptimized: true,
+  },
   async redirects() {
-    return [
-      {
-        source: "/_not-found",
-        destination: "/404",
-        permanent: false,
-      },
-    ]
+    return []
+  },
+  async rewrites() {
+    return []
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true,
   },
 }
 
