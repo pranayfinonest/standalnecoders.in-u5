@@ -10,8 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
+import RazorpayCheckout from "@/components/payment/razorpay-checkout"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function CheckoutForm() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function CheckoutForm() {
   const [cartItems, setCartItems] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState("razorpay")
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -29,11 +31,6 @@ export default function CheckoutForm() {
     state: "",
     postalCode: "",
     country: "India",
-    paymentMethod: "card",
-    cardNumber: "",
-    cardExpiry: "",
-    cardCvc: "",
-    nameOnCard: "",
     additionalNotes: "",
   })
 
@@ -77,61 +74,79 @@ export default function CheckoutForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSubmitting(true)
 
-    try {
-      // In a real app, you would process the payment here
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+    // For manual payment methods (not Razorpay)
+    if (paymentMethod !== "razorpay") {
+      setIsSubmitting(true)
 
-      // Clear the cart
-      localStorage.setItem("cart", "[]")
+      try {
+        // In a real app, you would process the payment here
+        await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      // Create an order ID
-      const orderId = `ORD-${Date.now().toString().slice(-6)}`
+        // Clear the cart
+        localStorage.setItem("cart", "[]")
 
-      // Store order in localStorage for demo purposes
-      const order = {
-        id: orderId,
-        items: cartItems,
-        customer: {
-          name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-        },
-        billing: {
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          postalCode: formData.postalCode,
-          country: formData.country,
-        },
-        payment: {
-          method: formData.paymentMethod,
-          total: calculateTotal(),
-        },
-        status: "confirmed",
-        date: new Date().toISOString(),
+        // Create an order ID
+        const orderId = `ORD-${Date.now().toString().slice(-6)}`
+
+        // Store order in localStorage for demo purposes
+        const order = {
+          id: orderId,
+          items: cartItems,
+          customer: {
+            name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+          },
+          billing: {
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.postalCode,
+            country: formData.country,
+          },
+          payment: {
+            method: paymentMethod,
+            total: calculateTotal(),
+          },
+          status: "confirmed",
+          date: new Date().toISOString(),
+        }
+
+        const orders = JSON.parse(localStorage.getItem("orders") || "[]")
+        localStorage.setItem("orders", JSON.stringify([...orders, order]))
+
+        toast({
+          title: "Order placed successfully!",
+          description: `Your order #${orderId} has been confirmed.`,
+        })
+
+        // Redirect to confirmation page
+        router.push(`/booking/confirmation?orderId=${orderId}`)
+      } catch (error) {
+        toast({
+          title: "Payment failed",
+          description: "There was an error processing your payment. Please try again.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsSubmitting(false)
       }
-
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]")
-      localStorage.setItem("orders", JSON.stringify([...orders, order]))
-
-      toast({
-        title: "Order placed successfully!",
-        description: `Your order #${orderId} has been confirmed.`,
-      })
-
-      // Redirect to confirmation page
-      router.push(`/booking/confirmation?orderId=${orderId}`)
-    } catch (error) {
-      toast({
-        title: "Payment failed",
-        description: "There was an error processing your payment. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsSubmitting(false)
     }
+  }
+
+  const handlePaymentSuccess = (data) => {
+    // This is handled inside the RazorpayCheckout component
+    console.log("Payment successful:", data)
+  }
+
+  const handlePaymentError = (error) => {
+    console.error("Payment error:", error)
+    toast({
+      title: "Payment failed",
+      description: "There was an error processing your payment. Please try again.",
+      variant: "destructive",
+    })
   }
 
   if (isLoading) {
@@ -248,89 +263,80 @@ export default function CheckoutForm() {
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold mb-4">Payment Method</h2>
 
-                <RadioGroup
-                  value={formData.paymentMethod}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, paymentMethod: value }))}
-                  className="space-y-4"
-                >
-                  <div className="flex items-center space-x-2 border rounded-md p-4">
-                    <RadioGroupItem value="card" id="payment-card" />
-                    <Label htmlFor="payment-card" className="flex-1 cursor-pointer">
-                      Credit/Debit Card
-                    </Label>
-                    <div className="flex space-x-1">
-                      <div className="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 border rounded-md p-4">
-                    <RadioGroupItem value="upi" id="payment-upi" />
-                    <Label htmlFor="payment-upi" className="flex-1 cursor-pointer">
-                      UPI Payment
-                    </Label>
-                    <div className="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  </div>
-                  <div className="flex items-center space-x-2 border rounded-md p-4">
-                    <RadioGroupItem value="netbanking" id="payment-netbanking" />
-                    <Label htmlFor="payment-netbanking" className="flex-1 cursor-pointer">
-                      Net Banking
-                    </Label>
-                    <div className="w-10 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  </div>
-                </RadioGroup>
+                <Tabs defaultValue="razorpay" onValueChange={setPaymentMethod}>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="razorpay">Razorpay</TabsTrigger>
+                    <TabsTrigger value="bank">Bank Transfer</TabsTrigger>
+                    <TabsTrigger value="cod">Cash on Delivery</TabsTrigger>
+                  </TabsList>
 
-                {formData.paymentMethod === "card" && (
-                  <div className="mt-6 space-y-4 p-4 border rounded-md bg-gray-50 dark:bg-gray-800/50">
-                    <div className="space-y-2">
-                      <Label htmlFor="cardNumber">Card Number *</Label>
-                      <Input
-                        id="cardNumber"
-                        name="cardNumber"
-                        placeholder="1234 5678 9012 3456"
-                        value={formData.cardNumber}
-                        onChange={handleChange}
-                        required={formData.paymentMethod === "card"}
+                  <TabsContent value="razorpay" className="mt-4">
+                    <div className="p-4 border rounded-md bg-gray-50 dark:bg-gray-800/50">
+                      <p className="mb-4">
+                        Pay securely using Razorpay. You will be redirected to Razorpay's secure payment page.
+                      </p>
+                      <div className="flex items-center justify-center space-x-4 mb-4">
+                        <div className="h-8 w-12 bg-blue-100 dark:bg-blue-900/20 rounded flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
+                          Visa
+                        </div>
+                        <div className="h-8 w-12 bg-red-100 dark:bg-red-900/20 rounded flex items-center justify-center text-red-600 dark:text-red-400 font-bold">
+                          MC
+                        </div>
+                        <div className="h-8 w-12 bg-green-100 dark:bg-green-900/20 rounded flex items-center justify-center text-green-600 dark:text-green-400 font-bold">
+                          UPI
+                        </div>
+                        <div className="h-8 w-12 bg-purple-100 dark:bg-purple-900/20 rounded flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold">
+                          NB
+                        </div>
+                      </div>
+
+                      <RazorpayCheckout
+                        amount={calculateTotal()}
+                        name="StandaloneCoders"
+                        description={`Payment for ${cartItems.length} item(s)`}
+                        customerName={formData.fullName}
+                        customerEmail={formData.email}
+                        customerPhone={formData.phone}
+                        notes={{
+                          address: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.postalCode}, ${formData.country}`,
+                          items: JSON.stringify(cartItems.map((item) => item.template.name)),
+                        }}
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
                       />
                     </div>
+                  </TabsContent>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="cardExpiry">Expiry Date *</Label>
-                        <Input
-                          id="cardExpiry"
-                          name="cardExpiry"
-                          placeholder="MM/YY"
-                          value={formData.cardExpiry}
-                          onChange={handleChange}
-                          required={formData.paymentMethod === "card"}
-                        />
+                  <TabsContent value="bank" className="mt-4">
+                    <div className="p-4 border rounded-md bg-gray-50 dark:bg-gray-800/50">
+                      <p className="mb-4">
+                        Make a direct bank transfer to our account. Please use your Order ID as the payment reference.
+                      </p>
+                      <div className="bg-white dark:bg-gray-900 p-4 rounded-md border mb-4">
+                        <p className="font-medium">Bank Account Details:</p>
+                        <p>Bank: HDFC Bank</p>
+                        <p>Account Name: StandaloneCoders Pvt Ltd</p>
+                        <p>Account Number: XXXX XXXX XXXX 1234</p>
+                        <p>IFSC Code: HDFC0001234</p>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="cardCvc">CVC *</Label>
-                        <Input
-                          id="cardCvc"
-                          name="cardCvc"
-                          placeholder="123"
-                          value={formData.cardCvc}
-                          onChange={handleChange}
-                          required={formData.paymentMethod === "card"}
-                        />
-                      </div>
+                      <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                        {isSubmitting ? "Processing..." : "Complete Order"}
+                      </Button>
                     </div>
+                  </TabsContent>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="nameOnCard">Name on Card *</Label>
-                      <Input
-                        id="nameOnCard"
-                        name="nameOnCard"
-                        value={formData.nameOnCard}
-                        onChange={handleChange}
-                        required={formData.paymentMethod === "card"}
-                      />
+                  <TabsContent value="cod" className="mt-4">
+                    <div className="p-4 border rounded-md bg-gray-50 dark:bg-gray-800/50">
+                      <p className="mb-4">
+                        Pay with cash upon delivery. Please note that this option is only available for certain
+                        locations.
+                      </p>
+                      <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                        {isSubmitting ? "Processing..." : "Complete Order"}
+                      </Button>
                     </div>
-                  </div>
-                )}
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
 
@@ -351,18 +357,6 @@ export default function CheckoutForm() {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="flex justify-end">
-              <Button type="submit" size="lg" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>Processing...</>
-                ) : (
-                  <>
-                    <Lock className="mr-2 h-4 w-4" /> Complete Order
-                  </>
-                )}
-              </Button>
-            </div>
           </form>
         </div>
 
@@ -376,7 +370,7 @@ export default function CheckoutForm() {
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <span>{item.template.name}</span>
-                      <span>₹{item.price}</span>
+                      <span>₹{item.price.toLocaleString()}</span>
                     </div>
                   ))}
 
@@ -384,19 +378,19 @@ export default function CheckoutForm() {
 
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>₹{calculateSubtotal()}</span>
+                    <span>₹{calculateSubtotal().toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span>GST (18%)</span>
-                    <span>₹{calculateTax()}</span>
+                    <span>₹{calculateTax().toLocaleString()}</span>
                   </div>
 
                   <Separator />
 
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>₹{calculateTotal()}</span>
+                    <span>₹{calculateTotal().toLocaleString()}</span>
                   </div>
                 </div>
 
