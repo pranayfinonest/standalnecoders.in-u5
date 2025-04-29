@@ -1,4 +1,4 @@
-import ServiceDetail from "@/components/service-detail"
+import ServiceDetailStatic from "@/components/service-detail-static"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -121,5 +121,5 @@ export default function CybersecurityPage() {
     ],
   }
 
-  return <ServiceDetail {...serviceData} />
+  return <ServiceDetailStatic {...serviceData} />
 }

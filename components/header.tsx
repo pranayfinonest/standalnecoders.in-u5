@@ -83,10 +83,8 @@ export default function Header() {
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white"}`}>
       <div className="container-custom py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
-          <span className="text-2xl font-bold">
-            <span className="text-blue-600">Standalone</span>
-            <span className="text-gray-900">Coders</span>
-          </span>
+          <img src="/standalone-coders-logo.png" alt="StandaloneCoders Logo" className="h-12 md:h-14" />
+          <span className="sr-only">StandaloneCoders</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -162,7 +160,7 @@ export default function Header() {
           )}
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

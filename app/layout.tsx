@@ -9,7 +9,10 @@ import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
 import { Toaster } from "@/components/ui/toaster"
 import GoogleAnalytics from "@/components/analytics/google-analytics"
-import ScrollToTop from "@/components/scroll-to-top"
+import ErrorBoundaryClient from "@/components/error-boundary-client"
+import StatsigWrapper from "@/components/statsig-provider"
+import { Analytics } from "@vercel/analytics/react"
+import { Suspense } from "react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -91,19 +94,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {/* Google Analytics */}
-          <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
-          {/* ScrollToTop component for handling scroll restoration */}
-          <ScrollToTop />
-          {/* Single Header instance to prevent duplication */}
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <WhatsAppButton />
-          <Toaster />
-          <GlobalScripts />
-        </ThemeProvider>
+        <StatsigWrapper>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {/* Google Analytics */}
+            <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
+            <ErrorBoundaryClient>
+              <Suspense fallback={`Loading UI...`}>
+                <Header />
+                <main>{children}</main>
+                <Footer />
+                <WhatsAppButton />
+              </Suspense>
+              <Toaster />
+              <GlobalScripts />
+            </ErrorBoundaryClient>
+            {/* Vercel Analytics */}
+            <Analytics />
+          </ThemeProvider>
+        </StatsigWrapper>
       </body>
     </html>
   )

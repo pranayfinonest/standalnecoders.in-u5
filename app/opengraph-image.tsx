@@ -18,8 +18,7 @@ export default async function Image() {
     // ImageResponse JSX element
     <div
       style={{
-        fontSize: 128,
-        background: "linear-gradient(to bottom, #1e3a8a, #1e40af)",
+        background: "#0f172a", // Dark navy background matching the logo
         width: "100%",
         height: "100%",
         display: "flex",
@@ -36,19 +35,40 @@ export default async function Image() {
           alignItems: "center",
           justifyContent: "center",
           marginBottom: "20px",
+          width: "80%",
         }}
       >
-        <span
+        {/* We can't directly use an external image in ImageResponse, so we'll use text */}
+        <div
           style={{
-            background: "linear-gradient(to right, #60a5fa, #3b82f6)",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "20px",
           }}
         >
-          Standalone
-        </span>
-        <span style={{ color: "white" }}>Coders</span>
+          <div
+            style={{
+              width: "100px",
+              height: "240px",
+              background: "#0f172a",
+              boxShadow: "0 0 40px 5px #3b82f6",
+              borderRadius: "30px",
+            }}
+          ></div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: "80px",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          >
+            <span>Standalone</span>
+            <span>Coders</span>
+          </div>
+        </div>
       </div>
       <div
         style={{

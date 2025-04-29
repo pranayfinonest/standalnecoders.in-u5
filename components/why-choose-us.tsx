@@ -1,7 +1,11 @@
+"use client"
+
 import { Check } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 export default function WhyChooseUs() {
+  const router = useRouter()
   const reasons = [
     "Cybersecurity Expertise & Modern Solutions",
     "Professional Digital Marketing",
@@ -13,10 +17,10 @@ export default function WhyChooseUs() {
   return (
     <section className="py-24 bg-gray-50 dark:bg-gray-900/50 overflow-hidden relative">
       {/* Background decorative elements */}
-      <div className="absolute top-40 right-0 w-72 h-72 bg-gray-200/30 dark:bg-gray-800/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-0 w-80 h-80 bg-gray-200/40 dark:bg-gray-800/30 rounded-full blur-3xl"></div>
+      <div className="absolute top-40 right-0 w-72 h-72 bg-gray-200/30 dark:bg-gray-800/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-20 left-0 w-80 h-80 bg-gray-200/40 dark:bg-gray-800/30 rounded-full blur-3xl -z-10"></div>
 
-      <div className="container-custom">
+      <div className="container-custom relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2 order-2 lg:order-1">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm font-medium mb-4">
@@ -38,9 +42,15 @@ export default function WhyChooseUs() {
                 </li>
               ))}
             </ul>
-            <div className="mt-10">
-              <a href="#contact" target="_blank" rel="noopener noreferrer" className="primary-button group">
-                Get Started Today
+            <div className="mt-10 relative z-20">
+              <button
+                onClick={() => {
+                  router.push("/about")
+                }}
+                className="primary-button group inline-flex items-center cursor-pointer"
+                aria-label="Learn more about our company"
+              >
+                Learn More About Us
                 <svg
                   className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -55,7 +65,7 @@ export default function WhyChooseUs() {
                     d="M14 5l7 7m0 0l-7 7m7-7H3"
                   ></path>
                 </svg>
-              </a>
+              </button>
             </div>
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
