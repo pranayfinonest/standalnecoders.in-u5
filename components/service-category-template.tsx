@@ -8,11 +8,11 @@ export default function ServiceCategoryTemplate({
   title,
   description,
   icon,
-  services,
+  services = [],
   benefits,
-  process,
-  technologies,
-  faqs,
+  process = [],
+  technologies = [],
+  faqs = [],
   cta,
 }) {
   return (
@@ -50,32 +50,33 @@ export default function ServiceCategoryTemplate({
       <div className="mb-20">
         <h2 className="text-3xl font-bold mb-12 text-center">Our {title} Services</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="rounded-full bg-blue-100 dark:bg-blue-900/20 p-3 w-12 h-12 flex items-center justify-center mb-4">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                {service.link && (
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={service.link}>
-                      Learn More <ChevronRight className="h-4 w-4 ml-1" />
-                    </Link>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+          {services &&
+            services.map((service, index) => (
+              <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <div className="rounded-full bg-blue-100 dark:bg-blue-900/20 p-3 w-12 h-12 flex items-center justify-center mb-4">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
+                  <ul className="space-y-2 mb-6">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start">
+                        <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {service.link && (
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href={service.link}>
+                        Learn More <ChevronRight className="h-4 w-4 ml-1" />
+                      </Link>
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
         </div>
       </div>
 
@@ -115,18 +116,19 @@ export default function ServiceCategoryTemplate({
       <div className="mb-20">
         <h2 className="text-3xl font-bold mb-12 text-center">Our {title} Process</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {process.steps.map((step, index) => (
-            <div key={index} className="relative">
-              <div className="rounded-full bg-blue-100 dark:bg-blue-900/20 w-16 h-16 flex items-center justify-center mb-6 mx-auto">
-                <span className="text-2xl font-bold text-blue-600">{index + 1}</span>
+          {process &&
+            process.steps.map((step, index) => (
+              <div key={index} className="relative">
+                <div className="rounded-full bg-blue-100 dark:bg-blue-900/20 w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                  <span className="text-2xl font-bold text-blue-600">{index + 1}</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-center">{step.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-center">{step.description}</p>
+                {index < process.steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-blue-100 dark:bg-blue-900/20 -z-10 transform -translate-x-1/2"></div>
+                )}
               </div>
-              <h3 className="text-xl font-bold mb-3 text-center">{step.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-center">{step.description}</p>
-              {index < process.steps.length - 1 && (
-                <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-blue-100 dark:bg-blue-900/20 -z-10 transform -translate-x-1/2"></div>
-              )}
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 
