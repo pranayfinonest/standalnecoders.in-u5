@@ -1,0 +1,164 @@
+import ServiceCategoryTemplate from "@/components/service-category-template"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Website Development Services | StandaloneCoders",
+  description:
+    "Custom website design and development services including e-commerce, CMS-based websites, and web applications.",
+}
+
+// Force static generation for this page
+export const dynamic = "force-static"
+
+export default function WebsiteDevelopmentPage() {
+  const serviceData = {
+    title: "Website Development",
+    description:
+      "Our Website Development services provide end-to-end solutions for businesses looking to establish or enhance their online presence. From custom designs to e-commerce platforms and content management systems, we deliver websites that are not only visually appealing but also functional and optimized for performance.",
+    imageSrc: "/modern-portfolio-design.png",
+    services: [
+      {
+        title: "Custom Website Design & Development",
+        description:
+          "Bespoke website designs tailored to your brand identity and business goals, developed with clean code and modern technologies.",
+      },
+      {
+        title: "E-commerce Development",
+        description:
+          "Robust online stores built on platforms like Shopify, WooCommerce, or custom solutions using React.js and Node.js.",
+      },
+      {
+        title: "CMS-based Websites",
+        description:
+          "Easy-to-manage websites built on popular content management systems like WordPress, Webflow, and other platforms.",
+      },
+      {
+        title: "Landing Pages & Sales Funnels",
+        description: "High-converting landing pages and sales funnels designed to capture leads and drive conversions.",
+      },
+      {
+        title: "API Integration & Backend Development",
+        description:
+          "Seamless integration with third-party APIs and custom backend development to power your website's functionality.",
+      },
+      {
+        title: "Website Maintenance & Support",
+        description:
+          "Ongoing maintenance, updates, and technical support to ensure your website remains secure and performs optimally.",
+      },
+    ],
+    process: [
+      {
+        title: "Discovery",
+        description:
+          "We analyze your business needs, target audience, and competitors to develop a strategic website plan.",
+      },
+      {
+        title: "Design & Prototyping",
+        description:
+          "Our designers create wireframes and visual designs that align with your brand and business objectives.",
+      },
+      {
+        title: "Development",
+        description:
+          "Our development team brings the designs to life with clean, efficient code and modern technologies.",
+      },
+      {
+        title: "Testing & Launch",
+        description:
+          "Rigorous testing across devices and browsers ensures your website functions flawlessly before launch.",
+      },
+    ],
+    packages: [
+      {
+        title: "Basic Website",
+        price: "$1,499",
+        features: [
+          "Up to 5 pages",
+          "Responsive design",
+          "Basic SEO setup",
+          "Contact form",
+          "Social media integration",
+          "3 rounds of revisions",
+        ],
+        cta: "Get Started",
+      },
+      {
+        title: "Business Website",
+        price: "$3,999",
+        features: [
+          "Up to 10 pages",
+          "Responsive design",
+          "Advanced SEO setup",
+          "Content management system",
+          "Blog integration",
+          "Custom forms",
+          "Analytics integration",
+          "5 rounds of revisions",
+        ],
+        cta: "Choose Plan",
+        popular: true,
+      },
+      {
+        title: "E-commerce Website",
+        price: "$7,999",
+        features: [
+          "Up to 100 products",
+          "Responsive design",
+          "E-commerce platform setup",
+          "Payment gateway integration",
+          "Inventory management",
+          "Order tracking",
+          "Customer accounts",
+          "Advanced SEO",
+          "Analytics & reporting",
+        ],
+        cta: "Contact Us",
+      },
+    ],
+    faqs: [
+      {
+        question: "How long does it take to build a website?",
+        answer:
+          "The timeline for website development varies depending on the complexity and scope of the project. A basic website typically takes 2-4 weeks, while more complex websites or e-commerce platforms can take 8-12 weeks or more.",
+      },
+      {
+        question: "Do you provide website hosting?",
+        answer:
+          "Yes, we offer website hosting solutions as part of our services. We can recommend and set up the most suitable hosting option based on your website's requirements and expected traffic.",
+      },
+      {
+        question: "Can I update the website content myself?",
+        answer:
+          "We build websites with user-friendly content management systems that allow you to easily update content, add new pages, and manage your website without technical knowledge.",
+      },
+      {
+        question: "Do you optimize websites for search engines?",
+        answer:
+          "Yes, we implement SEO best practices during the development process, including proper HTML structure, mobile responsiveness, site speed optimization, and basic on-page SEO elements to help your website rank better in search engines. We also offer more comprehensive SEO services if you need advanced optimization.",
+      },
+      {
+        question: "What technologies do you use for website development?",
+        answer:
+          "We use a range of modern technologies depending on your project requirements. For frontend development, we work with HTML5, CSS3, JavaScript, React.js, and Next.js. For backend development, we use Node.js, PHP, and Python. We're also experienced with WordPress, Shopify, WooCommerce, and other popular platforms.",
+      },
+    ],
+    technologies: [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "React.js",
+      "Next.js",
+      "Node.js",
+      "WordPress",
+      "Shopify",
+      "WooCommerce",
+      "PHP",
+      "Python",
+      "MongoDB",
+      "MySQL",
+    ],
+  }
+
+  return <ServiceCategoryTemplate {...serviceData} />
+}

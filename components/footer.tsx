@@ -31,24 +31,24 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gray-50 text-gray-700 pt-16 pb-8 border-t border-gray-200">
-      <div className="container-custom">
+    <footer className="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 pt-12 sm:pt-16 pb-8 border-t border-gray-200 dark:border-gray-800">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="text-xl font-bold mb-6">
-              <span className="text-blue-600">Standalone</span>
-              <span className="text-gray-900">Coders</span>
+            <h3 className="text-xl font-bold mb-4 sm:mb-6">
+              <span className="text-blue-600 dark:text-blue-400">Standalone</span>
+              <span className="text-gray-900 dark:text-gray-100">Coders</span>
               <span className="text-gray-500">.in</span>
             </h3>
-            <p className="text-gray-700 mb-6">
+            <p className="text-gray-700 dark:text-gray-400 mb-6">
               Providing cybersecurity, AI, digital marketing, and complete technology solutions.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3">
               {socialLinks.map((link, index) => (
                 <Link
                   key={index}
                   href={link.href}
-                  className="text-gray-600 hover:text-blue-600 transition-colors p-2 bg-white rounded-full shadow-sm hover:shadow"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm hover:shadow"
                   aria-label={link.name}
                 >
                   {link.icon}
@@ -58,16 +58,16 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6 text-gray-900">Quick Links</h3>
+            <h3 className="text-xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-gray-100">Quick Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     href={link.href}
-                    className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+                    className="text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center"
                   >
                     <svg
-                      className="w-4 h-4 mr-2 text-blue-500"
+                      className="w-4 h-4 mr-2 text-blue-500 dark:text-blue-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -83,16 +83,16 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6 text-gray-900">Services</h3>
+            <h3 className="text-xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-gray-100">Services</h3>
             <ul className="space-y-3">
               {serviceLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     href={link.href}
-                    className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+                    className="text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center"
                   >
                     <svg
-                      className="w-4 h-4 mr-2 text-blue-500"
+                      className="w-4 h-4 mr-2 text-blue-500 dark:text-blue-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -108,21 +108,21 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6 text-gray-900">Contact</h3>
-            <address className="text-gray-700 not-italic space-y-3">
+            <h3 className="text-xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-gray-100">Contact</h3>
+            <address className="text-gray-700 dark:text-gray-400 not-italic space-y-3">
               <p className="flex items-start">
-                <MapPin className="w-5 h-5 mr-2 mt-1 text-blue-500" />
-                Jaipur, Rajasthan, India 302001
+                <MapPin className="w-5 h-5 mr-2 mt-1 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                <span>Jaipur, Rajasthan, India 302001</span>
               </p>
               <p className="flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-blue-500" />
-                <Link href="tel:+916378110608" className="hover:text-blue-600">
+                <Phone className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                <Link href="tel:+916378110608" className="hover:text-blue-600 dark:hover:text-blue-400">
                   +91 6378110608
                 </Link>
               </p>
               <p className="flex items-center">
-                <Mail className="w-5 h-5 mr-2 text-blue-500" />
-                <Link href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600">
+                <Mail className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                <Link href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400">
                   Yogendra6378@gmail.com
                 </Link>
               </p>
@@ -130,8 +130,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-8 text-center">
-          <p className="text-gray-600">© {currentYear} StandaloneCoders.in. All rights reserved.</p>
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-8 text-center">
+          <p className="text-gray-600 dark:text-gray-400">© {currentYear} StandaloneCoders.in. All rights reserved.</p>
         </div>
       </div>
     </footer>

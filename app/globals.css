@@ -98,26 +98,26 @@ body {
   h4,
   h5,
   h6 {
-    @apply tracking-tight font-bold text-gray-900;
+    @apply tracking-tight font-bold text-gray-900 dark:text-gray-100;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
     line-height: 1.1;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-2xl md:text-3xl lg:text-4xl;
     line-height: 1.2;
   }
 
   h3 {
-    @apply text-2xl;
+    @apply text-xl md:text-2xl;
     line-height: 1.3;
   }
 
   h4 {
-    @apply text-xl;
+    @apply text-lg md:text-xl;
   }
 }
 
@@ -183,11 +183,11 @@ body {
   }
 
   .primary-button {
-    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+    @apply inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200;
   }
 
   .secondary-button {
-    @apply inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+    @apply inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200;
   }
 
   .input-field {
@@ -195,31 +195,31 @@ body {
   }
 
   .form-label {
-    @apply block text-sm font-medium text-gray-700;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
   }
 
   .error-text {
-    @apply mt-2 text-sm text-red-600;
+    @apply mt-2 text-sm text-red-600 dark:text-red-400;
   }
 
   .success-text {
-    @apply mt-2 text-sm text-green-600;
+    @apply mt-2 text-sm text-green-600 dark:text-green-400;
   }
 
   .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden;
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden;
   }
 
   .card-header {
-    @apply px-6 py-4 border-b border-gray-200;
+    @apply px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700;
   }
 
   .card-body {
-    @apply px-6 py-4;
+    @apply px-4 sm:px-6 py-4;
   }
 
   .card-footer {
-    @apply px-6 py-4 border-t border-gray-200;
+    @apply px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-gray-700;
   }
 
   .badge {
@@ -227,39 +227,77 @@ body {
   }
 
   .badge-blue {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
   }
 
   .badge-green {
-    @apply bg-green-100 text-green-800;
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
   }
 
   .badge-red {
-    @apply bg-red-100 text-red-800;
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
   }
 
   .badge-yellow {
-    @apply bg-yellow-100 text-yellow-800;
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
   }
 
   .badge-gray {
-    @apply bg-gray-100 text-gray-800;
+    @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
   }
 
   .section-title {
-    @apply text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl;
+    @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100;
   }
 
   .section-subtitle {
-    @apply mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto;
+    @apply mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 lg:mx-auto;
   }
 
   .section-container {
-    @apply py-12 sm:py-16 lg:py-20;
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
   }
 
   .grid-cols-responsive {
-    @apply grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3;
+    @apply grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  /* Responsive spacing utilities */
+  .responsive-p {
+    @apply p-4 sm:p-6 md:p-8 lg:p-10;
+  }
+
+  .responsive-px {
+    @apply px-4 sm:px-6 md:px-8 lg:px-10;
+  }
+
+  .responsive-py {
+    @apply py-4 sm:py-6 md:py-8 lg:py-10;
+  }
+
+  .responsive-m {
+    @apply m-4 sm:m-6 md:m-8 lg:m-10;
+  }
+
+  .responsive-mx {
+    @apply mx-4 sm:mx-6 md:mx-8 lg:mx-10;
+  }
+
+  .responsive-my {
+    @apply my-4 sm:my-6 md:my-8 lg:my-10;
+  }
+
+  .responsive-gap {
+    @apply gap-4 sm:gap-6 md:gap-8;
+  }
+
+  /* Responsive text utilities */
+  .responsive-text {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+
+  .responsive-text-sm {
+    @apply text-sm sm:text-base md:text-lg;
   }
 }
 
@@ -269,7 +307,7 @@ body {
 }
 
 .logo-3d {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-transform: uppercase;
   display: flex;
@@ -277,7 +315,7 @@ body {
   line-height: 1;
 
   @media (min-width: 640px) {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     flex-direction: row;
     gap: 0.5rem;
   }
@@ -325,7 +363,7 @@ body {
 }
 
 .section-title {
-  @apply text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl;
+  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100;
 }
 
 .primary-button {
@@ -333,24 +371,24 @@ body {
 }
 
 .outline-button {
-  @apply px-6 py-3 bg-white text-gray-900 font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200 inline-flex items-center justify-center border border-gray-200;
+  @apply px-4 sm:px-6 py-2 sm:py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-medium rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 inline-flex items-center justify-center border border-gray-200 dark:border-gray-700;
 }
 
 .modern-card {
-  @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden relative;
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden relative;
 }
 
 .gradient-text {
-  @apply text-blue-600 font-bold;
+  @apply text-blue-600 dark:text-blue-400 font-bold;
 }
 
 /* Form elements */
 .form-input {
-  @apply w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200;
+  @apply w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200;
 }
 
 .form-label {
-  @apply block text-sm font-medium text-gray-700;
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
 }
 
 /* Badge */
@@ -360,10 +398,216 @@ body {
 
 /* Section spacing */
 .section-spacing {
-  @apply py-16 md:py-24;
+  @apply py-10 sm:py-16 md:py-20 lg:py-24;
 }
 
 /* Divider */
 .divider {
-  @apply w-full h-px bg-gray-200 my-8;
+  @apply w-full h-px bg-gray-200 dark:bg-gray-700 my-6 sm:my-8;
+}
+
+/* Responsive image container */
+.responsive-img-container {
+  @apply relative w-full overflow-hidden;
+  aspect-ratio: 16 / 9;
+}
+
+/* Mobile-first responsive grid */
+.responsive-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8;
+}
+
+/* Responsive flex container */
+.responsive-flex {
+  @apply flex flex-col sm:flex-row items-center gap-4 sm:gap-6;
+}
+
+/* Responsive text alignment */
+.responsive-text-center {
+  @apply text-center sm:text-left;
+}
+
+/* Responsive padding for sections */
+.responsive-section {
+  @apply px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 lg:py-20;
+}
+
+/* Responsive container width */
+.responsive-container {
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive card grid */
+.responsive-card-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
+}
+
+/* Responsive button sizes */
+.responsive-button {
+  @apply px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 text-sm sm:text-base;
+}
+
+/* Responsive form layout */
+.responsive-form {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6;
+}
+
+/* Responsive table */
+.responsive-table {
+  @apply w-full overflow-x-auto;
+}
+
+/* Responsive video container */
+.responsive-video {
+  @apply relative w-full overflow-hidden rounded-lg;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.responsive-video iframe {
+  @apply absolute top-0 left-0 w-full h-full;
+}
+
+/* Responsive hero section */
+.responsive-hero {
+  @apply py-10 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive feature section */
+.responsive-feature {
+  @apply py-8 sm:py-12 md:py-16;
+}
+
+/* Responsive testimonial section */
+.responsive-testimonial {
+  @apply py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive footer */
+.responsive-footer {
+  @apply py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive navigation */
+.responsive-nav {
+  @apply flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6;
+}
+
+/* Responsive sidebar */
+.responsive-sidebar {
+  @apply w-full sm:w-64 md:w-72 lg:w-80;
+}
+
+/* Responsive main content */
+.responsive-main {
+  @apply w-full sm:ml-64 md:ml-72 lg:ml-80;
+}
+
+/* Responsive dashboard layout */
+.responsive-dashboard {
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+/* Responsive dashboard card */
+.responsive-dashboard-card {
+  @apply col-span-1 lg:col-span-1 xl:col-span-1;
+}
+
+/* Responsive dashboard main */
+.responsive-dashboard-main {
+  @apply col-span-1 lg:col-span-2 xl:col-span-2;
+}
+
+/* Responsive pricing table */
+.responsive-pricing {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6;
+}
+
+/* Responsive feature list */
+.responsive-feature-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+/* Responsive stats */
+.responsive-stats {
+  @apply grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6;
+}
+
+/* Responsive CTA */
+.responsive-cta {
+  @apply flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6;
+}
+
+/* Responsive image gallery */
+.responsive-gallery {
+  @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4;
+}
+
+/* Responsive tabs */
+.responsive-tabs {
+  @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
+}
+
+/* Responsive accordion */
+.responsive-accordion {
+  @apply space-y-2 sm:space-y-4;
+}
+
+/* Responsive timeline */
+.responsive-timeline {
+  @apply space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12;
+}
+
+/* Responsive team grid */
+.responsive-team-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8;
+}
+
+/* Responsive contact section */
+.responsive-contact {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12;
+}
+
+/* Responsive blog grid */
+.responsive-blog-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8;
+}
+
+/* Responsive portfolio grid */
+.responsive-portfolio-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+/* Responsive service grid */
+.responsive-service-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8;
+}
+
+/* Responsive FAQ section */
+.responsive-faq {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8;
+}
+
+/* Responsive client logo grid */
+.responsive-client-grid {
+  @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-8;
+}
+
+/* Responsive process steps */
+.responsive-process {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8;
+}
+
+/* Responsive benefits grid */
+.responsive-benefits {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8;
+}
+
+/* Responsive case study grid */
+.responsive-case-study {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12;
+}
+
+/* Responsive testimonial grid */
+.responsive-testimonial-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8;
 }

@@ -58,6 +58,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
+    "@emotion/is-prop-valid": "latest",
     "@remix-run/react": "latest",
     "@sveltejs/kit": "latest",
     "svelte": "latest",
@@ -65,8 +66,9 @@
     "vue-router": "latest",
     "crypto": "latest",
     "@supabase/supabase-js": "latest",
-    "@vercel/analytics": "latest",
-    "statsig-node": "latest"
+    "statsig-node": "latest",
+    "framer-motion": "latest",
+    "@vercel/analytics": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

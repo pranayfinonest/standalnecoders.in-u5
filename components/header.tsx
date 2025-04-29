@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, ChevronDown, LogIn, LogOut } from "lucide-react"
+import { Menu, ChevronDown, LogIn, LogOut } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -32,10 +33,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
 
   const toggleServices = () => {
     setIsServicesOpen(!isServicesOpen)
@@ -80,9 +77,13 @@ export default function Header() {
   }
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white"}`}>
-      <div className="container-custom py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white/95 backdrop-blur-sm shadow-md" : "bg-white"
+      }`}
+    >
+      <div className="container-custom py-3 md:py-4 flex justify-between items-center">
+        <Link href="/" className="flex items-center z-10">
           <div className="logo-3d-container">
             <h1 className="logo-3d">
               <span className="logo-3d-standalone">
@@ -98,14 +99,16 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-1 lg:space-x-8">
           {navLinks.map((link) =>
             link.dropdown ? (
               <div key={link.name} className="relative group">
                 <button
                   onClick={toggleServices}
-                  className={`flex items-center font-medium transition-colors ${
-                    isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  className={`flex items-center px-3 py-2 rounded-md font-medium transition-colors ${
+                    isActive(link.href)
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                 >
                   {link.name}
@@ -131,8 +134,10 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`font-medium transition-colors ${
-                  isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                className={`px-3 py-2 rounded-md font-medium transition-colors ${
+                  isActive(link.href)
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 }`}
               >
                 {link.name}
@@ -142,7 +147,12 @@ export default function Header() {
 
           {/* Add login/logout button */}
           {mounted && (
-            <button onClick={isLoggedIn ? handleLogout : handleLogin} className="primary-button">
+            <Button
+              onClick={isLoggedIn ? handleLogout : handleLogin}
+              variant="default"
+              size="sm"
+              className="ml-2 whitespace-nowrap"
+            >
               {isLoggedIn ? (
                 <>
                   <LogOut className="w-4 h-4 mr-2" /> Logout
@@ -152,7 +162,7 @@ export default function Header() {
                   <LogIn className="w-4 h-4 mr-2" /> Login
                 </>
               )}
-            </button>
+            </Button>
           )}
         </nav>
 
@@ -160,75 +170,70 @@ export default function Header() {
         <div className="flex items-center md:hidden">
           {/* Add login/logout button for mobile */}
           {mounted && (
-            <button
+            <Button
               onClick={isLoggedIn ? handleLogout : handleLogin}
-              className="p-2 mr-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+              variant="default"
+              size="sm"
+              className="mr-2"
               aria-label={isLoggedIn ? "Logout" : "Login"}
             >
-              {isLoggedIn ? <LogOut size={20} /> : <LogIn size={20} />}
-            </button>
+              {isLoggedIn ? <LogOut size={18} /> : <LogIn size={18} />}
+            </Button>
           )}
-          <button
-            onClick={toggleMenu}
-            className="p-2 ml-2 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[80vw] max-w-sm">
+              <nav className="flex flex-col gap-4 mt-8">
+                {navLinks.map((link) =>
+                  link.dropdown ? (
+                    <div key={link.name} className="space-y-2">
+                      <button
+                        onClick={toggleServices}
+                        className={`flex items-center justify-between w-full px-2 py-2 text-base font-medium rounded-md ${
+                          isActive(link.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
+                        }`}
+                      >
+                        {link.name}
+                        <ChevronDown className={`w-4 h-4 transition-transform ${isServicesOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      {isServicesOpen && (
+                        <div className="pl-4 space-y-2 border-l-2 border-gray-200">
+                          {link.items.map((item) => (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              className={`block py-2 text-sm ${
+                                isActive(item.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      className={`block px-2 py-2 text-base font-medium rounded-md ${
+                        isActive(link.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ),
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <nav className="md:hidden bg-white py-4 px-6 shadow-lg">
-          <ul className="space-y-4">
-            {navLinks.map((link) =>
-              link.dropdown ? (
-                <li key={link.name}>
-                  <button
-                    onClick={toggleServices}
-                    className={`flex items-center font-medium w-full text-left ${
-                      isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
-                    }`}
-                  >
-                    {link.name}
-                    <ChevronDown className="ml-1 w-4 h-4" />
-                  </button>
-                  {isServicesOpen && (
-                    <ul className="mt-2 ml-4 space-y-2">
-                      {link.items.map((item) => (
-                        <li key={item.name}>
-                          <Link
-                            href={item.href}
-                            className={`block font-medium ${
-                              isActive(item.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
-                            }`}
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {item.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ) : (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className={`block font-medium ${
-                      isActive(link.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ),
-            )}
-          </ul>
-        </nav>
-      )}
     </header>
   )
 }

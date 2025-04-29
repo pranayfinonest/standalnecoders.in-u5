@@ -64,6 +64,15 @@ export default function CheckoutForm() {
     return calculateSubtotal() + calculateTax()
   }
 
+  // Format currency in INR
+  const formatINR = (amount) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amount)
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -370,7 +379,7 @@ export default function CheckoutForm() {
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <span>{item.template.name}</span>
-                      <span>₹{item.price.toLocaleString()}</span>
+                      <span>{formatINR(item.price)}</span>
                     </div>
                   ))}
 
@@ -378,19 +387,19 @@ export default function CheckoutForm() {
 
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>₹{calculateSubtotal().toLocaleString()}</span>
+                    <span>{formatINR(calculateSubtotal())}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span>GST (18%)</span>
-                    <span>₹{calculateTax().toLocaleString()}</span>
+                    <span>{formatINR(calculateTax())}</span>
                   </div>
 
                   <Separator />
 
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>₹{calculateTotal().toLocaleString()}</span>
+                    <span>{formatINR(calculateTotal())}</span>
                   </div>
                 </div>
 

@@ -13,6 +13,7 @@ import ErrorBoundaryClient from "@/components/error-boundary-client"
 import StatsigWrapper from "@/components/statsig-provider"
 import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
+import { ResponsiveMeta } from "@/components/responsive-meta"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -93,6 +94,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <ResponsiveMeta />
+      </head>
       <body className={inter.className}>
         <StatsigWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
