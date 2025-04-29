@@ -51,6 +51,11 @@ export default function Header() {
     router.push("/auth/login")
   }
 
+  // Handle link click to ensure scroll to top
+  const handleLinkClick = () => {
+    window.scrollTo(0, 0)
+  }
+
   const navLinks = [
     { name: "Home", href: "/" },
     {
@@ -83,7 +88,7 @@ export default function Header() {
       }`}
     >
       <div className="container-custom py-3 md:py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center z-10">
+        <Link href="/" className="flex items-center z-10" onClick={handleLinkClick}>
           <div className="logo-3d-container">
             <h1 className="logo-3d">
               <span className="logo-3d-standalone">
@@ -120,6 +125,7 @@ export default function Header() {
                       <Link
                         key={item.name}
                         href={item.href}
+                        onClick={handleLinkClick}
                         className={`block px-4 py-2 text-sm ${
                           isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:bg-gray-50"
                         }`}
@@ -134,6 +140,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={handleLinkClick}
                 className={`px-3 py-2 rounded-md font-medium transition-colors ${
                   isActive(link.href)
                     ? "text-blue-600 bg-blue-50"
@@ -207,6 +214,7 @@ export default function Header() {
                             <Link
                               key={item.name}
                               href={item.href}
+                              onClick={handleLinkClick}
                               className={`block py-2 text-sm ${
                                 isActive(item.href) ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                               }`}
@@ -221,6 +229,7 @@ export default function Header() {
                     <Link
                       key={link.name}
                       href={link.href}
+                      onClick={handleLinkClick}
                       className={`block px-2 py-2 text-base font-medium rounded-md ${
                         isActive(link.href) ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
                       }`}

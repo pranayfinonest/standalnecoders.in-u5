@@ -14,6 +14,7 @@ import StatsigWrapper from "@/components/statsig-provider"
 import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
 import { ResponsiveMeta } from "@/components/responsive-meta"
+import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -104,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
             <ErrorBoundaryClient>
               <Suspense fallback={`Loading UI...`}>
+                <ScrollToTopOnNavigation />
                 <Header />
                 <main>{children}</main>
                 <Footer />
