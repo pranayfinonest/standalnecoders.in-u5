@@ -1,65 +1,38 @@
 "use client"
 
 import { useState } from "react"
-import { Phone, Mail, Send, MapPin } from "lucide-react"
+import { Send, MapPin, Phone, Mail, Clock } from "lucide-react"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    details: "",
+    subject: "",
+    message: "",
   })
-
-  const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const validateForm = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid"
-    }
-
-    if (!formData.details.trim()) {
-      newErrors.details = "Project details are required"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitError("")
 
-    if (validateForm()) {
-      setIsSubmitting(true)
-
+    try {
       // Simulate form submission
-      setTimeout(() => {
-        setIsSubmitting(false)
-        setSubmitSuccess(true)
-        setFormData({ name: "", email: "", details: "" })
-
-        // Reset success message after 5 seconds
-        setTimeout(() => {
-          setSubmitSuccess(false)
-        }, 5000)
-      }, 1500)
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      setSubmitSuccess(true)
+      setFormData({ name: "", email: "", subject: "", message: "" })
+    } catch (error) {
+      setSubmitError("There was an error submitting your message. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -71,72 +44,74 @@ export default function Contact() {
             <span className="w-2 h-2 rounded-full bg-blue-600 mr-2"></span>
             Get In Touch
           </div>
-          <h2 className="section-title">Contact Us</h2>
+          <h2 className="section-title mx-auto">Contact Us</h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto mt-6">
-            Ready to discuss your project? Get in touch today and let's talk about how we can help.
+            Have a question or want to work together? Reach out to us and we'll get back to you as soon as possible.
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto modern-card overflow-hidden">
-          <div className="grid md:grid-cols-5">
-            <div className="md:col-span-2 bg-blue-600 text-white p-8 flex flex-col justify-center">
-              <h3 className="text-2xl font-bold mb-8">Get In Touch</h3>
-              <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          <div className="lg:col-span-2">
+            <div className="bg-gray-50 p-8 rounded-xl h-full">
+              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+              <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="bg-white/10 p-3 rounded-full mr-4">
-                    <Phone className="w-6 h-6" />
+                  <div className="bg-blue-100 p-3 rounded-full mr-4">
+                    <MapPin className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Phone</h4>
-                    <p>+91 6378110608</p>
+                    <h4 className="font-semibold text-lg">Our Location</h4>
+                    <p className="text-gray-700">Jaipur, Rajasthan, India 302001</p>
                   </div>
                 </div>
+
                 <div className="flex items-start">
-                  <div className="bg-white/10 p-3 rounded-full mr-4">
-                    <Mail className="w-6 h-6" />
+                  <div className="bg-blue-100 p-3 rounded-full mr-4">
+                    <Phone className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Email</h4>
-                    <p>Yogendra6378@gmail.com</p>
+                    <h4 className="font-semibold text-lg">Phone Number</h4>
+                    <p className="text-gray-700">
+                      <a href="tel:+916378110608" className="hover:text-blue-600">
+                        +91 6378110608
+                      </a>
+                    </p>
                   </div>
                 </div>
+
                 <div className="flex items-start">
-                  <div className="bg-white/10 p-3 rounded-full mr-4">
-                    <MapPin className="w-6 h-6" />
+                  <div className="bg-blue-100 p-3 rounded-full mr-4">
+                    <Mail className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Address</h4>
-                    <p>Jaipur Rajasthan</p>
+                    <h4 className="font-semibold text-lg">Email Address</h4>
+                    <p className="text-gray-700">
+                      <a href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600">
+                        Yogendra6378@gmail.com
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="bg-blue-100 p-3 rounded-full mr-4">
+                    <Clock className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg">Working Hours</h4>
+                    <p className="text-gray-700">Mon - Fri: 9:00 AM - 6:00 PM</p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="md:col-span-3 p-8">
-              {submitSuccess ? (
-                <div className="bg-green-50 text-green-800 p-4 rounded-lg mb-6 border border-green-200 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-green-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  Thank you for your message! We'll get back to you soon.
-                </div>
-              ) : null}
-
-              <form onSubmit={handleSubmit} target="_blank">
-                <div className="mb-6">
-                  <label htmlFor="name" className="form-label">
-                    Name
+          <div className="lg:col-span-3">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Name
                   </label>
                   <input
                     type="text"
@@ -144,15 +119,13 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`form-input ${errors.name ? "border-red-500" : ""}`}
-                    placeholder="Your name"
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
-                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                 </div>
-
-                <div className="mb-6">
-                  <label htmlFor="email" className="form-label">
-                    Email
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Email
                   </label>
                   <input
                     type="email"
@@ -160,61 +133,66 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`form-input ${errors.email ? "border-red-500" : ""}`}
-                    placeholder="Your email"
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
-                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                 </div>
+              </div>
 
-                <div className="mb-6">
-                  <label htmlFor="details" className="form-label">
-                    Project Details
-                  </label>
-                  <textarea
-                    id="details"
-                    name="details"
-                    value={formData.details}
-                    onChange={handleChange}
-                    rows={4}
-                    className={`form-input ${errors.details ? "border-red-500" : ""}`}
-                    placeholder="Tell us about your project"
-                  ></textarea>
-                  {errors.details && <p className="mt-1 text-sm text-red-500">{errors.details}</p>}
-                </div>
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
 
-                <button type="submit" disabled={isSubmitting} className="primary-button w-full">
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={6}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                ></textarea>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-primary flex items-center justify-center gap-2 w-full md:w-auto"
+                >
                   {isSubmitting ? (
-                    <span className="flex items-center justify-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Processing...
-                    </span>
+                    "Sending..."
                   ) : (
-                    <span className="flex items-center justify-center">
-                      Submit <Send className="ml-2 w-4 h-4" />
-                    </span>
+                    <>
+                      Send Message <Send className="w-5 h-5" />
+                    </>
                   )}
                 </button>
-              </form>
-            </div>
+              </div>
+
+              {submitSuccess && (
+                <div className="p-4 bg-green-100 text-green-800 rounded-lg">
+                  Your message has been sent successfully. We'll get back to you soon!
+                </div>
+              )}
+
+              {submitError && <div className="p-4 bg-red-100 text-red-800 rounded-lg">{submitError}</div>}
+            </form>
           </div>
         </div>
       </div>

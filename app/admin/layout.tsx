@@ -1,6 +1,6 @@
-import type React from "react"
+import type { ReactNode } from "react"
 import AdminLayout from "@/components/admin/admin-layout"
 
-export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
+export default function AdminPageLayout({ children }: { children: ReactNode }) {
   return <AdminLayout>{children}</AdminLayout>
 }

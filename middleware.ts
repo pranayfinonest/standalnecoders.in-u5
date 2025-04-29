@@ -2,13 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(request: NextRequest) {
-  // Add your middleware logic here
-
-  // Example: Redirect legacy URLs
-  if (request.nextUrl.pathname.startsWith("/old-path")) {
-    return NextResponse.redirect(new URL("/new-path", request.url))
-  }
-
+  // Simplified middleware to avoid deployment issues
   return NextResponse.next()
 }
 

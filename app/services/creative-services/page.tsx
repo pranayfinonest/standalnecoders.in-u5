@@ -1,156 +1,117 @@
-import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
+import type { Metadata } from "next"
 
-export const dynamic = "force-static"
+export const metadata: Metadata = {
+  title: "Creative Services | StandaloneCoders",
+  description: "Professional creative services to enhance your brand identity and visual communication.",
+}
 
 export default function CreativeServicesPage() {
   const serviceData = {
     title: "Creative Services",
     description:
-      "Bring your brand to life with our creative services. From logo design and brand identity to website design and multimedia content creation.",
+      "Our Creative Services help businesses establish a strong visual identity and communicate effectively with their audience. From video editing to graphic design and UI/UX development, we provide comprehensive creative solutions to enhance your brand.",
+    imageSrc: "/confident-leader.png",
     features: [
-      "Brand Identity Design",
-      "Logo Creation & Refinement",
-      "Website UI/UX Design",
-      "Print & Digital Marketing Materials",
-      "Social Media Graphics",
-      "Video Production & Editing",
-      "Animation & Motion Graphics",
-      "Photography & Image Editing",
-      "Illustration & Custom Graphics",
-      "Packaging Design",
+      {
+        title: "Video Editing",
+        description:
+          "Professional video editing services to create engaging content for marketing, training, or social media.",
+      },
+      {
+        title: "Graphic Design",
+        description:
+          "Eye-catching graphic design that communicates your brand message and captures audience attention.",
+      },
+      {
+        title: "Banner Creation",
+        description: "Compelling banner designs for websites, social media, and digital advertising campaigns.",
+      },
+      {
+        title: "UI/UX Design",
+        description: "User-centered interface and experience design that enhances usability and customer satisfaction.",
+      },
     ],
     process: [
       {
-        step: 1,
-        title: "Discovery & Brief",
-        description:
-          "We start by understanding your brand, target audience, goals, and creative vision through in-depth discussions.",
+        title: "Discovery",
+        description: "We learn about your brand, target audience, and creative goals to inform our design approach.",
       },
       {
-        step: 2,
-        title: "Research & Concept Development",
-        description:
-          "Our creative team researches your industry and competitors, then develops initial concepts based on your brief.",
+        title: "Concept Development",
+        description: "We create initial concepts and prototypes based on your requirements and brand guidelines.",
       },
       {
-        step: 3,
-        title: "Design Creation",
+        title: "Refinement & Delivery",
         description:
-          "We create detailed designs and present them for your feedback, explaining our creative decisions.",
-      },
-      {
-        step: 4,
-        title: "Refinement",
-        description:
-          "Based on your feedback, we refine the designs until they perfectly match your vision and requirements.",
-      },
-      {
-        step: 5,
-        title: "Finalization & Delivery",
-        description:
-          "We finalize all assets, prepare them in appropriate formats, and deliver them with usage guidelines.",
+          "We refine the designs based on your feedback and deliver the final assets in your preferred formats.",
       },
     ],
     packages: [
       {
-        name: "Brand Starter",
-        price: "$2,500",
-        description: "Essential branding package for new businesses or rebrands.",
+        title: "Basic",
+        price: "$799",
         features: [
-          "Logo design (3 concepts)",
-          "Brand color palette",
-          "Typography selection",
+          "Logo design",
           "Basic brand guidelines",
-          "Business card design",
-          "Social media profile graphics",
+          "Social media graphics (5)",
+          "1 banner design",
+          "2 revision rounds",
         ],
+        cta: "Get Started",
       },
       {
-        name: "Brand Professional",
-        price: "$5,000",
-        popular: true,
-        description: "Comprehensive branding solution for established businesses looking to elevate their brand.",
+        title: "Standard",
+        price: "$1,999",
         features: [
-          "Logo design (5 concepts)",
-          "Extended brand guidelines",
-          "Complete stationery design",
-          "Social media templates",
-          "Email signature design",
-          "One-page website design",
-          "Brand messaging development",
-        ],
-      },
-      {
-        name: "Brand Enterprise",
-        price: "$10,000+",
-        description: "Complete brand identity system for businesses requiring extensive brand assets.",
-        features: [
-          "Logo design (unlimited concepts)",
+          "Logo design with variations",
           "Comprehensive brand guidelines",
-          "Complete marketing collateral",
-          "Custom illustration style",
-          "Video intro/outro animations",
-          "Multi-page website design",
-          "Packaging design concepts",
-          "Brand strategy consultation",
+          "Social media graphics (10)",
+          "3 banner designs",
+          "Basic video editing (1 video)",
+          "3 revision rounds",
         ],
+        cta: "Choose Plan",
+        popular: true,
+      },
+      {
+        title: "Premium",
+        price: "$3,999",
+        features: [
+          "Complete brand identity package",
+          "Extensive brand guidelines",
+          "Social media graphics (20)",
+          "5 banner designs",
+          "Advanced video editing (3 videos)",
+          "UI/UX design for one platform",
+          "Unlimited revision rounds",
+        ],
+        cta: "Contact Us",
       },
     ],
     faqs: [
       {
-        question: "How long does the creative process typically take?",
+        question: "What file formats do you provide for graphic designs?",
         answer:
-          "Timelines vary based on project scope. A basic brand identity might take 2-3 weeks, while a comprehensive brand system could take 6-8 weeks. Website designs typically take 3-6 weeks depending on complexity. We'll provide a detailed timeline during our initial consultation.",
+          "We provide designs in various formats including JPG, PNG, PDF, AI, and PSD, depending on your requirements and the specific deliverables.",
       },
       {
-        question: "How many revisions are included in your creative services?",
+        question: "How long does it take to complete a video editing project?",
         answer:
-          "Our packages typically include 2-3 rounds of revisions. We believe in getting things right and will work closely with you to ensure you're completely satisfied with the final result. Additional revision rounds can be arranged if needed.",
+          "The timeline for video editing projects varies depending on the complexity and length of the video. Simple edits may take 2-3 days, while more complex projects can take 1-2 weeks.",
       },
       {
-        question: "Do you provide the source files for the designs?",
+        question: "Do you provide source files for the designs?",
         answer:
-          "Yes, upon project completion and final payment, we provide all source files and assets in appropriate formats for your future use. We also include guidelines on how to properly use these assets to maintain brand consistency.",
+          "Yes, we provide source files for all designs upon project completion, giving you full ownership and the ability to make future modifications if needed.",
       },
       {
-        question: "Can you work with our existing brand elements?",
+        question: "Can you help with print materials as well as digital designs?",
         answer:
-          "We can work with your existing brand elements and either refresh them or expand upon them. Our goal is to enhance your brand while maintaining its core identity and recognition.",
-      },
-      {
-        question: "Do you offer ongoing creative support after project completion?",
-        answer:
-          "Yes, we offer retainer packages for ongoing creative support. This can include regular content creation, design updates, and brand management to ensure consistency across all your marketing efforts.",
+          "We create designs for both digital and print media, ensuring they're optimized for their respective formats and maintaining brand consistency across all materials.",
       },
     ],
-    cta: {
-      title: "Ready to Transform Your Brand?",
-      description:
-        "Contact us today to discuss how our creative services can help elevate your brand and captivate your audience.",
-    },
   }
 
-  return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-12 flex justify-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
-        </div>
-      }
-    >
-      <ServiceDetail
-        title={serviceData.title}
-        description={serviceData.description}
-        features={serviceData.features}
-        process={serviceData.process}
-        packages={serviceData.packages}
-        faqs={serviceData.faqs}
-        cta={serviceData.cta}
-      />
-    </Suspense>
-  )
+  return <ServiceDetail {...serviceData} />
 }

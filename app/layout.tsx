@@ -9,6 +9,7 @@ import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
 import { Toaster } from "@/components/ui/toaster"
 import GoogleAnalytics from "@/components/analytics/google-analytics"
+import ScrollToTop from "@/components/scroll-to-top"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -93,6 +94,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {/* Google Analytics */}
           <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
+          {/* ScrollToTop component for handling scroll restoration */}
+          <ScrollToTop />
+          {/* Single Header instance to prevent duplication */}
           <Header />
           <main>{children}</main>
           <Footer />

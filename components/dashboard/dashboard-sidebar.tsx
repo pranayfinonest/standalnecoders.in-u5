@@ -17,7 +17,7 @@ interface NavItem {
   icon: React.ReactNode
 }
 
-export function DashboardSidebar() {
+export default function DashboardSidebar() {
   const pathname = usePathname()
   const [searchQuery, setSearchQuery] = useState("")
 

@@ -5,25 +5,29 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   const quickLinks = [
-    { name: "Home", href: "#" },
-    { name: "Services", href: "#services" },
-    { name: "About Us", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Services", href: "/services" },
+    { name: "About Us", href: "/about" },
+    { name: "Contact", href: "/contact" },
   ]
 
   const serviceLinks = [
-    { name: "Cybersecurity Services", href: "#" },
-    { name: "Digital Marketing", href: "#" },
-    { name: "AI & Technology Solutions", href: "#" },
-    { name: "Creative Services", href: "#" },
+    { name: "Cybersecurity Services", href: "/services/cybersecurity" },
+    { name: "Digital Marketing", href: "/services/digital-marketing" },
+    { name: "AI & Technology Solutions", href: "/services/ai-technology" },
+    { name: "Creative Services", href: "/services/creative-services" },
   ]
 
   const socialLinks = [
-    { name: "Facebook", icon: <Facebook className="w-5 h-5" />, href: "#" },
-    { name: "Twitter", icon: <Twitter className="w-5 h-5" />, href: "#" },
-    { name: "Instagram", icon: <Instagram className="w-5 h-5" />, href: "#" },
-    { name: "LinkedIn", icon: <Linkedin className="w-5 h-5" />, href: "#" },
-    { name: "GitHub", icon: <Github className="w-5 h-5" />, href: "#" },
+    { name: "Facebook", icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/standalonecoders" },
+    { name: "Twitter", icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/standalonecoders" },
+    { name: "Instagram", icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/standalonecoders" },
+    {
+      name: "LinkedIn",
+      icon: <Linkedin className="w-5 h-5" />,
+      href: "https://www.linkedin.com/company/standalonecoders",
+    },
+    { name: "GitHub", icon: <Github className="w-5 h-5" />, href: "https://github.com/standalonecoders" },
   ]
 
   return (
@@ -41,16 +45,14 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((link, index) => (
-                <a
+                <Link
                   key={index}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-gray-600 hover:text-blue-600 transition-colors p-2 bg-white rounded-full shadow-sm hover:shadow"
                   aria-label={link.name}
                 >
                   {link.icon}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -62,8 +64,6 @@ export default function Footer() {
                 <li key={index}>
                   <Link
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
                   >
                     <svg
@@ -89,8 +89,6 @@ export default function Footer() {
                 <li key={index}>
                   <Link
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
                   >
                     <svg
@@ -118,11 +116,15 @@ export default function Footer() {
               </p>
               <p className="flex items-center">
                 <Phone className="w-5 h-5 mr-2 text-blue-500" />
-                +91 6378110608
+                <Link href="tel:+916378110608" className="hover:text-blue-600">
+                  +91 6378110608
+                </Link>
               </p>
               <p className="flex items-center">
                 <Mail className="w-5 h-5 mr-2 text-blue-500" />
-                Yogendra6378@gmail.com
+                <Link href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600">
+                  Yogendra6378@gmail.com
+                </Link>
               </p>
             </address>
           </div>

@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { scrollToTop } from "@/utils/scroll-utils"
 
 export default function AdminOrderDetail({ orderId }) {
   const router = useRouter()
@@ -29,6 +30,9 @@ export default function AdminOrderDetail({ orderId }) {
   const [editedStatus, setEditedStatus] = useState("")
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    scrollToTop()
+
     // Check if admin is logged in
     const isAdminLoggedIn = localStorage.getItem("isAdminLoggedIn") === "true"
     if (!isAdminLoggedIn) {
@@ -140,6 +144,7 @@ export default function AdminOrderDetail({ orderId }) {
     })
 
     router.push("/admin/orders")
+    scrollToTop()
   }
 
   const handleSendEmail = () => {
@@ -151,6 +156,11 @@ export default function AdminOrderDetail({ orderId }) {
 
   const handlePrintOrder = () => {
     window.print()
+  }
+
+  const handleBackToOrders = () => {
+    router.push("/admin/orders")
+    scrollToTop()
   }
 
   if (isLoading) {
@@ -166,7 +176,7 @@ export default function AdminOrderDetail({ orderId }) {
       <div className="flex flex-col items-center justify-center py-12">
         <h2 className="text-2xl font-bold mb-4">Order Not Found</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">The requested order could not be found.</p>
-        <Button asChild>
+        <Button asChild onClick={() => scrollToTop()}>
           <Link href="/admin/orders">Back to Orders</Link>
         </Button>
       </div>
@@ -177,7 +187,7 @@ export default function AdminOrderDetail({ orderId }) {
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div className="flex items-center mb-4 md:mb-0">
-          <Button variant="ghost" className="mr-4" onClick={() => router.push("/admin/orders")}>
+          <Button variant="ghost" className="mr-4" onClick={handleBackToOrders}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Orders
           </Button>
           <h1 className="text-2xl font-bold">Order #{order.id}</h1>
@@ -272,11 +282,11 @@ export default function AdminOrderDetail({ orderId }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Template</h3>
-                    <p className="mt-1 font-medium">{order.template?.name || "Custom Website"}</p>
+                    <p className="mt-1 font-medium">{order.items?.[0]?.template?.name || "Custom Website"}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Price</h3>
-                    <p className="mt-1 font-medium">{formatCurrency(order.totalAmount || 0)}</p>
+                    <p className="mt-1 font-medium">{formatCurrency(order.payment?.total || 0)}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Order Date</h3>
@@ -284,16 +294,16 @@ export default function AdminOrderDetail({ orderId }) {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Method</h3>
-                    <p className="mt-1 font-medium">{order.paymentMethod || "Credit Card"}</p>
+                    <p className="mt-1 font-medium">{order.payment?.method || "Credit Card"}</p>
                   </div>
                 </div>
 
-                {order.customizations && (
+                {order.items?.[0]?.customizations && (
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Customizations</h3>
                     <div className="bg-gray-50 dark:bg-gray-800/50 rounded-md p-3">
                       <ul className="list-disc list-inside space-y-1 text-sm">
-                        {Object.entries(order.customizations).map(([key, value]) => (
+                        {Object.entries(order.items[0].customizations).map(([key, value]) => (
                           <li key={key}>
                             <span className="font-medium">{key}:</span> {value}
                           </li>

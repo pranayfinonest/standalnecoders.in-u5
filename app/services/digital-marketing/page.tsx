@@ -1,155 +1,119 @@
-import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
+import type { Metadata } from "next"
 
-export const dynamic = "force-static"
+export const metadata: Metadata = {
+  title: "Digital Marketing Services | StandaloneCoders",
+  description: "Strategic digital marketing services to boost your online presence and drive business growth.",
+}
 
 export default function DigitalMarketingPage() {
   const serviceData = {
-    title: "Digital Marketing Services",
+    title: "Digital Marketing",
     description:
-      "Boost your online presence and reach your target audience with our strategic digital marketing services.",
+      "Our Digital Marketing services help businesses establish a strong online presence, reach their target audience, and drive conversions. From SEO optimization to content marketing and social media management, we provide comprehensive digital marketing solutions.",
+    imageSrc: "/interconnected-world.png",
     features: [
-      "Search Engine Optimization (SEO)",
-      "Pay-Per-Click Advertising (PPC)",
-      "Social Media Marketing",
-      "Content Marketing",
-      "Email Marketing Campaigns",
-      "Conversion Rate Optimization",
-      "Analytics and Reporting",
-      "Brand Strategy Development",
-      "Competitor Analysis",
-      "Local SEO and Google My Business",
+      {
+        title: "SEO Optimization",
+        description:
+          "Improve your website's visibility in search engine results to drive organic traffic and increase conversions.",
+      },
+      {
+        title: "Content Marketing",
+        description:
+          "Create valuable, relevant content that attracts and engages your target audience while establishing your brand authority.",
+      },
+      {
+        title: "Social Media Management",
+        description:
+          "Build and maintain a strong social media presence to connect with your audience and promote your brand.",
+      },
+      {
+        title: "PPC Campaigns",
+        description: "Drive targeted traffic to your website through strategic pay-per-click advertising campaigns.",
+      },
     ],
     process: [
       {
-        step: 1,
-        title: "Discovery & Analysis",
+        title: "Research & Analysis",
         description:
-          "We analyze your current digital presence, target audience, and competitors to identify opportunities.",
+          "We analyze your market, competitors, and target audience to develop an effective marketing strategy.",
       },
       {
-        step: 2,
         title: "Strategy Development",
         description:
-          "We create a customized digital marketing strategy aligned with your business goals and target audience.",
+          "We create a comprehensive digital marketing strategy aligned with your business goals and objectives.",
       },
       {
-        step: 3,
-        title: "Implementation",
-        description: "Our team executes the strategy across relevant channels, creating and optimizing campaigns.",
-      },
-      {
-        step: 4,
-        title: "Monitoring & Optimization",
-        description:
-          "We continuously monitor campaign performance and make data-driven adjustments to improve results.",
-      },
-      {
-        step: 5,
-        title: "Reporting & Analysis",
-        description:
-          "Regular reports provide insights into campaign performance, ROI, and recommendations for improvement.",
+        title: "Implementation & Optimization",
+        description: "Our team implements the marketing strategy and continuously optimizes it for maximum results.",
       },
     ],
     packages: [
       {
-        name: "Starter",
-        price: "$1,500/mo",
-        description:
-          "Essential digital marketing services for small businesses looking to establish an online presence.",
+        title: "Starter",
+        price: "$999/mo",
         features: [
           "Basic SEO optimization",
+          "Content creation (2 posts/mo)",
           "Social media management (2 platforms)",
-          "Monthly content creation (2 posts)",
-          "Basic Google Analytics setup",
-          "Quarterly performance reports",
+          "Monthly performance report",
+          "Email support",
         ],
+        cta: "Get Started",
       },
       {
-        name: "Growth",
-        price: "$3,000/mo",
-        popular: true,
-        description: "Comprehensive digital marketing solution for businesses looking to expand their online reach.",
+        title: "Growth",
+        price: "$2,499/mo",
         features: [
           "Advanced SEO optimization",
+          "Content creation (4 posts/mo)",
           "Social media management (4 platforms)",
-          "Weekly content creation",
           "PPC campaign management",
-          "Email marketing campaigns",
-          "Monthly performance reports",
-          "Conversion rate optimization",
+          "Bi-weekly performance reports",
+          "Email and phone support",
         ],
+        cta: "Choose Plan",
+        popular: true,
       },
       {
-        name: "Enterprise",
-        price: "$5,000+/mo",
-        description:
-          "Full-service digital marketing solution for businesses requiring extensive online presence management.",
+        title: "Premium",
+        price: "$4,999/mo",
         features: [
-          "Complete digital strategy",
-          "Advanced SEO & content strategy",
+          "Comprehensive SEO strategy",
+          "Content creation (8 posts/mo)",
           "Social media management (all platforms)",
           "Advanced PPC campaign management",
-          "Custom reporting dashboard",
+          "Weekly performance reports",
+          "Priority support",
           "Dedicated marketing manager",
-          "Marketing automation setup",
-          "Competitor analysis & tracking",
         ],
+        cta: "Contact Us",
       },
     ],
     faqs: [
       {
-        question: "How long does it take to see results from digital marketing?",
+        question: "How long does it take to see results from SEO?",
         answer:
-          "Results vary depending on the strategies implemented. SEO typically takes 3-6 months to show significant results, while PPC and social media advertising can generate immediate traffic. We provide realistic timelines based on your specific goals and market conditions.",
+          "SEO is a long-term strategy that typically takes 3-6 months to start showing significant results. However, this can vary depending on your industry, competition, and the current state of your website.",
+      },
+      {
+        question: "What social media platforms should my business be on?",
+        answer:
+          "The best social media platforms for your business depend on your target audience and industry. We'll help you identify which platforms will provide the best ROI for your specific business.",
       },
       {
         question: "How do you measure the success of digital marketing campaigns?",
         answer:
-          "We track key performance indicators (KPIs) aligned with your business goals, such as website traffic, conversion rates, lead generation, engagement metrics, and ultimately, ROI. We provide regular reports with insights and recommendations.",
+          "We track various metrics including website traffic, conversion rates, engagement rates, click-through rates, and ultimately, return on investment (ROI) to measure the success of our digital marketing campaigns.",
       },
       {
-        question: "Do I need to be on all social media platforms?",
+        question: "Can you help with email marketing?",
         answer:
-          "No, it's better to focus on platforms where your target audience is most active. We help identify the most effective channels for your business and develop strategies specific to those platforms.",
-      },
-      {
-        question: "How often will I receive reports on campaign performance?",
-        answer:
-          "Depending on your package, we provide monthly or quarterly comprehensive reports. However, we maintain open communication throughout the campaign and can provide updates as needed.",
-      },
-      {
-        question: "Can you work with my existing marketing team?",
-        answer:
-          "We can complement your in-house team's efforts or provide training to help them maximize results. We're flexible in our approach and can adapt to your organizational structure.",
+          "Yes, we offer email marketing services including strategy development, campaign creation, automation, and performance analysis to help you nurture leads and maintain customer relationships.",
       },
     ],
-    cta: {
-      title: "Ready to Boost Your Online Presence?",
-      description: "Contact us today to discuss how our digital marketing services can help your business grow.",
-    },
   }
 
-  return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-12 flex justify-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
-        </div>
-      }
-    >
-      <ServiceDetail
-        title={serviceData.title}
-        description={serviceData.description}
-        features={serviceData.features}
-        process={serviceData.process}
-        packages={serviceData.packages}
-        faqs={serviceData.faqs}
-        cta={serviceData.cta}
-      />
-    </Suspense>
-  )
+  return <ServiceDetail {...serviceData} />
 }

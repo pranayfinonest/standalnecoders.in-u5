@@ -18,6 +18,9 @@ export default function OrderDetails({ orderId }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0)
+
     // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
     if (!isLoggedIn) {
@@ -104,6 +107,11 @@ export default function OrderDetails({ orderId }) {
     }
   }
 
+  const handleBackToDashboard = () => {
+    router.push("/dashboard/projects")
+    window.scrollTo(0, 0)
+  }
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center">
@@ -121,8 +129,8 @@ export default function OrderDetails({ orderId }) {
         <div className="max-w-md mx-auto text-center">
           <h1 className="text-2xl font-bold mb-4">Order Not Found</h1>
           <p className="text-gray-600 dark:text-gray-400 mb-8">We couldn't find the order you're looking for.</p>
-          <Button asChild>
-            <Link href="/booking/dashboard">Go to Dashboard</Link>
+          <Button asChild onClick={() => window.scrollTo(0, 0)}>
+            <Link href="/dashboard/projects">Go to Dashboard</Link>
           </Button>
         </div>
       </div>
@@ -131,7 +139,7 @@ export default function OrderDetails({ orderId }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Button variant="ghost" className="mb-6" onClick={() => router.push("/booking/dashboard")}>
+      <Button variant="ghost" className="mb-6" onClick={handleBackToDashboard}>
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
       </Button>
 
@@ -155,7 +163,7 @@ export default function OrderDetails({ orderId }) {
             <Clock className="inline h-4 w-4 mr-1" /> Placed on {formatDate(order.date)}
           </p>
         </div>
-        <Button variant="outline" asChild>
+        <Button variant="outline" asChild onClick={() => window.scrollTo(0, 0)}>
           <Link href="/contact">Contact Support</Link>
         </Button>
       </div>
@@ -241,59 +249,70 @@ export default function OrderDetails({ orderId }) {
             </CardHeader>
             <CardContent>
               <h3 className="font-semibold mb-4">Items</h3>
-              {order.items.map((item) => (
-                <div key={item.id} className="mb-6 last:mb-0">
-                  <div className="flex justify-between">
-                    <div>
-                      <h4 className="font-medium">{item.template.name}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{item.template.description}</p>
+              {order.items &&
+                order.items.map((item) => (
+                  <div key={item.id} className="mb-6 last:mb-0">
+                    <div className="flex justify-between">
+                      <div>
+                        <h4 className="font-medium">{item.template?.name || "Custom Website"}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {item.template?.description || "Custom website development"}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">₹{item.price || 0}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Base price: ₹{item.template?.basePrice || 0}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium">₹{item.price}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Base price: ₹{item.template.basePrice}</p>
-                    </div>
-                  </div>
 
-                  <div className="mt-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-                    <h5 className="text-sm font-medium mb-2">Customizations</h5>
-                    <ul className="space-y-1 text-sm">
-                      <li>
-                        <span className="font-medium">Business Name:</span> {item.customizations.businessName}
-                      </li>
-                      <li>
-                        <span className="font-medium">Business Type:</span> {item.customizations.businessType}
-                      </li>
-                      {item.customizations.additionalPages?.length > 0 && (
-                        <li>
-                          <span className="font-medium">Additional Pages:</span>{" "}
-                          {item.customizations.additionalPages.join(", ")}
-                        </li>
-                      )}
-                      {item.customizations.selectedAddOns?.length > 0 && (
-                        <li>
-                          <span className="font-medium">Add-ons:</span> {item.customizations.selectedAddOns.length}{" "}
-                          selected
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                    {item.customizations && (
+                      <div className="mt-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                        <h5 className="text-sm font-medium mb-2">Customizations</h5>
+                        <ul className="space-y-1 text-sm">
+                          {item.customizations.businessName && (
+                            <li>
+                              <span className="font-medium">Business Name:</span> {item.customizations.businessName}
+                            </li>
+                          )}
+                          {item.customizations.businessType && (
+                            <li>
+                              <span className="font-medium">Business Type:</span> {item.customizations.businessType}
+                            </li>
+                          )}
+                          {item.customizations.additionalPages?.length > 0 && (
+                            <li>
+                              <span className="font-medium">Additional Pages:</span>{" "}
+                              {item.customizations.additionalPages.join(", ")}
+                            </li>
+                          )}
+                          {item.customizations.selectedAddOns?.length > 0 && (
+                            <li>
+                              <span className="font-medium">Add-ons:</span> {item.customizations.selectedAddOns.length}{" "}
+                              selected
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
 
-                  <Separator className="my-4" />
-                </div>
-              ))}
+                    <Separator className="my-4" />
+                  </div>
+                ))}
 
               <div className="flex justify-between mt-6">
                 <span className="font-medium">Subtotal:</span>
-                <span>₹{order.payment.total}</span>
+                <span>₹{order.payment?.total || 0}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">GST (18%):</span>
-                <span>₹{Math.round(order.payment.total * 0.18)}</span>
+                <span>₹{Math.round((order.payment?.total || 0) * 0.18)}</span>
               </div>
               <Separator className="my-4" />
               <div className="flex justify-between text-lg font-bold">
                 <span>Total:</span>
-                <span>₹{order.payment.total}</span>
+                <span>₹{order.payment?.total || 0}</span>
               </div>
             </CardContent>
           </Card>
@@ -311,9 +330,9 @@ export default function OrderDetails({ orderId }) {
                     <User className="h-4 w-4 mr-2" />
                     <span className="text-sm">Contact Details</span>
                   </div>
-                  <p className="font-medium">{order.customer.name}</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{order.customer.email}</p>
-                  {order.customer.phone && (
+                  <p className="font-medium">{order.customer?.name || "N/A"}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{order.customer?.email || "N/A"}</p>
+                  {order.customer?.phone && (
                     <p className="text-gray-600 dark:text-gray-400 text-sm">{order.customer.phone}</p>
                   )}
                 </div>
@@ -340,13 +359,13 @@ export default function OrderDetails({ orderId }) {
                     <span className="text-sm">Payment Method</span>
                   </div>
                   <p className="font-medium capitalize">
-                    {order.payment.method === "card"
+                    {order.payment?.method === "card"
                       ? "Credit/Debit Card"
-                      : order.payment.method === "upi"
+                      : order.payment?.method === "upi"
                         ? "UPI Payment"
-                        : order.payment.method === "netbanking"
+                        : order.payment?.method === "netbanking"
                           ? "Net Banking"
-                          : order.payment.method}
+                          : order.payment?.method || "N/A"}
                   </p>
                 </div>
               </div>
@@ -361,7 +380,7 @@ export default function OrderDetails({ orderId }) {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 If you have any questions or concerns about your order, our support team is here to help.
               </p>
-              <Button className="w-full" asChild>
+              <Button className="w-full" asChild onClick={() => window.scrollTo(0, 0)}>
                 <Link href="/contact">Contact Support</Link>
               </Button>
             </CardContent>

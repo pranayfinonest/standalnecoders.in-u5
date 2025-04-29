@@ -1,161 +1,119 @@
-import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
+import type { Metadata } from "next"
 
-export const dynamic = "force-static"
+export const metadata: Metadata = {
+  title: "AI & Technology Solutions | StandaloneCoders",
+  description: "Cutting-edge AI and technology solutions to streamline operations and enhance customer experiences.",
+}
 
 export default function AITechnologyPage() {
   const serviceData = {
     title: "AI & Technology Solutions",
     description:
-      "Leverage the power of artificial intelligence and cutting-edge technology to help businesses innovate, automate processes, and gain competitive advantages. Our solutions are designed to solve complex problems and drive digital transformation.",
+      "Our AI & Technology Solutions help businesses leverage cutting-edge technologies to streamline operations, enhance customer experiences, and drive innovation. From AI implementation to custom software development, we provide comprehensive technology solutions tailored to your specific needs.",
+    imageSrc: "/vibrant-tech-hub.png",
     features: [
-      "Custom AI Solutions Development",
-      "Machine Learning Implementation",
-      "Data Analytics & Business Intelligence",
-      "Process Automation",
-      "AI Integration with Existing Systems",
-      "Natural Language Processing",
-      "Computer Vision Solutions",
-      "Predictive Analytics",
-      "AI Strategy Consulting",
-      "AI Model Training & Optimization",
+      {
+        title: "AI Implementation",
+        description:
+          "Integrate artificial intelligence into your business processes to automate tasks, gain insights, and improve decision-making.",
+      },
+      {
+        title: "Prompt Engineering",
+        description:
+          "Optimize AI interactions with expertly crafted prompts that enhance the performance of language models and other AI systems.",
+      },
+      {
+        title: "CRM Management",
+        description:
+          "Implement and manage customer relationship management systems to improve customer service and streamline sales processes.",
+      },
+      {
+        title: "Custom Software Development",
+        description: "Create tailored software solutions designed specifically for your business needs and objectives.",
+      },
     ],
     process: [
       {
-        step: 1,
-        title: "Discovery & Assessment",
+        title: "Assessment",
         description:
-          "We begin by understanding your business challenges and objectives to identify opportunities where AI can create value.",
+          "We analyze your current technology infrastructure and identify opportunities for improvement and innovation.",
       },
       {
-        step: 2,
-        title: "Solution Design",
-        description:
-          "Our experts design a tailored AI solution that addresses your specific needs and integrates with your existing systems.",
+        title: "Strategy Development",
+        description: "We create a comprehensive technology strategy aligned with your business goals and objectives.",
       },
       {
-        step: 3,
-        title: "Development & Implementation",
+        title: "Implementation",
         description:
-          "We develop and implement the AI solution, ensuring it meets quality standards and performance requirements.",
-      },
-      {
-        step: 4,
-        title: "Testing & Validation",
-        description:
-          "Rigorous testing ensures the solution performs as expected and delivers accurate results across various scenarios.",
-      },
-      {
-        step: 5,
-        title: "Deployment & Integration",
-        description: "We deploy the solution and integrate it seamlessly with your existing workflows and systems.",
-      },
-      {
-        step: 6,
-        title: "Monitoring & Optimization",
-        description:
-          "Ongoing monitoring and optimization ensure your AI solution continues to deliver value and improves over time.",
+          "Our team of experts implements the technology solutions, ensuring seamless integration with your existing systems.",
       },
     ],
     packages: [
       {
-        name: "AI Starter",
-        price: "$5,000",
-        description: "Basic AI implementation for small businesses looking to start their AI journey.",
+        title: "Starter",
+        price: "$1,999",
         features: [
-          "Single use case implementation",
-          "Basic data integration",
-          "Model training with existing data",
-          "Basic reporting dashboard",
+          "Basic AI implementation",
+          "CRM setup",
+          "1 custom software module",
           "30 days support",
+          "Basic training",
         ],
+        cta: "Get Started",
       },
       {
-        name: "AI Professional",
-        price: "$15,000",
+        title: "Professional",
+        price: "$4,999",
+        features: [
+          "Advanced AI implementation",
+          "CRM setup and customization",
+          "3 custom software modules",
+          "90 days support",
+          "Comprehensive training",
+          "Monthly performance reports",
+        ],
+        cta: "Choose Plan",
         popular: true,
-        description: "Comprehensive AI solution for growing businesses with moderate complexity needs.",
-        features: [
-          "Multiple use case implementation",
-          "Advanced data integration",
-          "Custom model development",
-          "Interactive analytics dashboard",
-          "API development for integration",
-          "3 months support and maintenance",
-          "Knowledge transfer sessions",
-        ],
       },
       {
-        name: "AI Enterprise",
-        price: "Custom",
-        description:
-          "Enterprise-grade AI solutions for organizations with complex requirements and large-scale implementation needs.",
+        title: "Enterprise",
+        price: "$9,999",
         features: [
-          "Enterprise-wide AI strategy",
-          "Multiple complex use cases",
-          "Advanced model development",
-          "Full system integration",
-          "Custom analytics platform",
-          "Ongoing support and optimization",
-          "Dedicated AI consultant",
-          "Staff training program",
+          "Full AI ecosystem implementation",
+          "Enterprise CRM integration",
+          "Unlimited custom software modules",
+          "1 year priority support",
+          "Executive training sessions",
+          "Quarterly strategy reviews",
+          "Dedicated account manager",
         ],
+        cta: "Contact Us",
       },
     ],
     faqs: [
       {
         question: "How can AI benefit my business?",
         answer:
-          "AI can benefit your business in numerous ways, including automating repetitive tasks, extracting insights from data, improving decision-making, enhancing customer experiences, optimizing operations, and creating new business opportunities through innovation.",
+          "AI can automate repetitive tasks, provide valuable insights from data, enhance customer experiences, improve decision-making, and create new business opportunities through innovation.",
       },
       {
-        question: "Do I need a large amount of data to implement AI?",
+        question: "What is prompt engineering?",
         answer:
-          "While having quality data is important for AI implementation, you don't necessarily need massive amounts. We can work with your existing data and also help you identify strategies for data collection and enrichment if needed.",
+          "Prompt engineering is the process of designing and optimizing inputs to AI systems, particularly language models, to generate more accurate, relevant, and useful outputs.",
       },
       {
-        question: "How long does it take to implement an AI solution?",
+        question: "How long does it take to implement a custom software solution?",
         answer:
-          "Implementation timelines vary based on the complexity of the solution, ranging from a few weeks for simple implementations to several months for complex enterprise solutions. We'll provide a detailed timeline during the solution design phase.",
+          "The timeline for custom software development varies depending on the complexity and scope of the project. Simple applications may take 1-3 months, while more complex enterprise solutions can take 6-12 months or more.",
       },
       {
-        question: "How do you ensure the security of our data?",
+        question: "Do you provide ongoing support after implementation?",
         answer:
-          "We implement robust security measures throughout the AI development process, including data encryption, secure access controls, and compliance with relevant data protection regulations. We can also work within your existing security frameworks.",
-      },
-      {
-        question: "Will we need specialized staff to maintain the AI solution?",
-        answer:
-          "Our solutions are designed with usability in mind. While some technical knowledge is beneficial, we provide training and documentation to enable your team to manage the solution. We also offer ongoing support and maintenance packages.",
+          "Yes, we offer various support packages to ensure your technology solutions continue to function optimally. Our support includes maintenance, updates, troubleshooting, and continuous improvement.",
       },
     ],
-    cta: {
-      title: "Ready to Transform Your Business with AI?",
-      description:
-        "Contact us today to discuss how our AI and technology solutions can help your business innovate and grow.",
-    },
   }
 
-  return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-12 flex justify-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
-        </div>
-      }
-    >
-      <ServiceDetail
-        title={serviceData.title}
-        description={serviceData.description}
-        features={serviceData.features}
-        process={serviceData.process}
-        packages={serviceData.packages}
-        faqs={serviceData.faqs}
-        cta={serviceData.cta}
-      />
-    </Suspense>
-  )
+  return <ServiceDetail {...serviceData} />
 }

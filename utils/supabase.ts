@@ -6,7 +6,8 @@ export const createServerSupabaseClient = () => {
   const supabaseKey = process.env.SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Missing Supabase environment variables")
+    console.error("Missing Supabase environment variables")
+    return null
   }
 
   return createClient(supabaseUrl, supabaseKey)
@@ -22,9 +23,19 @@ export const createClientSupabaseClient = () => {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Missing Supabase public environment variables")
+    console.error("Missing Supabase public environment variables")
+    return null
   }
 
   clientSupabaseInstance = createClient(supabaseUrl, supabaseKey)
   return clientSupabaseInstance
+}
+
+// Helper function to get server-side client with error handling
+export const getServerSupabaseClient = () => {
+  const client = createServerSupabaseClient()
+  if (!client) {
+    throw new Error("Failed to initialize Supabase client")
+  }
+  return client
 }

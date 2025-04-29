@@ -1,158 +1,118 @@
-import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
+import type { Metadata } from "next"
 
-export const dynamic = "force-static"
+export const metadata: Metadata = {
+  title: "Cybersecurity Services | StandaloneCoders",
+  description:
+    "Comprehensive security solutions to protect your business from cyber threats and ensure data integrity.",
+}
 
 export default function CybersecurityPage() {
   const serviceData = {
     title: "Cybersecurity Services",
     description:
-      "Protect your digital assets with our comprehensive cybersecurity solutions designed to safeguard your business from evolving threats.",
+      "Our Cybersecurity Services provide comprehensive protection for your business against evolving cyber threats. From penetration testing to security audits and compliance, we ensure your data and systems remain secure.",
+    imageSrc: "/intricate-logic-flow.png",
     features: [
-      "Vulnerability Assessment & Penetration Testing",
-      "Security Audits & Compliance",
-      "Incident Response Planning",
-      "Security Awareness Training",
-      "Network Security Implementation",
-      "Cloud Security Solutions",
-      "Data Protection & Encryption",
-      "24/7 Security Monitoring",
-      "Identity & Access Management",
-      "Security Policy Development",
+      {
+        title: "Penetration Testing",
+        description:
+          "Identify vulnerabilities in your systems before hackers do with our thorough penetration testing services.",
+      },
+      {
+        title: "Security Audits",
+        description: "Comprehensive assessment of your security posture to identify gaps and recommend improvements.",
+      },
+      {
+        title: "ISO 27001 Compliance",
+        description:
+          "Ensure your information security management system meets international standards for best practices.",
+      },
+      {
+        title: "Threat Analysis",
+        description: "Continuous monitoring and analysis of potential threats to your organization's digital assets.",
+      },
     ],
     process: [
       {
-        step: 1,
-        title: "Security Assessment",
+        title: "Assessment",
+        description: "We evaluate your current security posture and identify potential vulnerabilities and risks.",
+      },
+      {
+        title: "Strategy Development",
         description:
-          "We conduct a thorough assessment of your current security posture to identify vulnerabilities and gaps.",
+          "We create a comprehensive security strategy tailored to your specific business needs and risk profile.",
       },
       {
-        step: 2,
-        title: "Risk Analysis",
-        description: "Our experts analyze potential risks and prioritize them based on impact and likelihood.",
-      },
-      {
-        step: 3,
-        title: "Security Planning",
-        description:
-          "We develop a comprehensive security plan tailored to your specific business needs and risk profile.",
-      },
-      {
-        step: 4,
         title: "Implementation",
-        description: "Our team implements security measures, tools, and protocols to protect your digital assets.",
-      },
-      {
-        step: 5,
-        title: "Testing & Validation",
-        description: "We conduct thorough testing to ensure all security measures are functioning effectively.",
-      },
-      {
-        step: 6,
-        title: "Ongoing Monitoring",
-        description:
-          "Continuous monitoring and regular security updates help maintain your security posture over time.",
+        description: "Our team implements security measures and controls to protect your systems and data.",
       },
     ],
     packages: [
       {
-        name: "Essential Security",
-        price: "$2,500",
-        description: "Basic security assessment and implementation for small businesses.",
+        title: "Basic Security",
+        price: "$1,499",
         features: [
           "Vulnerability assessment",
-          "Basic security policy development",
+          "Basic security audit",
           "Security awareness training",
-          "Password management solution",
-          "Basic firewall configuration",
+          "30 days support",
+          "Incident response plan",
         ],
+        cta: "Get Started",
       },
       {
-        name: "Advanced Protection",
-        price: "$7,500",
+        title: "Advanced Security",
+        price: "$3,999",
+        features: [
+          "Comprehensive penetration testing",
+          "Detailed security audit",
+          "Advanced security training",
+          "90 days support",
+          "Incident response plan",
+          "Monthly security reports",
+        ],
+        cta: "Choose Plan",
         popular: true,
-        description: "Comprehensive security solution for medium-sized businesses with sensitive data.",
-        features: [
-          "Full penetration testing",
-          "Advanced security assessment",
-          "Incident response planning",
-          "Network security implementation",
-          "Cloud security configuration",
-          "Data encryption solutions",
-          "Quarterly security reviews",
-        ],
       },
       {
-        name: "Enterprise Security",
-        price: "Custom",
-        description: "Enterprise-grade security solutions for organizations requiring the highest level of protection.",
+        title: "Enterprise Security",
+        price: "$8,999",
         features: [
-          "Comprehensive security program",
-          "Advanced penetration testing",
-          "24/7 security monitoring",
-          "Custom security architecture",
-          "Compliance management",
-          "Executive security training",
+          "Full-scale penetration testing",
+          "Enterprise security audit",
+          "ISO 27001 compliance assistance",
+          "1 year priority support",
+          "Advanced incident response",
+          "Quarterly security reviews",
           "Dedicated security consultant",
-          "Monthly security reviews",
         ],
+        cta: "Contact Us",
       },
     ],
     faqs: [
       {
-        question: "How often should we conduct security assessments?",
+        question: "How often should we conduct security audits?",
         answer:
-          "We recommend conducting comprehensive security assessments at least annually, with more frequent targeted assessments when significant changes occur in your IT environment or when new threats emerge.",
+          "We recommend conducting comprehensive security audits at least annually, with more frequent targeted assessments quarterly or after significant changes to your IT infrastructure.",
       },
       {
-        question: "What compliance standards do you support?",
+        question: "What is penetration testing?",
         answer:
-          "We support a wide range of compliance standards including GDPR, HIPAA, PCI DSS, ISO 27001, SOC 2, and NIST frameworks. Our team can help you achieve and maintain compliance with these and other industry-specific regulations.",
+          "Penetration testing is a simulated cyber attack against your computer system to check for exploitable vulnerabilities. It helps identify security weaknesses before malicious hackers can exploit them.",
       },
       {
-        question: "How do you handle security incidents?",
+        question: "How can we prepare for ISO 27001 certification?",
         answer:
-          "We follow a structured incident response process that includes detection, containment, eradication, recovery, and lessons learned. Our team works quickly to minimize damage and restore normal operations while documenting the incident for future prevention.",
+          "Preparing for ISO 27001 certification involves establishing an information security management system (ISMS), conducting risk assessments, implementing security controls, and documenting policies and procedures.",
       },
       {
-        question: "Do you offer employee security training?",
+        question: "What should we do if we experience a security breach?",
         answer:
-          "Yes, we provide comprehensive security awareness training programs that can be customized to your organization's specific needs. These include phishing simulations, security best practices, and role-specific training modules.",
-      },
-      {
-        question: "How do you stay current with evolving cyber threats?",
-        answer:
-          "Our security team continuously monitors threat intelligence feeds, participates in industry forums, and maintains certifications in the latest security technologies. We regularly update our security practices and client recommendations based on emerging threats.",
+          "In the event of a security breach, you should activate your incident response plan, contain the breach, assess the damage, notify affected parties as required by law, and work to prevent similar incidents in the future.",
       },
     ],
-    cta: {
-      title: "Secure Your Business Today",
-      description:
-        "Don't wait for a breach to happen. Contact us to strengthen your security posture and protect your valuable digital assets.",
-    },
   }
 
-  return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-12 flex justify-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
-        </div>
-      }
-    >
-      <ServiceDetail
-        title={serviceData.title}
-        description={serviceData.description}
-        features={serviceData.features}
-        process={serviceData.process}
-        packages={serviceData.packages}
-        faqs={serviceData.faqs}
-        cta={serviceData.cta}
-      />
-    </Suspense>
-  )
+  return <ServiceDetail {...serviceData} />
 }

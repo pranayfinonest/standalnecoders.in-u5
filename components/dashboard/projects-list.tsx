@@ -70,6 +70,14 @@ export default function ProjectsList() {
     }).format(value)
   }
 
+  const handleViewProject = (projectId) => {
+    // Navigate to the project detail page
+    router.push(`/dashboard/projects/${projectId}`)
+
+    // Scroll to top of the page
+    window.scrollTo(0, 0)
+  }
+
   if (isLoading) {
     return (
       <div className="flex flex-col gap-4">
@@ -89,7 +97,7 @@ export default function ProjectsList() {
           <h1 className="text-2xl font-bold">Your Projects</h1>
           <p className="text-gray-600 dark:text-gray-400">Manage and track your website development projects</p>
         </div>
-        <Button asChild>
+        <Button asChild onClick={() => window.scrollTo(0, 0)}>
           <Link href="/booking/templates">Create New Project</Link>
         </Button>
       </div>
@@ -130,7 +138,7 @@ export default function ProjectsList() {
       <div className="space-y-4">
         {filteredProjects.length > 0 ? (
           filteredProjects.map((project) => (
-            <Card key={project.id}>
+            <Card key={project.id} className="hover:shadow-md transition-shadow duration-200">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row justify-between gap-4">
                   <div>
@@ -181,8 +189,8 @@ export default function ProjectsList() {
                   </div>
                   <div className="flex flex-col justify-between items-end">
                     <div className="font-bold text-lg">{formatCurrency(project.payment?.total || 0)}</div>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/dashboard/projects/${project.id}`}>View Details</Link>
+                    <Button variant="outline" size="sm" onClick={() => handleViewProject(project.id)}>
+                      View Details
                     </Button>
                   </div>
                 </div>
@@ -200,7 +208,7 @@ export default function ProjectsList() {
                   : "You haven't created any website projects yet."}
               </p>
               {projects.length === 0 && (
-                <Button asChild>
+                <Button asChild onClick={() => window.scrollTo(0, 0)}>
                   <Link href="/booking/templates">Create a Project</Link>
                 </Button>
               )}

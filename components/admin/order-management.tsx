@@ -44,6 +44,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { scrollToTop } from "@/utils/scroll-utils"
 
 export default function OrderManagement() {
   const router = useRouter()
@@ -59,6 +60,9 @@ export default function OrderManagement() {
   const [selectedOrder, setSelectedOrder] = useState(null)
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    scrollToTop()
+
     // Load orders from localStorage
     const storedOrders = JSON.parse(localStorage.getItem("orders") || "[]")
 
@@ -278,6 +282,11 @@ export default function OrderManagement() {
     setIsDeleteDialogOpen(true)
   }
 
+  const handleViewDetails = (orderId) => {
+    router.push(`/admin/orders/${orderId}`)
+    scrollToTop()
+  }
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A"
     const date = new Date(dateString)
@@ -458,7 +467,7 @@ export default function OrderManagement() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => router.push(`/admin/orders/${order.id}`)}>
+                            <DropdownMenuItem onClick={() => handleViewDetails(order.id)}>
                               <Eye className="mr-2 h-4 w-4" /> View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => openEditDialog(order)}>
