@@ -1,21 +1,16 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
+// Simplified middleware to reduce overhead
 export function middleware(request: NextRequest) {
-  // Simplified middleware to avoid deployment issues
   return NextResponse.next()
 }
 
+// Limit middleware to only run on specific paths
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+    // Only run middleware on admin and dashboard routes
+    "/admin/:path*",
+    "/dashboard/:path*",
   ],
 }
