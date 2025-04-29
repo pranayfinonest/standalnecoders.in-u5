@@ -83,8 +83,18 @@ export default function Header() {
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-white"}`}>
       <div className="container-custom py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
-          <img src="/standalone-coders-logo.png" alt="StandaloneCoders Logo" className="h-12 md:h-14" />
-          <span className="sr-only">StandaloneCoders</span>
+          <div className="logo-3d-container">
+            <h1 className="logo-3d">
+              <span className="logo-3d-standalone">
+                <span className="text-red-600">S</span>
+                <span>tandalone</span>
+              </span>
+              <span className="logo-3d-coders">
+                <span className="text-red-600">C</span>
+                <span>oders</span>
+              </span>
+            </h1>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
