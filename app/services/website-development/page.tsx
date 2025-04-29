@@ -1,5 +1,6 @@
 import ServiceCategoryTemplate from "@/components/service-category-template"
 import type { Metadata } from "next"
+import { Code, ShoppingCart, FileText, Zap, Database, Shield } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Website Development Services | StandaloneCoders",
@@ -16,59 +17,135 @@ export default function WebsiteDevelopmentPage() {
     description:
       "Our Website Development services provide end-to-end solutions for businesses looking to establish or enhance their online presence. From custom designs to e-commerce platforms and content management systems, we deliver websites that are not only visually appealing but also functional and optimized for performance.",
     imageSrc: "/modern-portfolio-design.png",
+    icon: <Code className="h-6 w-6 text-blue-600" />,
     services: [
       {
         title: "Custom Website Design & Development",
         description:
           "Bespoke website designs tailored to your brand identity and business goals, developed with clean code and modern technologies.",
+        icon: <Code className="h-6 w-6 text-blue-600" />,
+        features: [
+          "Responsive design for all devices",
+          "Custom UI/UX design",
+          "Fast loading speeds",
+          "SEO-friendly structure",
+          "Accessibility compliance",
+        ],
       },
       {
         title: "E-commerce Development",
         description:
           "Robust online stores built on platforms like Shopify, WooCommerce, or custom solutions using React.js and Node.js.",
+        icon: <ShoppingCart className="h-6 w-6 text-blue-600" />,
+        features: [
+          "Secure payment gateways",
+          "Inventory management",
+          "Product catalog",
+          "Customer accounts",
+          "Order tracking",
+        ],
       },
       {
         title: "CMS-based Websites",
         description:
           "Easy-to-manage websites built on popular content management systems like WordPress, Webflow, and other platforms.",
+        icon: <FileText className="h-6 w-6 text-blue-600" />,
+        features: [
+          "User-friendly admin panel",
+          "Content scheduling",
+          "Media library",
+          "User role management",
+          "Plugin integration",
+        ],
       },
       {
         title: "Landing Pages & Sales Funnels",
         description: "High-converting landing pages and sales funnels designed to capture leads and drive conversions.",
+        icon: <Zap className="h-6 w-6 text-blue-600" />,
+        features: [
+          "A/B testing capability",
+          "Lead capture forms",
+          "Call-to-action optimization",
+          "Analytics integration",
+          "Conversion tracking",
+        ],
       },
       {
         title: "API Integration & Backend Development",
         description:
           "Seamless integration with third-party APIs and custom backend development to power your website's functionality.",
+        icon: <Database className="h-6 w-6 text-blue-600" />,
+        features: [
+          "RESTful API development",
+          "Database design",
+          "Authentication systems",
+          "Third-party integrations",
+          "Scalable architecture",
+        ],
       },
       {
         title: "Website Maintenance & Support",
         description:
           "Ongoing maintenance, updates, and technical support to ensure your website remains secure and performs optimally.",
+        icon: <Shield className="h-6 w-6 text-blue-600" />,
+        features: [
+          "Regular security updates",
+          "Performance optimization",
+          "Content updates",
+          "Technical support",
+          "Backup and recovery",
+        ],
       },
     ],
-    process: [
-      {
-        title: "Discovery",
-        description:
-          "We analyze your business needs, target audience, and competitors to develop a strategic website plan.",
-      },
-      {
-        title: "Design & Prototyping",
-        description:
-          "Our designers create wireframes and visual designs that align with your brand and business objectives.",
-      },
-      {
-        title: "Development",
-        description:
-          "Our development team brings the designs to life with clean, efficient code and modern technologies.",
-      },
-      {
-        title: "Testing & Launch",
-        description:
-          "Rigorous testing across devices and browsers ensures your website functions flawlessly before launch.",
-      },
-    ],
+    benefits: {
+      description:
+        "Our website development services are designed to give your business a competitive edge in the digital landscape.",
+      items: [
+        {
+          title: "Increased Online Visibility",
+          description:
+            "A professionally developed website helps your business get found online and attract more potential customers.",
+        },
+        {
+          title: "Enhanced User Experience",
+          description:
+            "We create intuitive, user-friendly websites that provide a seamless experience for your visitors.",
+        },
+        {
+          title: "Higher Conversion Rates",
+          description:
+            "Strategic design and optimization lead to better conversion rates and more business opportunities.",
+        },
+        {
+          title: "Mobile Responsiveness",
+          description: "All our websites are fully responsive, ensuring a perfect experience across all devices.",
+        },
+      ],
+    },
+    process: {
+      steps: [
+        {
+          title: "Discovery",
+          description:
+            "We analyze your business needs, target audience, and competitors to develop a strategic website plan.",
+        },
+        {
+          title: "Design & Prototyping",
+          description:
+            "Our designers create wireframes and visual designs that align with your brand and business objectives.",
+        },
+        {
+          title: "Development",
+          description:
+            "Our development team brings the designs to life with clean, efficient code and modern technologies.",
+        },
+        {
+          title: "Testing & Launch",
+          description:
+            "Rigorous testing across devices and browsers ensures your website functions flawlessly before launch.",
+        },
+      ],
+    },
     packages: [
       {
         title: "Basic Website",
@@ -144,20 +221,23 @@ export default function WebsiteDevelopmentPage() {
       },
     ],
     technologies: [
-      "HTML5",
-      "CSS3",
-      "JavaScript",
-      "React.js",
-      "Next.js",
-      "Node.js",
-      "WordPress",
-      "Shopify",
-      "WooCommerce",
-      "PHP",
-      "Python",
-      "MongoDB",
-      "MySQL",
+      { name: "HTML5", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "CSS3", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "JavaScript", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "React.js", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "Next.js", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "Node.js", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "WordPress", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "Shopify", icon: <ShoppingCart className="h-6 w-6 text-blue-600" /> },
+      { name: "WooCommerce", icon: <ShoppingCart className="h-6 w-6 text-blue-600" /> },
+      { name: "PHP", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "Python", icon: <Code className="h-6 w-6 text-blue-600" /> },
+      { name: "MongoDB", icon: <Database className="h-6 w-6 text-blue-600" /> },
     ],
+    cta: {
+      title: "Ready to Start Your Website Project?",
+      description: "Contact us today to discuss your website development needs and get a free consultation.",
+    },
   }
 
   return <ServiceCategoryTemplate {...serviceData} />
