@@ -1,43 +1,45 @@
+import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
 import type { Metadata } from "next"
+import { ServiceDetailSkeleton } from "@/components/service-detail-skeleton"
 
 export const metadata: Metadata = {
   title: "Digital Marketing Services | StandaloneCoders",
-  description: "Strategic digital marketing services to boost your online presence and drive business growth.",
+  description: "Strategic digital marketing solutions to boost your online presence and drive business growth.",
 }
 
 export default function DigitalMarketingPage() {
   const serviceData = {
-    title: "Digital Marketing",
+    title: "Digital Marketing Services",
     description:
-      "Our Digital Marketing services help businesses establish a strong online presence, reach their target audience, and drive conversions. From SEO optimization to content marketing and social media management, we provide comprehensive digital marketing solutions.",
+      "Our Digital Marketing Services help businesses establish a strong online presence, reach their target audience, and drive meaningful engagement. From SEO and content marketing to social media management and PPC campaigns, we provide comprehensive digital marketing solutions tailored to your specific goals.",
     imageSrc: "/interconnected-world.png",
     features: [
       {
-        title: "SEO Optimization",
+        title: "Search Engine Optimization (SEO)",
         description:
           "Improve your website's visibility in search engine results to drive organic traffic and increase conversions.",
       },
       {
         title: "Content Marketing",
         description:
-          "Create valuable, relevant content that attracts and engages your target audience while establishing your brand authority.",
+          "Create and distribute valuable, relevant content to attract and engage your target audience and drive profitable customer action.",
       },
       {
         title: "Social Media Management",
         description:
-          "Build and maintain a strong social media presence to connect with your audience and promote your brand.",
+          "Build and maintain your brand presence across social media platforms to engage with your audience and drive business growth.",
       },
       {
-        title: "PPC Campaigns",
-        description: "Drive targeted traffic to your website through strategic pay-per-click advertising campaigns.",
+        title: "Pay-Per-Click (PPC) Advertising",
+        description: "Create targeted ad campaigns to drive immediate traffic and conversions to your website.",
       },
     ],
     process: [
       {
-        title: "Research & Analysis",
+        title: "Analysis",
         description:
-          "We analyze your market, competitors, and target audience to develop an effective marketing strategy.",
+          "We analyze your current digital presence, target audience, and competitors to identify opportunities for growth.",
       },
       {
         title: "Strategy Development",
@@ -45,48 +47,49 @@ export default function DigitalMarketingPage() {
           "We create a comprehensive digital marketing strategy aligned with your business goals and objectives.",
       },
       {
-        title: "Implementation & Optimization",
-        description: "Our team implements the marketing strategy and continuously optimizes it for maximum results.",
+        title: "Implementation",
+        description:
+          "Our team of experts implements the digital marketing strategy, ensuring consistent messaging and brand voice.",
       },
     ],
     packages: [
       {
         title: "Starter",
-        price: "$999/mo",
+        price: "$999/month",
         features: [
           "Basic SEO optimization",
-          "Content creation (2 posts/mo)",
           "Social media management (2 platforms)",
-          "Monthly performance report",
-          "Email support",
+          "Monthly content creation (2 posts)",
+          "Basic analytics reporting",
+          "Email marketing setup",
         ],
         cta: "Get Started",
       },
       {
-        title: "Growth",
-        price: "$2,499/mo",
+        title: "Professional",
+        price: "$2,499/month",
         features: [
           "Advanced SEO optimization",
-          "Content creation (4 posts/mo)",
           "Social media management (4 platforms)",
+          "Weekly content creation",
           "PPC campaign management",
-          "Bi-weekly performance reports",
-          "Email and phone support",
+          "Comprehensive analytics reporting",
+          "Email marketing campaigns",
         ],
         cta: "Choose Plan",
         popular: true,
       },
       {
-        title: "Premium",
-        price: "$4,999/mo",
+        title: "Enterprise",
+        price: "$4,999/month",
         features: [
-          "Comprehensive SEO strategy",
-          "Content creation (8 posts/mo)",
+          "Full-scale SEO strategy",
           "Social media management (all platforms)",
+          "Daily content creation",
           "Advanced PPC campaign management",
-          "Weekly performance reports",
-          "Priority support",
-          "Dedicated marketing manager",
+          "Custom analytics dashboard",
+          "Marketing automation",
+          "Dedicated account manager",
         ],
         cta: "Contact Us",
       },
@@ -95,25 +98,29 @@ export default function DigitalMarketingPage() {
       {
         question: "How long does it take to see results from SEO?",
         answer:
-          "SEO is a long-term strategy that typically takes 3-6 months to start showing significant results. However, this can vary depending on your industry, competition, and the current state of your website.",
+          "SEO is a long-term strategy, and results typically take 3-6 months to become noticeable. However, this timeline can vary depending on factors such as your industry, competition, website history, and the specific SEO tactics being implemented.",
       },
       {
-        question: "What social media platforms should my business be on?",
+        question: "Which social media platforms should my business be on?",
         answer:
-          "The best social media platforms for your business depend on your target audience and industry. We'll help you identify which platforms will provide the best ROI for your specific business.",
+          "The best social media platforms for your business depend on your target audience, industry, and marketing goals. We'll help you identify the platforms where your audience is most active and develop a strategy to effectively engage with them.",
       },
       {
         question: "How do you measure the success of digital marketing campaigns?",
         answer:
-          "We track various metrics including website traffic, conversion rates, engagement rates, click-through rates, and ultimately, return on investment (ROI) to measure the success of our digital marketing campaigns.",
+          "We track key performance indicators (KPIs) such as website traffic, conversion rates, engagement metrics, lead generation, and return on investment (ROI). We provide regular reports that show the impact of our digital marketing efforts on your business goals.",
       },
       {
-        question: "Can you help with email marketing?",
+        question: "Do you offer one-time projects or only ongoing services?",
         answer:
-          "Yes, we offer email marketing services including strategy development, campaign creation, automation, and performance analysis to help you nurture leads and maintain customer relationships.",
+          "We offer both one-time projects and ongoing digital marketing services. For best results, we recommend ongoing services as digital marketing requires consistent effort and optimization over time. However, we can also help with specific one-time projects based on your needs.",
       },
     ],
   }
 
-  return <ServiceDetail {...serviceData} />
+  return (
+    <Suspense fallback={<ServiceDetailSkeleton />}>
+      <ServiceDetail {...serviceData} />
+    </Suspense>
+  )
 }

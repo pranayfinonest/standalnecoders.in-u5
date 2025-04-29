@@ -1,117 +1,127 @@
+import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
 import type { Metadata } from "next"
+import { ServiceDetailSkeleton } from "@/components/service-detail-skeleton"
 
 export const metadata: Metadata = {
   title: "Creative Services | StandaloneCoders",
-  description: "Professional creative services to enhance your brand identity and visual communication.",
+  description: "Innovative creative services to elevate your brand and captivate your audience.",
 }
 
 export default function CreativeServicesPage() {
   const serviceData = {
     title: "Creative Services",
     description:
-      "Our Creative Services help businesses establish a strong visual identity and communicate effectively with their audience. From video editing to graphic design and UI/UX development, we provide comprehensive creative solutions to enhance your brand.",
+      "Our Creative Services help businesses establish a strong brand identity and create compelling visual content that resonates with their target audience. From brand design and development to UI/UX design and video production, we provide comprehensive creative solutions tailored to your specific needs.",
     imageSrc: "/confident-leader.png",
     features: [
       {
-        title: "Video Editing",
+        title: "Brand Design & Development",
         description:
-          "Professional video editing services to create engaging content for marketing, training, or social media.",
+          "Create a distinctive brand identity that reflects your company's values and resonates with your target audience.",
+      },
+      {
+        title: "UI/UX Design",
+        description:
+          "Design intuitive and engaging user interfaces that provide exceptional user experiences across all digital platforms.",
       },
       {
         title: "Graphic Design",
         description:
-          "Eye-catching graphic design that communicates your brand message and captures audience attention.",
+          "Create visually compelling graphics for marketing materials, social media, and other communication channels.",
       },
       {
-        title: "Banner Creation",
-        description: "Compelling banner designs for websites, social media, and digital advertising campaigns.",
-      },
-      {
-        title: "UI/UX Design",
-        description: "User-centered interface and experience design that enhances usability and customer satisfaction.",
+        title: "Video Production",
+        description: "Produce high-quality videos that tell your brand story and engage your audience effectively.",
       },
     ],
     process: [
       {
         title: "Discovery",
-        description: "We learn about your brand, target audience, and creative goals to inform our design approach.",
+        description:
+          "We learn about your brand, target audience, and objectives to understand your creative needs fully.",
       },
       {
         title: "Concept Development",
-        description: "We create initial concepts and prototypes based on your requirements and brand guidelines.",
+        description: "We develop creative concepts that align with your brand identity and marketing goals.",
       },
       {
-        title: "Refinement & Delivery",
+        title: "Execution",
         description:
-          "We refine the designs based on your feedback and deliver the final assets in your preferred formats.",
+          "Our creative team brings the concepts to life, ensuring high-quality deliverables that meet your expectations.",
       },
     ],
     packages: [
       {
-        title: "Basic",
-        price: "$799",
+        title: "Essential",
+        price: "$1,499",
         features: [
+          "Basic brand identity package",
           "Logo design",
+          "Brand color palette",
+          "Typography selection",
           "Basic brand guidelines",
-          "Social media graphics (5)",
-          "1 banner design",
-          "2 revision rounds",
         ],
         cta: "Get Started",
       },
       {
-        title: "Standard",
-        price: "$1,999",
+        title: "Professional",
+        price: "$3,999",
         features: [
+          "Comprehensive brand identity",
           "Logo design with variations",
+          "Extended color palette",
+          "Typography system",
           "Comprehensive brand guidelines",
-          "Social media graphics (10)",
-          "3 banner designs",
-          "Basic video editing (1 video)",
-          "3 revision rounds",
+          "Social media templates",
+          "Basic marketing materials",
         ],
         cta: "Choose Plan",
         popular: true,
       },
       {
-        title: "Premium",
-        price: "$3,999",
+        title: "Enterprise",
+        price: "$7,999",
         features: [
-          "Complete brand identity package",
-          "Extensive brand guidelines",
-          "Social media graphics (20)",
-          "5 banner designs",
-          "Advanced video editing (3 videos)",
-          "UI/UX design for one platform",
-          "Unlimited revision rounds",
+          "Complete brand ecosystem",
+          "Logo design with extensive variations",
+          "Comprehensive visual identity system",
+          "Detailed brand guidelines",
+          "Full marketing collateral design",
+          "Website design concepts",
+          "Social media strategy and templates",
+          "Video brand elements",
         ],
         cta: "Contact Us",
       },
     ],
     faqs: [
       {
-        question: "What file formats do you provide for graphic designs?",
+        question: "How long does the branding process take?",
         answer:
-          "We provide designs in various formats including JPG, PNG, PDF, AI, and PSD, depending on your requirements and the specific deliverables.",
+          "The branding process typically takes 4-8 weeks, depending on the scope of the project and the complexity of your requirements. This includes discovery, concept development, design iterations, and finalization.",
       },
       {
-        question: "How long does it take to complete a video editing project?",
+        question: "Do I own the rights to the creative work you produce?",
         answer:
-          "The timeline for video editing projects varies depending on the complexity and length of the video. Simple edits may take 2-3 days, while more complex projects can take 1-2 weeks.",
+          "Yes, once the project is completed and paid for, you own the rights to all the creative work we produce for you. We provide all necessary files and assets for your use across various platforms and applications.",
       },
       {
-        question: "Do you provide source files for the designs?",
+        question: "How many revisions are included in your design process?",
         answer:
-          "Yes, we provide source files for all designs upon project completion, giving you full ownership and the ability to make future modifications if needed.",
+          "Our standard packages include up to three rounds of revisions to ensure your complete satisfaction. Additional revisions can be accommodated at an hourly rate if needed.",
       },
       {
-        question: "Can you help with print materials as well as digital designs?",
+        question: "Can you work with our existing brand guidelines?",
         answer:
-          "We create designs for both digital and print media, ensuring they're optimized for their respective formats and maintaining brand consistency across all materials.",
+          "We can work within your existing brand guidelines to create new materials that align with your established brand identity. We can also help evolve your brand while maintaining its core essence if that's what you're looking for.",
       },
     ],
   }
 
-  return <ServiceDetail {...serviceData} />
+  return (
+    <Suspense fallback={<ServiceDetailSkeleton />}>
+      <ServiceDetail {...serviceData} />
+    </Suspense>
+  )
 }

@@ -1,42 +1,47 @@
+import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
 import type { Metadata } from "next"
+import { ServiceDetailSkeleton } from "@/components/service-detail-skeleton"
 
 export const metadata: Metadata = {
   title: "Cybersecurity Services | StandaloneCoders",
   description:
-    "Comprehensive security solutions to protect your business from cyber threats and ensure data integrity.",
+    "Comprehensive cybersecurity solutions to protect your business from digital threats and vulnerabilities.",
 }
 
 export default function CybersecurityPage() {
   const serviceData = {
     title: "Cybersecurity Services",
     description:
-      "Our Cybersecurity Services provide comprehensive protection for your business against evolving cyber threats. From penetration testing to security audits and compliance, we ensure your data and systems remain secure.",
+      "Our Cybersecurity Services provide comprehensive protection for your digital assets, ensuring your business remains secure against evolving threats. From vulnerability assessments to incident response, we offer end-to-end security solutions tailored to your specific needs.",
     imageSrc: "/intricate-logic-flow.png",
     features: [
       {
+        title: "Vulnerability Assessment",
+        description:
+          "Identify and address security weaknesses in your systems before they can be exploited by malicious actors.",
+      },
+      {
         title: "Penetration Testing",
         description:
-          "Identify vulnerabilities in your systems before hackers do with our thorough penetration testing services.",
+          "Simulate real-world attacks to test your defenses and identify potential entry points for hackers.",
       },
       {
-        title: "Security Audits",
-        description: "Comprehensive assessment of your security posture to identify gaps and recommend improvements.",
-      },
-      {
-        title: "ISO 27001 Compliance",
+        title: "Security Monitoring",
         description:
-          "Ensure your information security management system meets international standards for best practices.",
+          "Continuous monitoring of your network and systems to detect and respond to security incidents in real-time.",
       },
       {
-        title: "Threat Analysis",
-        description: "Continuous monitoring and analysis of potential threats to your organization's digital assets.",
+        title: "Incident Response",
+        description:
+          "Rapid and effective response to security breaches to minimize damage and restore operations quickly.",
       },
     ],
     process: [
       {
         title: "Assessment",
-        description: "We evaluate your current security posture and identify potential vulnerabilities and risks.",
+        description:
+          "We conduct a thorough assessment of your current security posture to identify vulnerabilities and gaps.",
       },
       {
         title: "Strategy Development",
@@ -45,7 +50,8 @@ export default function CybersecurityPage() {
       },
       {
         title: "Implementation",
-        description: "Our team implements security measures and controls to protect your systems and data.",
+        description:
+          "Our security experts implement robust security measures to protect your systems, data, and digital assets.",
       },
     ],
     packages: [
@@ -54,10 +60,10 @@ export default function CybersecurityPage() {
         price: "$1,499",
         features: [
           "Vulnerability assessment",
-          "Basic security audit",
+          "Basic security monitoring",
           "Security awareness training",
-          "30 days support",
-          "Incident response plan",
+          "Quarterly security reports",
+          "Email security",
         ],
         cta: "Get Started",
       },
@@ -65,12 +71,12 @@ export default function CybersecurityPage() {
         title: "Advanced Security",
         price: "$3,999",
         features: [
-          "Comprehensive penetration testing",
-          "Detailed security audit",
-          "Advanced security training",
-          "90 days support",
-          "Incident response plan",
+          "Comprehensive vulnerability assessment",
+          "Penetration testing",
+          "24/7 security monitoring",
+          "Incident response planning",
           "Monthly security reports",
+          "Advanced email and web security",
         ],
         cta: "Choose Plan",
         popular: true,
@@ -79,40 +85,44 @@ export default function CybersecurityPage() {
         title: "Enterprise Security",
         price: "$8,999",
         features: [
-          "Full-scale penetration testing",
-          "Enterprise security audit",
-          "ISO 27001 compliance assistance",
-          "1 year priority support",
-          "Advanced incident response",
-          "Quarterly security reviews",
-          "Dedicated security consultant",
+          "Full security assessment",
+          "Advanced penetration testing",
+          "24/7 managed security services",
+          "Dedicated security team",
+          "Custom security solutions",
+          "Executive security briefings",
+          "Compliance management",
         ],
         cta: "Contact Us",
       },
     ],
     faqs: [
       {
-        question: "How often should we conduct security audits?",
+        question: "How often should we conduct security assessments?",
         answer:
-          "We recommend conducting comprehensive security audits at least annually, with more frequent targeted assessments quarterly or after significant changes to your IT infrastructure.",
+          "Security assessments should be conducted at least annually, but more frequent assessments are recommended for businesses with high-value data or those in regulated industries. Additionally, assessments should be performed after significant changes to your IT infrastructure.",
       },
       {
-        question: "What is penetration testing?",
+        question: "What is the difference between vulnerability assessment and penetration testing?",
         answer:
-          "Penetration testing is a simulated cyber attack against your computer system to check for exploitable vulnerabilities. It helps identify security weaknesses before malicious hackers can exploit them.",
+          "A vulnerability assessment identifies and reports potential security weaknesses, while penetration testing goes a step further by actively exploiting those vulnerabilities to demonstrate how a malicious actor might gain access to your systems.",
       },
       {
-        question: "How can we prepare for ISO 27001 certification?",
+        question: "How do you handle security incidents?",
         answer:
-          "Preparing for ISO 27001 certification involves establishing an information security management system (ISMS), conducting risk assessments, implementing security controls, and documenting policies and procedures.",
+          "Our incident response process includes immediate containment of the threat, thorough investigation to determine the scope and impact, eradication of the threat, recovery of affected systems, and a post-incident analysis to prevent similar incidents in the future.",
       },
       {
-        question: "What should we do if we experience a security breach?",
+        question: "What security training do you provide for employees?",
         answer:
-          "In the event of a security breach, you should activate your incident response plan, contain the breach, assess the damage, notify affected parties as required by law, and work to prevent similar incidents in the future.",
+          "We offer comprehensive security awareness training that covers phishing recognition, password management, safe browsing habits, social engineering awareness, and proper handling of sensitive data. Training can be customized to address specific security concerns relevant to your business.",
       },
     ],
   }
 
-  return <ServiceDetail {...serviceData} />
+  return (
+    <Suspense fallback={<ServiceDetailSkeleton />}>
+      <ServiceDetail {...serviceData} />
+    </Suspense>
+  )
 }

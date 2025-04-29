@@ -1,5 +1,14 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
 import Link from "next/link"
-import { CheckCircle, ArrowRight } from "lucide-react"
 
 interface Feature {
   title: string
@@ -43,130 +52,138 @@ export default function ServiceDetail({
   packages,
   faqs,
 }: ServiceDetailProps) {
+  const [activeTab, setActiveTab] = useState("overview")
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const tab = searchParams.get("tab")
+    if (tab && ["overview", "features", "pricing", "faq"].includes(tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
+
   return (
     <div className="container mx-auto px-4 py-12">
-      {/* Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
         <div>
           <h1 className="text-4xl font-bold mb-6">{title}</h1>
           <p className="text-lg text-gray-700 mb-8">{description}</p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Get Started <ArrowRight className="ml-2 w-5 h-5" />
-          </Link>
+          <div className="flex flex-wrap gap-4">
+            <Button asChild>
+              <Link href="/contact">Get a Quote</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/booking/flow">Start Project</Link>
+            </Button>
+          </div>
         </div>
-        <div className="rounded-xl overflow-hidden shadow-xl">
-          <img src={imageSrc || "/placeholder.svg"} alt={title} className="w-full h-auto" />
+        <div className="relative h-[300px] lg:h-[400px] rounded-lg overflow-hidden">
+          <Image
+            src={imageSrc || "/placeholder.svg"}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+          />
         </div>
       </div>
 
-      {/* Features Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold mb-12 text-center">Key Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {features.map((feature, index) => (
-            <div key={index} className="bg-white p-8 rounded-xl shadow-md">
-              <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-              <p className="text-gray-700">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-16">
+        <TabsList className="grid grid-cols-4 mb-8">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="features">Features</TabsTrigger>
+          <TabsTrigger value="pricing">Pricing</TabsTrigger>
+          <TabsTrigger value="faq">FAQ</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {process.map((step, index) => (
+              <Card key={index}>
+                <CardContent className="pt-6">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-4">
+                      {index + 1}
+                    </div>
+                    <h3 className="text-xl font-semibold">{step.title}</h3>
+                  </div>
+                  <p className="text-gray-600">{step.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="features">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index}>
+                <CardContent className="pt-6">
+                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="pricing">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {packages.map((pkg, index) => (
+              <Card key={index} className={`relative ${pkg.popular ? "border-primary shadow-lg" : ""}`}>
+                {pkg.popular && (
+                  <Badge className="absolute top-4 right-4" variant="default">
+                    Popular
+                  </Badge>
+                )}
+                <CardContent className="pt-6">
+                  <h3 className="text-xl font-semibold mb-2">{pkg.title}</h3>
+                  <p className="text-3xl font-bold mb-6">{pkg.price}</p>
+                  <ul className="space-y-3 mb-8">
+                    {pkg.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start">
+                        <svg
+                          className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button className="w-full" variant={pkg.popular ? "default" : "outline"} asChild>
+                    <Link href="/contact">{pkg.cta}</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="faq">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                <AccordionContent>{faq.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </TabsContent>
+      </Tabs>
 
-      {/* Process Section */}
-      <section className="mb-20 bg-gray-50 py-16 px-4 rounded-2xl">
-        <h2 className="text-3xl font-bold mb-12 text-center">Our Process</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {process.map((step, index) => (
-            <div key={index} className="relative">
-              <div className="bg-white p-8 rounded-xl shadow-md h-full">
-                <div className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg mb-4">
-                  {index + 1}
-                </div>
-                <h3 className="text-xl font-bold mb-4">{step.title}</h3>
-                <p className="text-gray-700">{step.description}</p>
-              </div>
-              {index < process.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
-                  <ArrowRight className="w-6 h-6 text-blue-600" />
-                </div>
-              )}
-            </div>
-          ))}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-6">Ready to get started?</h2>
+        <div className="flex justify-center gap-4">
+          <Button asChild>
+            <Link href="/contact">Contact Us</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/booking/flow">Start Your Project</Link>
+          </Button>
         </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold mb-12 text-center">Pricing Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {packages.map((pkg, index) => (
-            <div
-              key={index}
-              className={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:transform hover:scale-105 ${
-                pkg.popular ? "border-2 border-blue-600 relative" : ""
-              }`}
-            >
-              {pkg.popular && (
-                <div className="bg-blue-600 text-white text-center py-1 text-sm font-medium">Most Popular</div>
-              )}
-              <div className="p-8">
-                <h3 className="text-2xl font-bold mb-4">{pkg.title}</h3>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold">{pkg.price}</span>
-                </div>
-                <ul className="mb-8 space-y-3">
-                  {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/contact"
-                  className={`block text-center py-3 px-6 rounded-lg font-medium transition-colors ${
-                    pkg.popular
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                  }`}
-                >
-                  {pkg.cta}
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <div key={index} className="mb-6">
-              <h3 className="text-xl font-bold mb-2">{faq.question}</h3>
-              <p className="text-gray-700">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-blue-600 text-white rounded-2xl p-12 text-center">
-        <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
-        <p className="text-xl mb-8 max-w-2xl mx-auto">
-          Contact us today to discuss how our {title} can help your business grow and succeed.
-        </p>
-        <Link
-          href="/contact"
-          className="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
-        >
-          Contact Us <ArrowRight className="ml-2 w-5 h-5" />
-        </Link>
-      </section>
+      </div>
     </div>
   )
 }
