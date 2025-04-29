@@ -1,7 +1,5 @@
-import { Suspense } from "react"
 import ServiceDetail from "@/components/service-detail"
 import type { Metadata } from "next"
-import { ServiceDetailSkeleton } from "@/components/service-detail-skeleton"
 
 export const metadata: Metadata = {
   title: "Digital Marketing Services | StandaloneCoders",
@@ -118,9 +116,5 @@ export default function DigitalMarketingPage() {
     ],
   }
 
-  return (
-    <Suspense fallback={<ServiceDetailSkeleton />}>
-      <ServiceDetail {...serviceData} />
-    </Suspense>
-  )
+  return <ServiceDetail {...serviceData} />
 }

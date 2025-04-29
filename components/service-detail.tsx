@@ -1,15 +1,12 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import Image from "next/image"
-import Link from "next/link"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+// Define types for the service data
 interface Feature {
   title: string
   description: string
@@ -20,7 +17,7 @@ interface ProcessStep {
   description: string
 }
 
-interface Package {
+interface ServicePackage {
   title: string
   price: string
   features: string[]
@@ -33,16 +30,158 @@ interface FAQ {
   answer: string
 }
 
-interface ServiceDetailProps {
+export interface ServiceDetailProps {
   title: string
   description: string
   imageSrc: string
   features: Feature[]
   process: ProcessStep[]
-  packages: Package[]
+  packages: ServicePackage[]
   faqs: FAQ[]
 }
 
+// Create a loading skeleton for the service detail
+export function ServiceDetailSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-12 animate-pulse">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div>
+          <div className="h-10 bg-gray-200 rounded w-3/4 mb-6"></div>
+          <div className="h-24 bg-gray-200 rounded mb-8"></div>
+          <div className="flex flex-wrap gap-4">
+            <div className="h-10 bg-gray-200 rounded w-32"></div>
+            <div className="h-10 bg-gray-200 rounded w-32"></div>
+          </div>
+        </div>
+        <div className="relative h-[300px] lg:h-[400px] rounded-lg bg-gray-200"></div>
+      </div>
+
+      <div className="mb-16">
+        <div className="grid grid-cols-4 mb-8">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-10 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-40 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+
+      <div className="text-center">
+        <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-6"></div>
+        <div className="flex justify-center gap-4">
+          <div className="h-10 bg-gray-200 rounded w-32"></div>
+          <div className="h-10 bg-gray-200 rounded w-32"></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Create a client component for the tabs
+function ServiceTabs({
+  defaultTab = "overview",
+  features,
+  process,
+  packages,
+  faqs,
+}: {
+  defaultTab?: string
+  features: Feature[]
+  process: ProcessStep[]
+  packages: ServicePackage[]
+  faqs: FAQ[]
+}) {
+  return (
+    <Tabs defaultValue={defaultTab} className="mb-16">
+      <TabsList className="grid grid-cols-4 mb-8">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="features">Features</TabsTrigger>
+        <TabsTrigger value="pricing">Pricing</TabsTrigger>
+        <TabsTrigger value="faq">FAQ</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {process.map((step, index) => (
+            <Card key={index}>
+              <CardContent className="pt-6">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-4">
+                    {index + 1}
+                  </div>
+                  <h3 className="text-xl font-semibold">{step.title}</h3>
+                </div>
+                <p className="text-gray-600">{step.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="features">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {features.map((feature, index) => (
+            <Card key={index}>
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="pricing">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {packages.map((pkg, index) => (
+            <Card key={index} className={`relative ${pkg.popular ? "border-primary shadow-lg" : ""}`}>
+              {pkg.popular && (
+                <Badge className="absolute top-4 right-4" variant="default">
+                  Popular
+                </Badge>
+              )}
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">{pkg.title}</h3>
+                <p className="text-3xl font-bold mb-6">{pkg.price}</p>
+                <ul className="space-y-3 mb-8">
+                  {pkg.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <svg
+                        className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full" variant={pkg.popular ? "default" : "outline"} asChild>
+                  <Link href="/contact">{pkg.cta}</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="faq">
+        <Accordion type="single" collapsible className="w-full">
+          {faqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+              <AccordionContent>{faq.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </TabsContent>
+    </Tabs>
+  )
+}
+
+// Main service detail component
 export default function ServiceDetail({
   title,
   description,
@@ -52,16 +191,6 @@ export default function ServiceDetail({
   packages,
   faqs,
 }: ServiceDetailProps) {
-  const [activeTab, setActiveTab] = useState("overview")
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const tab = searchParams.get("tab")
-    if (tab && ["overview", "features", "pricing", "faq"].includes(tab)) {
-      setActiveTab(tab)
-    }
-  }, [searchParams])
-
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -89,89 +218,7 @@ export default function ServiceDetail({
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-16">
-        <TabsList className="grid grid-cols-4 mb-8">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="features">Features</TabsTrigger>
-          <TabsTrigger value="pricing">Pricing</TabsTrigger>
-          <TabsTrigger value="faq">FAQ</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {process.map((step, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-4">
-                      {index + 1}
-                    </div>
-                    <h3 className="text-xl font-semibold">{step.title}</h3>
-                  </div>
-                  <p className="text-gray-600">{step.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value="features">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value="pricing">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg, index) => (
-              <Card key={index} className={`relative ${pkg.popular ? "border-primary shadow-lg" : ""}`}>
-                {pkg.popular && (
-                  <Badge className="absolute top-4 right-4" variant="default">
-                    Popular
-                  </Badge>
-                )}
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">{pkg.title}</h3>
-                  <p className="text-3xl font-bold mb-6">{pkg.price}</p>
-                  <ul className="space-y-3 mb-8">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <svg
-                          className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full" variant={pkg.popular ? "default" : "outline"} asChild>
-                    <Link href="/contact">{pkg.cta}</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value="faq">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </TabsContent>
-      </Tabs>
+      <ServiceTabs features={features} process={process} packages={packages} faqs={faqs} />
 
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-6">Ready to get started?</h2>
