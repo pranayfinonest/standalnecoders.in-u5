@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { MessageCircle } from "lucide-react"
 
 interface WhatsAppButtonProps {
-  phoneNumber: string
+  phoneNumber?: string
   message?: string
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left"
   showOnMobile?: boolean
@@ -12,7 +12,7 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({
-  phoneNumber,
+  phoneNumber = "+916378110608",
   message = "Hello! I'm interested in your services.",
   position = "bottom-right",
   showOnMobile = true,
@@ -31,7 +31,9 @@ export default function WhatsAppButton({
 
   const handleClick = () => {
     const encodedMessage = encodeURIComponent(message)
-    const url = `https://wa.me/${phoneNumber.replace(/\D/g, "")}?text=${encodedMessage}`
+    // Add a check to ensure phoneNumber is defined and not empty
+    const formattedNumber = phoneNumber ? phoneNumber.replace(/\D/g, "") : ""
+    const url = `https://wa.me/${formattedNumber}?text=${encodedMessage}`
     window.open(url, "_blank")
   }
 
