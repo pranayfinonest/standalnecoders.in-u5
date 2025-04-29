@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: "Innovative creative services to elevate your brand and captivate your audience.",
 }
 
+// Force static generation for this page
+export const dynamic = "force-static"
+
 export default function CreativeServicesPage() {
   const serviceData = {
     title: "Creative Services",

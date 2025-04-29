@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: "Strategic digital marketing solutions to boost your online presence and drive business growth.",
 }
 
+// Force static generation for this page
+export const dynamic = "force-static"
+
 export default function DigitalMarketingPage() {
   const serviceData = {
     title: "Digital Marketing Services",

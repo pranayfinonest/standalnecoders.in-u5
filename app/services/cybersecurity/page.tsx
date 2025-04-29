@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     "Comprehensive cybersecurity solutions to protect your business from digital threats and vulnerabilities.",
 }
 
+// Force static generation for this page
+export const dynamic = "force-static"
+
 export default function CybersecurityPage() {
   const serviceData = {
     title: "Cybersecurity Services",

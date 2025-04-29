@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: "Cutting-edge AI and technology solutions to streamline operations and enhance customer experiences.",
 }
 
+// Force static generation for this page
+export const dynamic = "force-static"
+
 export default function AITechnologyPage() {
   const serviceData = {
     title: "AI & Technology Solutions",
