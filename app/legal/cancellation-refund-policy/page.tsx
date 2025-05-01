@@ -1,127 +1,193 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Cancellation and Refund Policy | Standalone Coders",
-  description: "Cancellation and Refund Policy for Standalone Coders services.",
+  title: "Cancellation & Refund Policy | StandaloneCoders",
+  description:
+    "Cancellation and Refund Policy for StandaloneCoders - Learn about our cancellation procedures and refund terms.",
 }
 
-export default function CancellationRefundPage() {
+export default function CancellationRefundPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-center">Cancellation and Refund Policy</h1>
+      <h1 className="text-3xl font-bold mb-8">Cancellation & Refund Policy</h1>
 
-      <div className="prose prose-lg max-w-none">
-        <p className="text-gray-600 mb-6">Last Updated: May 1, 2024</p>
+      <div className="prose prose-lg dark:prose-invert max-w-none">
+        <p className="text-gray-600 dark:text-gray-400 mb-8">Last Updated: May 1, 2023</p>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
+          <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
           <p>
-            This Cancellation and Refund Policy outlines the terms under which you may cancel services and request
-            refunds from Standalone Coders. We strive to ensure complete satisfaction with our services, but we
-            understand that circumstances may arise where cancellations or refunds are necessary.
+            At StandaloneCoders, we strive to ensure complete satisfaction with our services. This Cancellation and
+            Refund Policy outlines the terms and conditions for cancellations, refunds, and project terminations.
           </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">2. Project Cancellation</h2>
-          <h3 className="text-xl font-medium mt-6 mb-3">2.1 Client-Initiated Cancellation</h3>
           <p>
-            If you wish to cancel a project after signing the agreement and making the initial payment, the following
-            terms apply:
-          </p>
-          <ul className="list-disc pl-6 mt-4 space-y-2">
-            <li>
-              <strong>Within 48 hours of signing:</strong> Full refund of the initial payment, minus any transaction
-              fees.
-            </li>
-            <li>
-              <strong>After project work has begun but before 25% completion:</strong> 50% of the initial payment will
-              be retained as compensation for work already performed.
-            </li>
-            <li>
-              <strong>After 25% project completion:</strong> The initial payment is non-refundable.
-            </li>
-            <li>
-              <strong>After 50% project completion:</strong> The client is liable for up to 75% of the total project
-              cost, depending on the actual work completed.
-            </li>
-          </ul>
-
-          <h3 className="text-xl font-medium mt-6 mb-3">2.2 Company-Initiated Cancellation</h3>
-          <p>Standalone Coders reserves the right to cancel a project under the following circumstances:</p>
-          <ul className="list-disc pl-6 mt-4 space-y-2">
-            <li>Client's failure to provide necessary information, content, or feedback within 30 days of request</li>
-            <li>Client's request for services outside our scope or expertise</li>
-            <li>Unethical or illegal requests</li>
-            <li>Abusive behavior towards our team members</li>
-          </ul>
-          <p className="mt-4">
-            In case of company-initiated cancellation, refund terms will depend on the reason for cancellation and the
-            stage of the project.
+            By purchasing our services, you agree to the terms of this policy. Please read it carefully to understand
+            your rights and obligations.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">3. Refund Process</h2>
+          <h2 className="text-2xl font-semibold mb-4">Definitions</h2>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              <strong>"Company"</strong> refers to StandaloneCoders.
+            </li>
+            <li>
+              <strong>"Client"</strong> refers to any individual or entity that purchases our services.
+            </li>
+            <li>
+              <strong>"Services"</strong> refers to all website development, design, and related services offered by the
+              Company.
+            </li>
+            <li>
+              <strong>"Project"</strong> refers to the specific work agreed upon between the Company and the Client.
+            </li>
+            <li>
+              <strong>"Milestone"</strong> refers to a specific stage or deliverable in the Project.
+            </li>
+          </ul>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Cancellation Policy</h2>
+
+          <h3 className="text-xl font-medium mb-3">Project Cancellation by Client</h3>
+          <p>If you wish to cancel a project, the following terms apply:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              <strong>Before Project Commencement:</strong> If you cancel before we begin work on your project, you will
+              receive a full refund of any payments made, minus a 5% administrative fee.
+            </li>
+            <li>
+              <strong>During Initial Planning Phase:</strong> If you cancel during the planning phase (before any design
+              or development work has begun), you will receive a 75% refund of any payments made.
+            </li>
+            <li>
+              <strong>After Work Has Begun:</strong> If you cancel after we have begun design or development work,
+              refunds will be prorated based on the percentage of work completed, as determined by our project
+              management system.
+            </li>
+            <li>
+              <strong>After Project Completion:</strong> No refunds will be issued after the project has been completed
+              and delivered.
+            </li>
+          </ul>
+
+          <h3 className="text-xl font-medium mb-3">Project Cancellation by Company</h3>
+          <p>We reserve the right to cancel a project under the following circumstances:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              If the Client fails to provide necessary information, content, or feedback within 30 days of request.
+            </li>
+            <li>If the Client requests changes that significantly alter the original project scope.</li>
+            <li>If the Client violates any terms of our service agreement.</li>
+            <li>If unforeseen circumstances prevent us from completing the project.</li>
+          </ul>
           <p>
-            To request a refund, please contact us at refunds@standalonecoders.com with your order details and reason
-            for the refund request.
+            In case of cancellation by the Company, refunds will be issued on a prorated basis for work not completed.
           </p>
-          <ul className="list-disc pl-6 mt-4 space-y-2">
-            <li>All refund requests will be processed within 7-10 business days.</li>
-            <li>Refunds will be issued using the original payment method when possible.</li>
-            <li>Bank charges or transaction fees may be deducted from the refund amount.</li>
-          </ul>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">4. Non-Refundable Services</h2>
-          <p>The following services are non-refundable:</p>
-          <ul className="list-disc pl-6 mt-4 space-y-2">
-            <li>Domain registration and transfer fees</li>
-            <li>SSL certificates</li>
-            <li>Third-party software licenses purchased on your behalf</li>
-            <li>Completed maintenance work</li>
-            <li>Rush fees for expedited services</li>
-          </ul>
-        </section>
+          <h2 className="text-2xl font-semibold mb-4">Refund Policy</h2>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">5. Maintenance and Support Plans</h2>
+          <h3 className="text-xl font-medium mb-3">Standard Services</h3>
+          <p>For our standard website development and design services:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              <strong>Deposit/Initial Payment:</strong> The initial payment or deposit (typically 30-50% of the total
+              project cost) is non-refundable once work has begun, as it covers initial planning, research, and resource
+              allocation.
+            </li>
+            <li>
+              <strong>Milestone Payments:</strong> Payments made for completed milestones are non-refundable, as they
+              represent work already delivered.
+            </li>
+            <li>
+              <strong>Final Payment:</strong> The final payment is due upon project completion and is non-refundable.
+            </li>
+          </ul>
+
+          <h3 className="text-xl font-medium mb-3">Maintenance and Support Plans</h3>
           <p>For ongoing maintenance and support plans:</p>
-          <ul className="list-disc pl-6 mt-4 space-y-2">
-            <li>Monthly plans can be cancelled with 15 days' notice before the next billing cycle.</li>
+          <ul className="list-disc pl-6 mb-4">
             <li>
-              Annual plans can be cancelled with 30 days' notice, with a prorated refund for unused months minus a 10%
-              administrative fee.
+              <strong>Monthly Plans:</strong> No refunds are provided for the current month. You may cancel at any time,
+              and the service will continue until the end of the current billing period.
+            </li>
+            <li>
+              <strong>Annual Plans:</strong> If you cancel an annual plan, we will provide a prorated refund for the
+              remaining full months, minus a 10% administrative fee.
+            </li>
+          </ul>
+
+          <h3 className="text-xl font-medium mb-3">Hosting Services</h3>
+          <p>For hosting services:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              <strong>Monthly Hosting:</strong> No refunds are provided for the current month.
+            </li>
+            <li>
+              <strong>Annual Hosting:</strong> If you cancel annual hosting, we will provide a prorated refund for the
+              remaining full months, minus a 10% administrative fee.
             </li>
           </ul>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">6. Disputes</h2>
-          <p>
-            If you are dissatisfied with our services, please contact us to resolve the issue before initiating a
-            payment dispute or chargeback. We are committed to finding a fair resolution to any concerns you may have.
-          </p>
+          <h2 className="text-2xl font-semibold mb-4">How to Request a Cancellation or Refund</h2>
+          <p>To request a cancellation or refund, please follow these steps:</p>
+          <ol className="list-decimal pl-6 mb-4">
+            <li>
+              Contact your project manager or our customer support team via email at support@standalonecoders.com.
+            </li>
+            <li>Provide your project ID, name, and reason for cancellation or refund.</li>
+            <li>Our team will review your request and respond within 3 business days.</li>
+            <li>If approved, refunds will be processed within 7-14 business days using the original payment method.</li>
+          </ol>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">7. Changes to This Policy</h2>
+          <h2 className="text-2xl font-semibold mb-4">Exceptions</h2>
+          <p>
+            We understand that exceptional circumstances may arise. We may consider exceptions to this policy on a
+            case-by-case basis, including:
+          </p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>Serious illness or death of the client or immediate family member.</li>
+            <li>Natural disasters or other force majeure events.</li>
+            <li>Significant and demonstrable failure on our part to deliver as promised.</li>
+          </ul>
+          <p>Documentation may be required to support exception requests.</p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Dispute Resolution</h2>
+          <p>If you are dissatisfied with our services or have a dispute regarding a refund:</p>
+          <ol className="list-decimal pl-6 mb-4">
+            <li>Contact our customer support team to explain your concerns.</li>
+            <li>If the issue cannot be resolved by our support team, it will be escalated to management.</li>
+            <li>If a resolution still cannot be reached, we may agree to mediation or arbitration.</li>
+          </ol>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Changes to This Policy</h2>
           <p>
             We reserve the right to modify this Cancellation and Refund Policy at any time. Changes will be effective
-            immediately upon posting on our website.
+            immediately upon posting on our website. We will notify active clients of significant changes via email.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">8. Contact Us</h2>
-          <p>
-            If you have any questions about this Cancellation and Refund Policy, please contact us at:
+          <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
+          <p>If you have any questions about this Cancellation and Refund Policy, please contact us at:</p>
+          <p className="mt-2">
+            <strong>Email:</strong> support@standalonecoders.com
             <br />
-            <strong>Email:</strong> refunds@standalonecoders.com
+            <strong>Address:</strong> 123 Tech Park, Bangalore, Karnataka, India 560001
             <br />
-            <strong>Phone:</strong> +91 XXXXXXXXXX
+            <strong>Phone:</strong> +91 98765 43210
           </p>
         </section>
       </div>
