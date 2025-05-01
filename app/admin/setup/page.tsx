@@ -1,15 +1,24 @@
-import AdminSetup from "@/components/admin/admin-setup"
+import SimpleAdminSetup from "@/components/admin/simple-admin-setup"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import type { Metadata } from "next"
 
-export const dynamic = "force-dynamic"
+export const metadata: Metadata = {
+  title: "Admin Setup | StandaloneCoders",
+  description: "Set up the admin account",
+}
 
-export default function SetupPage() {
-  return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">StandaloneCoders Admin Setup</h1>
-      <AdminSetup />
-      <p className="mt-8 text-sm text-gray-500 text-center">
-        This page is only accessible during initial setup. Once an admin user is created, you should secure this route.
-      </p>
-    </div>
-  )
+export default async function AdminSetupPage() {
+  // Check if admin already exists
+  const supabase = createServerComponentClient({ cookies })
+
+  const { data: existingAdmins, error } = await supabase.from("admin_users").select("id").limit(1)
+
+  // If there's already an admin, redirect to login
+  if (!error && existingAdmins && existingAdmins.length > 0) {
+    redirect("/admin/login")
+  }
+
+  return <SimpleAdminSetup />
 }

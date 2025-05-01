@@ -10,6 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Services() {
   const [activeTab, setActiveTab] = useState("all")
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
+
+  const toggleCardExpansion = (category: string) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }))
+  }
 
   const services = {
     "website-development": {
@@ -264,7 +272,10 @@ export default function Services() {
             >
               {categories.map((category) => (
                 <motion.div key={category} variants={fadeIn}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card
+                    className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                    onClick={() => toggleCardExpansion(category)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-3 mr-4">
@@ -274,18 +285,33 @@ export default function Services() {
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 mb-6">{services[category].description}</p>
                       <ul className="space-y-3 mb-6">
-                        {services[category].items.slice(0, 2).map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span>{item.title}</span>
-                          </li>
-                        ))}
+                        {services[category].items
+                          .slice(0, expandedCards[category] ? services[category].items.length : 2)
+                          .map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                              <span>{item.title}</span>
+                            </li>
+                          ))}
                       </ul>
-                      <Button asChild variant="outline" className="w-full">
-                        <Link href={`/services/${category}`}>
-                          Learn More <ChevronRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </Button>
+                      <div className="flex justify-between items-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCardExpansion(category)
+                          }}
+                          className="text-blue-600 hover:text-blue-800 p-0"
+                        >
+                          {expandedCards[category] ? "Show Less" : "Show More"}
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link href={`/services#${category}`} onClick={(e) => e.stopPropagation()}>
+                            Learn More <ChevronRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -303,7 +329,10 @@ export default function Services() {
             >
               {["website-development", "app-development", "custom-software"].map((category) => (
                 <motion.div key={category} variants={fadeIn}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card
+                    className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                    onClick={() => toggleCardExpansion(category)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-3 mr-4">
@@ -313,18 +342,33 @@ export default function Services() {
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 mb-6">{services[category].description}</p>
                       <ul className="space-y-3 mb-6">
-                        {services[category].items.slice(0, 2).map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span>{item.title}</span>
-                          </li>
-                        ))}
+                        {services[category].items
+                          .slice(0, expandedCards[category] ? services[category].items.length : 2)
+                          .map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                              <span>{item.title}</span>
+                            </li>
+                          ))}
                       </ul>
-                      <Button asChild variant="outline" className="w-full">
-                        <Link href={`/services/${category}`}>
-                          Learn More <ChevronRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </Button>
+                      <div className="flex justify-between items-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCardExpansion(category)
+                          }}
+                          className="text-blue-600 hover:text-blue-800 p-0"
+                        >
+                          {expandedCards[category] ? "Show Less" : "Show More"}
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link href={`/services#${category}`} onClick={(e) => e.stopPropagation()}>
+                            Learn More <ChevronRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -342,7 +386,10 @@ export default function Services() {
             >
               {["creative-services", "digital-marketing"].map((category) => (
                 <motion.div key={category} variants={fadeIn}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card
+                    className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                    onClick={() => toggleCardExpansion(category)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-3 mr-4">
@@ -352,18 +399,33 @@ export default function Services() {
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 mb-6">{services[category].description}</p>
                       <ul className="space-y-3 mb-6">
-                        {services[category].items.slice(0, 2).map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span>{item.title}</span>
-                          </li>
-                        ))}
+                        {services[category].items
+                          .slice(0, expandedCards[category] ? services[category].items.length : 2)
+                          .map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                              <span>{item.title}</span>
+                            </li>
+                          ))}
                       </ul>
-                      <Button asChild variant="outline" className="w-full">
-                        <Link href={`/services/${category}`}>
-                          Learn More <ChevronRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </Button>
+                      <div className="flex justify-between items-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCardExpansion(category)
+                          }}
+                          className="text-blue-600 hover:text-blue-800 p-0"
+                        >
+                          {expandedCards[category] ? "Show Less" : "Show More"}
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link href={`/services#${category}`} onClick={(e) => e.stopPropagation()}>
+                            Learn More <ChevronRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -381,7 +443,10 @@ export default function Services() {
             >
               {["ai-technology", "cybersecurity"].map((category) => (
                 <motion.div key={category} variants={fadeIn}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card
+                    className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                    onClick={() => toggleCardExpansion(category)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-3 mr-4">
@@ -391,18 +456,33 @@ export default function Services() {
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 mb-6">{services[category].description}</p>
                       <ul className="space-y-3 mb-6">
-                        {services[category].items.slice(0, 2).map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span>{item.title}</span>
-                          </li>
-                        ))}
+                        {services[category].items
+                          .slice(0, expandedCards[category] ? services[category].items.length : 2)
+                          .map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                              <span>{item.title}</span>
+                            </li>
+                          ))}
                       </ul>
-                      <Button asChild variant="outline" className="w-full">
-                        <Link href={`/services/${category}`}>
-                          Learn More <ChevronRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </Button>
+                      <div className="flex justify-between items-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCardExpansion(category)
+                          }}
+                          className="text-blue-600 hover:text-blue-800 p-0"
+                        >
+                          {expandedCards[category] ? "Show Less" : "Show More"}
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link href={`/services#${category}`} onClick={(e) => e.stopPropagation()}>
+                            Learn More <ChevronRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>

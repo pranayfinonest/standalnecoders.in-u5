@@ -42,7 +42,12 @@ export default function Hero() {
                   Explore Services <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-base">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="text-base text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 border-2"
+              >
                 <Link href="/contact">Contact Us</Link>
               </Button>
             </div>
