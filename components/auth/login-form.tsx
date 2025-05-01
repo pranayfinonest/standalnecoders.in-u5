@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -9,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -19,8 +22,9 @@ export default function LoginForm() {
   })
   const router = useRouter()
   const { toast } = useToast()
+  const { signIn } = useAuth()
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
@@ -28,28 +32,41 @@ export default function LoginForm() {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      // This would be replaced with actual authentication logic
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const { error, success } = await signIn(formData.email, formData.password)
 
-      // Simulate successful login
-      localStorage.setItem("isLoggedIn", "true")
-      localStorage.setItem("user", JSON.stringify({ email: formData.email, name: "User" }))
+      if (error) {
+        toast({
+          title: "Login failed",
+          description: error.message || "Please check your credentials and try again.",
+          variant: "destructive",
+        })
+        return
+      }
 
-      toast({
-        title: "Login successful",
-        description: "Welcome back to StandaloneCoders!",
-      })
+      if (success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome back to StandaloneCoders!",
+        })
 
-      router.push("/booking/dashboard")
+        // Check if there's a redirect path stored
+        const redirectPath = sessionStorage.getItem("redirectAfterLogin")
+        if (redirectPath) {
+          sessionStorage.removeItem("redirectAfterLogin")
+          router.push(redirectPath)
+        } else {
+          router.push("/todos")
+        }
+      }
     } catch (error) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     } finally {

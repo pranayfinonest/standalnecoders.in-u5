@@ -64,11 +64,12 @@
     "svelte": "latest",
     "vue": "latest",
     "vue-router": "latest",
-    "crypto": "latest",
     "@supabase/supabase-js": "latest",
+    "crypto": "latest",
     "statsig-node": "latest",
     "framer-motion": "latest",
-    "@vercel/analytics": "latest"
+    "@vercel/analytics": "latest",
+    "@supabase/auth-helpers-nextjs": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

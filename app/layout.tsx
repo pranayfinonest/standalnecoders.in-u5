@@ -17,6 +17,7 @@ import { ResponsiveMeta } from "@/components/responsive-meta"
 import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
 import SEOOptimizer from "@/components/seo/seo-optimizer"
 import SchemaGenerator from "@/components/seo/schema-generator"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -115,27 +116,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SchemaGenerator pageType="home" />
       </head>
       <body className={inter.className}>
-        <StatsigWrapper>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {/* Google Analytics */}
-            <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
-            <ErrorBoundaryClient>
-              <SEOOptimizer>
-                <Suspense fallback={`Loading UI...`}>
-                  <ScrollToTopOnNavigation />
-                  <Header />
-                  <main>{children}</main>
-                  <Footer />
-                  <WhatsAppButton />
-                </Suspense>
-              </SEOOptimizer>
-              <Toaster />
-              <GlobalScripts />
-            </ErrorBoundaryClient>
-            {/* Vercel Analytics */}
-            <Analytics />
-          </ThemeProvider>
-        </StatsigWrapper>
+        <AuthProvider>
+          <StatsigWrapper>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {/* Google Analytics */}
+              <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
+              <ErrorBoundaryClient>
+                <SEOOptimizer>
+                  <Suspense fallback={`Loading UI...`}>
+                    <ScrollToTopOnNavigation />
+                    <Header />
+                    <main>{children}</main>
+                    <Footer />
+                    <WhatsAppButton />
+                  </Suspense>
+                </SEOOptimizer>
+                <Toaster />
+                <GlobalScripts />
+              </ErrorBoundaryClient>
+              {/* Vercel Analytics */}
+              <Analytics />
+            </ThemeProvider>
+          </StatsigWrapper>
+        </AuthProvider>
       </body>
     </html>
   )

@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 // Server-side Supabase client (for server components, API routes, and server actions)
 export const createServerSupabaseClient = () => {
@@ -13,22 +14,17 @@ export const createServerSupabaseClient = () => {
   return createClient(supabaseUrl, supabaseKey)
 }
 
-// Client-side Supabase client (singleton pattern to avoid multiple instances)
-let clientSupabaseInstance: ReturnType<typeof createClient> | null = null
-
+// Client-side Supabase client using auth-helpers-nextjs
 export const createClientSupabaseClient = () => {
-  if (clientSupabaseInstance) return clientSupabaseInstance
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseKey) {
-    console.error("Missing Supabase public environment variables")
+  try {
+    return createClientComponentClient({
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    })
+  } catch (error) {
+    console.error("Error creating Supabase client:", error)
     return null
   }
-
-  clientSupabaseInstance = createClient(supabaseUrl, supabaseKey)
-  return clientSupabaseInstance
 }
 
 // Helper function to get server-side client with error handling

@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -10,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,8 +25,9 @@ export default function RegisterForm() {
   })
   const router = useRouter()
   const { toast } = useToast()
+  const { signUp } = useAuth()
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
@@ -31,7 +35,7 @@ export default function RegisterForm() {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!formData.agreeTerms) {
@@ -46,23 +50,35 @@ export default function RegisterForm() {
     setIsLoading(true)
 
     try {
-      // This would be replaced with actual registration logic
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      // Simulate successful registration
-      localStorage.setItem("isLoggedIn", "true")
-      localStorage.setItem("user", JSON.stringify({ email: formData.email, name: formData.name }))
-
-      toast({
-        title: "Registration successful",
-        description: "Welcome to StandaloneCoders!",
+      const { error, success } = await signUp(formData.email, formData.password, {
+        name: formData.name,
       })
 
-      router.push("/booking/dashboard")
+      if (error) {
+        toast({
+          title: "Registration failed",
+          description: error.message || "Please check your information and try again.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (success) {
+        toast({
+          title: "Verification email sent",
+          description: "Please check your email for a verification link or OTP code.",
+        })
+
+        // Store email in session storage for OTP verification
+        sessionStorage.setItem("verificationEmail", formData.email)
+
+        // Redirect to OTP verification page
+        router.push("/auth/verify")
+      }
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: "Please check your information and try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -74,7 +90,7 @@ export default function RegisterForm() {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl">Create an Account</CardTitle>
-        <CardDescription>Sign up to start booking your website project</CardDescription>
+        <CardDescription>Sign up to start managing your todos</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
