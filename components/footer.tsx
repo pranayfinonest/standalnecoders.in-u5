@@ -130,6 +130,47 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Legal Links */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="mt-8 md:mt-0">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/legal/privacy-policy"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/legal/terms-and-conditions"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/legal/cancellation-refund-policy"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  Cancellation & Refund
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/legal/shipping-delivery-policy"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  Shipping & Delivery
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <div className="border-t border-gray-200 dark:border-gray-800 pt-8 text-center">
           <p className="text-gray-600 dark:text-gray-400">© {currentYear} StandaloneCoders.in. All rights reserved.</p>
         </div>

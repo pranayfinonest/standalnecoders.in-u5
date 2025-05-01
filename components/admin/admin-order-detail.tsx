@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { scrollToTop } from "@/utils/scroll-utils"
+import { formatCurrency } from "@/utils/currency"
 
 export default function AdminOrderDetail({ orderId }) {
   const router = useRouter()
@@ -74,14 +75,6 @@ export default function AdminOrderDetail({ orderId }) {
       hour: "2-digit",
       minute: "2-digit",
     }).format(date)
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(amount)
   }
 
   const getStatusColor = (status) => {

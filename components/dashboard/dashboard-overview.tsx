@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import {
   BarChart,
   Bar,
@@ -34,6 +33,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { formatCurrency } from "@/utils/currency"
 
 export default function DashboardOverview() {
   const [isLoading, setIsLoading] = useState(true)
@@ -110,14 +110,6 @@ export default function DashboardOverview() {
   ]
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(value)
-  }
 
   if (isLoading) {
     return (
@@ -497,84 +489,6 @@ export default function DashboardOverview() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="projects">
-          <div className="space-y-6">
-            {projects.length > 0 ? (
-              projects.map((project) => (
-                <Card key={project.id}>
-                  <CardContent className="p-6">
-                    <div className="flex flex-col md:flex-row justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-bold text-lg">
-                            {project.items?.[0]?.template?.name || "Website Project"} -{" "}
-                            {project.items?.[0]?.customizations?.businessName || "Untitled"}
-                          </h3>
-                          <Badge
-                            className={
-                              project.status === "confirmed"
-                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                : project.status === "in-progress"
-                                  ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                                  : project.status === "review"
-                                    ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
-                                    : project.status === "completed"
-                                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                      : "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
-                            }
-                          >
-                            {project.status === "confirmed"
-                              ? "Confirmed"
-                              : project.status === "in-progress"
-                                ? "In Progress"
-                                : project.status === "review"
-                                  ? "Under Review"
-                                  : project.status === "completed"
-                                    ? "Completed"
-                                    : project.status}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          <Clock className="inline h-4 w-4 mr-1" /> Order Date:{" "}
-                          {new Date(project.date).toLocaleDateString()}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Order #: {project.id}</p>
-
-                        {project.status === "in-progress" && (
-                          <div className="mb-4">
-                            <div className="flex justify-between text-sm mb-1">
-                              <span>Progress</span>
-                              <span>45%</span>
-                            </div>
-                            <Progress value={45} className="h-2" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col justify-between items-end">
-                        <div className="font-bold text-lg">{formatCurrency(project.payment?.total || 0)}</div>
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href={`/dashboard/projects/${project.id}`}>View Details</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No projects found</h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4">You haven't created any website projects yet.</p>
-                  <Button asChild>
-                    <Link href="/booking/templates">Create a Project</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </div>
         </TabsContent>
       </Tabs>
     </div>

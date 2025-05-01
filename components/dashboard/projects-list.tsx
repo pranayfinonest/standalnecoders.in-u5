@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Clock, AlertCircle, Search, Filter } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { formatCurrency } from "@/utils/currency"
 
 export default function ProjectsList() {
   const [isLoading, setIsLoading] = useState(true)
@@ -61,14 +62,6 @@ export default function ProjectsList() {
 
     setFilteredProjects(filtered)
   }, [searchQuery, statusFilter, projects])
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(value)
-  }
 
   const handleViewProject = (projectId) => {
     // Navigate to the project detail page

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { CreditCard, Landmark, IndianRupee } from "lucide-react"
+import { formatCurrency } from "@/utils/currency"
 
 export default function PaymentOptions({ order, onComplete }) {
   const [paymentMethod, setPaymentMethod] = useState("card")
@@ -40,14 +41,6 @@ export default function PaymentOptions({ order, onComplete }) {
 
     setIsProcessing(false)
     onComplete(updatedOrder)
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(amount)
   }
 
   return (

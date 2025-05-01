@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import RazorpayCheckout from "@/components/payment/razorpay-checkout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { formatCurrency } from "@/utils/currency"
 
 export default function CheckoutForm() {
   const router = useRouter()
@@ -62,15 +63,6 @@ export default function CheckoutForm() {
 
   const calculateTotal = () => {
     return calculateSubtotal() + calculateTax()
-  }
-
-  // Format currency in INR
-  const formatINR = (amount) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(amount)
   }
 
   const handleChange = (e) => {
@@ -379,7 +371,7 @@ export default function CheckoutForm() {
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <span>{item.template.name}</span>
-                      <span>{formatINR(item.price)}</span>
+                      <span>{formatCurrency(item.price)}</span>
                     </div>
                   ))}
 
@@ -387,19 +379,19 @@ export default function CheckoutForm() {
 
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>{formatINR(calculateSubtotal())}</span>
+                    <span>{formatCurrency(calculateSubtotal())}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span>GST (18%)</span>
-                    <span>{formatINR(calculateTax())}</span>
+                    <span>{formatCurrency(calculateTax())}</span>
                   </div>
 
                   <Separator />
 
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>{formatINR(calculateTotal())}</span>
+                    <span>{formatCurrency(calculateTotal())}</span>
                   </div>
                 </div>
 
