@@ -25,26 +25,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: {
-    default: "Best Website Development Company – Standalone Coders",
-    template: "%s | Standalone Coders",
-  },
+  title: "StandaloneCoders.in | Cybersecurity, AI & Digital Solutions",
   description:
-    "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations. We provide custom web development, cybersecurity services, AI implementation, and digital marketing strategies.",
-  keywords: [
-    "web development",
-    "cybersecurity",
-    "AI solutions",
-    "digital marketing",
-    "technology services",
-    "website booking",
-    "custom websites",
-    "web design",
-    "SEO services",
-    "IT consulting",
-    "mobile app development",
-    "e-commerce solutions",
-  ],
+    "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses across Rajasthan. Serving Jaipur, Jodhpur, Udaipur, and all cities.",
+  keywords:
+    "web development, cybersecurity, AI solutions, digital marketing, technology services, Rajasthan, Jaipur, Jodhpur, Udaipur",
   authors: [{ name: "StandaloneCoders Team" }],
   creator: "StandaloneCoders.in",
   publisher: "StandaloneCoders.in",

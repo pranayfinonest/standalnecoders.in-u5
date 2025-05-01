@@ -18,6 +18,8 @@ import {
   Cell,
   Legend,
 } from "recharts"
+import { Settings, ImageIcon, Tag, Calendar, Layout } from "lucide-react"
+import Link from "next/link"
 
 interface DashboardStats {
   totalUsers: number
@@ -225,6 +227,54 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+
+        <Link href="/admin/offers" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <Tag className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Offers Management</h3>
+          </div>
+          <p className="text-gray-600">Create and manage special offers and discounts</p>
+        </Link>
+
+        <Link href="/admin/services" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <Settings className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Services Management</h3>
+          </div>
+          <p className="text-gray-600">Add, edit, and organize service offerings</p>
+        </Link>
+
+        <Link href="/admin/media" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <ImageIcon className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Media Library</h3>
+          </div>
+          <p className="text-gray-600">Upload and manage website images and media</p>
+        </Link>
+
+        <Link href="/admin/pricing" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <DollarSign className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Pricing Management</h3>
+          </div>
+          <p className="text-gray-600">Configure service pricing and packages</p>
+        </Link>
+
+        <Link href="/admin/bookings" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <Calendar className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Booking Management</h3>
+          </div>
+          <p className="text-gray-600">View and manage project bookings</p>
+        </Link>
+
+        <Link href="/admin/customize" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center mb-4">
+            <Layout className="text-blue-600 mr-2" size={24} />
+            <h3 className="text-xl font-semibold">Website Customization</h3>
+          </div>
+          <p className="text-gray-600">Customize website appearance and content</p>
+        </Link>
       </div>
 
       {/* Charts */}

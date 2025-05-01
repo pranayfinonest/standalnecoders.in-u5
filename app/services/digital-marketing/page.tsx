@@ -56,7 +56,7 @@ export default function DigitalMarketingPage() {
     packages: [
       {
         title: "Starter",
-        price: "$999/month",
+        price: "₹19,999/month",
         features: [
           "Basic SEO optimization",
           "Social media management (2 platforms)",
@@ -68,7 +68,7 @@ export default function DigitalMarketingPage() {
       },
       {
         title: "Professional",
-        price: "$2,499/month",
+        price: "₹39,999/month",
         features: [
           "Advanced SEO optimization",
           "Social media management (4 platforms)",
@@ -82,7 +82,7 @@ export default function DigitalMarketingPage() {
       },
       {
         title: "Enterprise",
-        price: "$4,999/month",
+        price: "₹79,999/month",
         features: [
           "Full-scale SEO strategy",
           "Social media management (all platforms)",

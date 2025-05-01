@@ -4,6 +4,7 @@ import Portfolio from "@/components/portfolio"
 import WhyChooseUs from "@/components/why-choose-us"
 import { ResponsiveContainer } from "@/components/responsive-container"
 import AboutUs from "@/components/about-us"
+import EnhancedSpecialOffers from "@/components/enhanced-special-offers"
 
 export const dynamic = "force-static"
 
@@ -16,6 +17,8 @@ export default function Home() {
         <WhyChooseUs />
         <Portfolio />
         <AboutUs />
+        {/* Special Offers */}
+        <EnhancedSpecialOffers />
       </ResponsiveContainer>
     </main>
   )

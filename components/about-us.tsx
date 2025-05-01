@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -26,24 +25,14 @@ export default function AboutUs() {
   return (
     <section id="about" className="py-20 bg-white dark:bg-gray-900">
       <div className="container px-4 mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+        <div className="mb-20">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="relative h-[500px] rounded-xl overflow-hidden shadow-xl"
+            className="max-w-3xl mx-auto"
           >
-            <Image
-              src="/yogendra-singh.png"
-              alt="Yogendra Singh - Founder"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-          </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">About StandaloneCoders</h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
               StandaloneCoders is a premier web development and digital solutions company based in India. We specialize

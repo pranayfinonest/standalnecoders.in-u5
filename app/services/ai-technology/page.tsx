@@ -55,7 +55,7 @@ export default function AITechnologyPage() {
     packages: [
       {
         title: "Starter",
-        price: "$1,999",
+        price: "₹49,999",
         features: [
           "Basic AI implementation",
           "CRM setup",
@@ -67,7 +67,7 @@ export default function AITechnologyPage() {
       },
       {
         title: "Professional",
-        price: "$4,999",
+        price: "₹99,999",
         features: [
           "Advanced AI implementation",
           "CRM setup and customization",
@@ -81,7 +81,7 @@ export default function AITechnologyPage() {
       },
       {
         title: "Enterprise",
-        price: "$9,999",
+        price: "₹1,99,999",
         features: [
           "Full AI ecosystem implementation",
           "Enterprise CRM integration",

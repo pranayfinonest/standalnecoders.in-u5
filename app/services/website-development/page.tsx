@@ -149,7 +149,7 @@ export default function WebsiteDevelopmentPage() {
     packages: [
       {
         title: "Basic Website",
-        price: "$1,499",
+        price: "₹24,999",
         features: [
           "Up to 5 pages",
           "Responsive design",
@@ -162,7 +162,7 @@ export default function WebsiteDevelopmentPage() {
       },
       {
         title: "Business Website",
-        price: "$3,999",
+        price: "₹49,999",
         features: [
           "Up to 10 pages",
           "Responsive design",
@@ -178,7 +178,7 @@ export default function WebsiteDevelopmentPage() {
       },
       {
         title: "E-commerce Website",
-        price: "$7,999",
+        price: "₹99,999",
         features: [
           "Up to 100 products",
           "Responsive design",

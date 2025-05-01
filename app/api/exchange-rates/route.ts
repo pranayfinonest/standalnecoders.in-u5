@@ -1,0 +1,29 @@
+import { NextResponse } from "next/server"
+import { getUSDtoINRRate } from "@/utils/currency-conversion"
+
+export async function GET() {
+  try {
+    const rate = await getUSDtoINRRate()
+
+    return NextResponse.json({
+      success: true,
+      rate,
+      currency: "INR",
+      base: "USD",
+      timestamp: Date.now(),
+    })
+  } catch (error) {
+    console.error("Error fetching exchange rate:", error)
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to fetch exchange rate",
+      },
+      { status: 500 },
+    )
+  }
+}
+
+// Revalidate every 6 hours
+export const revalidate = 21600

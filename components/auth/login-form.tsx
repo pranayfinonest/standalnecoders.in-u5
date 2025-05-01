@@ -54,14 +54,8 @@ export default function LoginForm() {
           description: "Welcome back to StandaloneCoders!",
         })
 
-        // Check if there's a redirect path stored
-        const redirectPath = sessionStorage.getItem("redirectAfterLogin")
-        if (redirectPath) {
-          sessionStorage.removeItem("redirectAfterLogin")
-          router.push(redirectPath)
-        } else {
-          router.push("/todos")
-        }
+        // Always redirect to homepage after login
+        router.push("/")
       }
     } catch (error) {
       toast({

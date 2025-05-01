@@ -59,17 +59,17 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "@emotion/is-prop-valid": "latest",
+    "@supabase/supabase-js": "latest",
     "@remix-run/react": "latest",
     "@sveltejs/kit": "latest",
     "svelte": "latest",
     "vue": "latest",
     "vue-router": "latest",
-    "@supabase/supabase-js": "latest",
     "crypto": "latest",
     "statsig-node": "latest",
     "framer-motion": "latest",
-    "@vercel/analytics": "latest",
-    "@supabase/auth-helpers-nextjs": "latest"
+    "@supabase/auth-helpers-nextjs": "latest",
+    "@vercel/analytics": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

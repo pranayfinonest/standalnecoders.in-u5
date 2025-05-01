@@ -2,25 +2,25 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, ChevronDown, LogIn, LogOut } from "lucide-react"
+import { Menu, ChevronDown, LogIn, User } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useAuth } from "@/contexts/auth-context"
+import UserProfileDropdown from "@/components/auth/user-profile-dropdown"
+import UserProfileSidebar from "@/components/auth/user-profile-sidebar"
 
 export default function Header() {
-  const [isServicesOpen, setIsServicesOpen] = useState(false)
+  const { user } = useAuth()
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isServicesOpen, setIsServicesOpen] = useState(false)
+  const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
-
-    // Check if user is logged in
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
-    setIsLoggedIn(loggedIn)
 
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -38,15 +38,6 @@ export default function Header() {
     setIsServicesOpen(!isServicesOpen)
   }
 
-  // Add handleLogout function
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn")
-    localStorage.removeItem("user")
-    setIsLoggedIn(false)
-    router.push("/")
-  }
-
-  // Add handleLogin function
   const handleLogin = () => {
     router.push("/auth/login")
   }
@@ -90,7 +81,7 @@ export default function Header() {
       <div className="container-custom py-3 md:py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center z-10" onClick={handleLinkClick}>
           <div className="logo-3d-container">
-            <h1 className="logo-3d">
+            <h1 className="logo-3d no-shadow">
               <span className="logo-3d-standalone">
                 <span className="text-red-600">S</span>
                 <span>tandalone</span>
@@ -153,40 +144,35 @@ export default function Header() {
           )}
 
           {/* Add login/logout button */}
-          {mounted && (
-            <Button
-              onClick={isLoggedIn ? handleLogout : handleLogin}
-              variant="default"
-              size="sm"
-              className="ml-2 whitespace-nowrap"
-            >
-              {isLoggedIn ? (
-                <>
-                  <LogOut className="w-4 h-4 mr-2" /> Logout
-                </>
-              ) : (
-                <>
-                  <LogIn className="w-4 h-4 mr-2" /> Login
-                </>
-              )}
-            </Button>
-          )}
+          {mounted &&
+            (user ? (
+              <UserProfileDropdown />
+            ) : (
+              <Button onClick={handleLogin} variant="default" size="sm" className="ml-2 whitespace-nowrap">
+                <LogIn className="w-4 h-4 mr-2" /> Login
+              </Button>
+            ))}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="flex items-center md:hidden">
           {/* Add login/logout button for mobile */}
-          {mounted && (
-            <Button
-              onClick={isLoggedIn ? handleLogout : handleLogin}
-              variant="default"
-              size="sm"
-              className="mr-2"
-              aria-label={isLoggedIn ? "Logout" : "Login"}
-            >
-              {isLoggedIn ? <LogOut size={18} /> : <LogIn size={18} />}
-            </Button>
-          )}
+          {mounted &&
+            (user ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsProfileSidebarOpen(true)}
+                className="mr-2"
+                aria-label="User Profile"
+              >
+                <User size={18} />
+              </Button>
+            ) : (
+              <Button onClick={handleLogin} variant="default" size="sm" className="mr-2" aria-label="Login">
+                <LogIn size={18} />
+              </Button>
+            ))}
 
           <Sheet>
             <SheetTrigger asChild>
@@ -243,6 +229,10 @@ export default function Header() {
           </Sheet>
         </div>
       </div>
+      {/* User Profile Sidebar for Mobile */}
+      {mounted && user && (
+        <UserProfileSidebar isOpen={isProfileSidebarOpen} onClose={() => setIsProfileSidebarOpen(false)} />
+      )}
     </header>
   )
 }

@@ -58,7 +58,7 @@ export default function CybersecurityPage() {
     packages: [
       {
         title: "Basic Security",
-        price: "$1,499",
+        price: "₹39,999",
         features: [
           "Vulnerability assessment",
           "Basic security monitoring",
@@ -70,7 +70,7 @@ export default function CybersecurityPage() {
       },
       {
         title: "Advanced Security",
-        price: "$3,999",
+        price: "₹79,999",
         features: [
           "Comprehensive vulnerability assessment",
           "Penetration testing",
@@ -84,7 +84,7 @@ export default function CybersecurityPage() {
       },
       {
         title: "Enterprise Security",
-        price: "$8,999",
+        price: "₹1,49,999",
         features: [
           "Full security assessment",
           "Advanced penetration testing",

@@ -65,15 +65,12 @@ export default function RegisterForm() {
 
       if (success) {
         toast({
-          title: "Verification email sent",
-          description: "Please check your email for a verification link or OTP code.",
+          title: "Registration successful",
+          description: "Welcome to StandaloneCoders!",
         })
 
-        // Store email in session storage for OTP verification
-        sessionStorage.setItem("verificationEmail", formData.email)
-
-        // Redirect to OTP verification page
-        router.push("/auth/verify")
+        // Redirect to homepage
+        router.push("/")
       }
     } catch (error) {
       toast({

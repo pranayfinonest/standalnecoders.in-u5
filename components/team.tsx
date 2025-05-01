@@ -8,19 +8,6 @@ import { Card, CardContent } from "@/components/ui/card"
 
 const teamMembers = [
   {
-    id: 1,
-    name: "Yogendra Singh",
-    role: "Founder & Lead Developer",
-    image: "/yogendra-singh.png",
-    bio: "With over 5 years of experience in web development and cybersecurity, Yogendra leads our technical team and oversees all projects.",
-    social: {
-      linkedin: "https://www.linkedin.com/in/yogendrasingh-dev/",
-      twitter: "https://twitter.com/yogendrasingh",
-      github: "https://github.com/yogendra-singh-rathore",
-      email: "yogendra6378@gmail.com",
-    },
-  },
-  {
     id: 2,
     name: "Priya Sharma",
     role: "UI/UX Designer",

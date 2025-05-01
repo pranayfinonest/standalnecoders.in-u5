@@ -55,7 +55,7 @@ export default function CreativeServicesPage() {
     packages: [
       {
         title: "Essential",
-        price: "$1,499",
+        price: "₹29,999",
         features: [
           "Basic brand identity package",
           "Logo design",
@@ -67,7 +67,7 @@ export default function CreativeServicesPage() {
       },
       {
         title: "Professional",
-        price: "$3,999",
+        price: "₹59,999",
         features: [
           "Comprehensive brand identity",
           "Logo design with variations",
@@ -82,7 +82,7 @@ export default function CreativeServicesPage() {
       },
       {
         title: "Enterprise",
-        price: "$7,999",
+        price: "₹1,19,999",
         features: [
           "Complete brand ecosystem",
           "Logo design with extensive variations",

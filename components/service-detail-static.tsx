@@ -1,5 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import SpecialDiscounts from "./special-discounts"
+import AddToCartButton from "./add-to-cart-button"
 
 // Define types for the service data
 interface Feature {
@@ -45,8 +47,39 @@ export default function ServiceDetailStatic({
   packages,
   faqs,
 }: ServiceDetailProps) {
+  // Special discounts data
+  const discounts = [
+    {
+      id: "early-bird",
+      name: "Early Bird Discount",
+      description: "Book any service package before the end of the month and get a special discount!",
+      code: "EARLYBIRD",
+      discount: "15% OFF",
+      validUntil: "31 May 2025",
+      isNew: true,
+    },
+    {
+      id: "bundle",
+      name: "Bundle & Save",
+      description: "Purchase any two services together and save on your total order.",
+      code: "BUNDLE2025",
+      discount: "20% OFF",
+      validUntil: "30 June 2025",
+    },
+    {
+      id: "first-time",
+      name: "First-Time Customer",
+      description: "New to StandaloneCoders? Get a special discount on your first service.",
+      code: "WELCOME",
+      discount: "₹5,000 OFF",
+    },
+  ]
+
   return (
     <div className="container mx-auto px-4 py-12">
+      {/* Special Discounts Section */}
+      <SpecialDiscounts discounts={discounts} />
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
         <div>
           <h1 className="text-4xl font-bold mb-6">{title}</h1>
@@ -116,7 +149,7 @@ export default function ServiceDetailStatic({
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`bg-card p-6 rounded-lg shadow ${pkg.popular ? "border-2 border-primary shadow-lg" : ""}`}
+              className={`bg-card p-6 rounded-lg shadow relative ${pkg.popular ? "border-2 border-primary shadow-lg" : ""}`}
             >
               {pkg.popular && (
                 <div className="absolute top-4 right-4 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
@@ -141,16 +174,30 @@ export default function ServiceDetailStatic({
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/contact"
-                className={`inline-flex w-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
-                  pkg.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
-                } h-10 px-4 py-2`}
-              >
-                {pkg.cta}
-              </Link>
+              <div className="space-y-3">
+                <AddToCartButton
+                  service={{
+                    title: pkg.title,
+                    price: pkg.price,
+                    features: pkg.features,
+                    description: `${title} - ${pkg.title} Package`,
+                    image: imageSrc,
+                  }}
+                  category={title}
+                  packageType={pkg.title}
+                  className="w-full"
+                />
+                <Link
+                  href="/contact"
+                  className={`inline-flex w-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
+                    pkg.popular
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                  } h-10 px-4 py-2`}
+                >
+                  {pkg.cta}
+                </Link>
+              </div>
             </div>
           ))}
         </div>
