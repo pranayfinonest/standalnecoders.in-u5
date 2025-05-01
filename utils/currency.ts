@@ -1,5 +1,5 @@
 /**
- * Formats a number as Indian Rupees (INR)
+ * Format a number as Indian Rupees (INR)
  * @param amount - The amount to format
  * @returns Formatted currency string
  */

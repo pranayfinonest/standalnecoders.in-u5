@@ -15,6 +15,8 @@ import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
 import { ResponsiveMeta } from "@/components/responsive-meta"
 import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
+import SEOOptimizer from "@/components/seo/seo-optimizer"
+import SchemaGenerator from "@/components/seo/schema-generator"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,11 +25,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "StandaloneCoders.in | Cybersecurity, AI & Digital Solutions",
-    template: "%s | StandaloneCoders.in",
+    default: "Best Website Development Company – Standalone Coders",
+    template: "%s | Standalone Coders",
   },
   description:
-    "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations.",
+    "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations. We provide custom web development, cybersecurity services, AI implementation, and digital marketing strategies.",
   keywords: [
     "web development",
     "cybersecurity",
@@ -36,6 +38,11 @@ export const metadata: Metadata = {
     "technology services",
     "website booking",
     "custom websites",
+    "web design",
+    "SEO services",
+    "IT consulting",
+    "mobile app development",
+    "e-commerce solutions",
   ],
   authors: [{ name: "StandaloneCoders Team" }],
   creator: "StandaloneCoders.in",
@@ -48,13 +55,17 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://standalonecoders.in"),
   alternates: {
     canonical: "/",
+    languages: {
+      "en-US": "/en-US",
+      "hi-IN": "/hi-IN",
+    },
   },
   openGraph: {
-    title: "StandaloneCoders.in | Cybersecurity, AI & Digital Solutions",
+    title: "Best Website Development Company – Standalone Coders",
     description:
       "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations.",
     url: "https://standalonecoders.in",
-    siteName: "StandaloneCoders.in",
+    siteName: "Standalone Coders",
     locale: "en_US",
     type: "website",
     images: [
@@ -62,13 +73,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "StandaloneCoders.in",
+        alt: "Standalone Coders",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "StandaloneCoders.in | Cybersecurity, AI & Digital Solutions",
+    title: "Best Website Development Company – Standalone Coders",
     description:
       "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations.",
     creator: "@standalonecoders",
@@ -97,6 +108,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <ResponsiveMeta />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <SchemaGenerator pageType="home" />
       </head>
       <body className={inter.className}>
         <StatsigWrapper>
@@ -104,13 +120,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Google Analytics */}
             <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
             <ErrorBoundaryClient>
-              <Suspense fallback={`Loading UI...`}>
-                <ScrollToTopOnNavigation />
-                <Header />
-                <main>{children}</main>
-                <Footer />
-                <WhatsAppButton />
-              </Suspense>
+              <SEOOptimizer>
+                <Suspense fallback={`Loading UI...`}>
+                  <ScrollToTopOnNavigation />
+                  <Header />
+                  <main>{children}</main>
+                  <Footer />
+                  <WhatsAppButton />
+                </Suspense>
+              </SEOOptimizer>
               <Toaster />
               <GlobalScripts />
             </ErrorBoundaryClient>

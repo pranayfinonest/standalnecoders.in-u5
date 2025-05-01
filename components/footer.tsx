@@ -122,8 +122,8 @@ export default function Footer() {
               </p>
               <p className="flex items-center">
                 <Mail className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400 flex-shrink-0" />
-                <Link href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400">
-                  Yogendra6378@gmail.com
+                <Link href="mailto:standalonecoders@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400">
+                  standalonecoders@gmail.com
                 </Link>
               </p>
             </address>

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import crypto from "crypto"
-import { logWebhookEvent } from "@/utils/webhook-logger"
 
 // Make sure the webhook secret is properly accessed from environment variables
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET
@@ -36,7 +35,7 @@ export async function POST(request: Request) {
     const payload = JSON.parse(body)
     const event = payload.event
 
-    logWebhookEvent(event, payload)
+    console.log(`Received Razorpay webhook: ${event}`, payload)
 
     // Handle different webhook events
     switch (event) {
@@ -71,7 +70,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    logWebhookEvent("error", { message: error.message, stack: error.stack }, true)
+    console.error("Error processing webhook:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
