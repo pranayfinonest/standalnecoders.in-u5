@@ -1,9 +1,30 @@
 import { Suspense } from "react"
+import { redirect } from "next/navigation"
 import AdminDashboard from "@/components/admin/admin-dashboard"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  // Check if user is authenticated and is an admin
+  const supabase = createServerComponentClient({ cookies })
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session) {
+    redirect("/admin/login")
+  }
+
+  // Check if user is in admin_users table
+  const { data: adminData, error } = await supabase.from("admin_users").select("*").eq("id", session.user.id).single()
+
+  if (error || !adminData) {
+    redirect("/admin/login?error=unauthorized")
+  }
+
   return (
     <Suspense
       fallback={

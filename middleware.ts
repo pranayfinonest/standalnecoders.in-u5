@@ -22,8 +22,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(callbackUrl)
   }
 
-  // Protect admin routes (except login and setup)
-  if (pathname.startsWith("/admin") && !pathname.includes("/admin/login") && !pathname.includes("/admin/setup")) {
+  // Special case for admin setup page - always allow access
+  if (pathname.includes("/admin/setup")) {
+    return response
+  }
+
+  // Protect admin routes (except login)
+  if (pathname.startsWith("/admin") && !pathname.includes("/admin/login")) {
     // Check if user is authenticated
     const {
       data: { session },

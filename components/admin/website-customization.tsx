@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Save, Undo, ImageIcon, Loader2 } from "lucide-react"
+import { Save, Undo, ImageIcon, Loader2, Eye, EyeOff, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
 import { Slider } from "@/components/ui/slider"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import Image from "next/image"
 
 interface WebsiteSettings {
@@ -58,6 +59,11 @@ interface WebsiteSettings {
     twitterHandle: string
     googleAnalyticsId: string
     enableIndexing: boolean
+  }
+  offers: {
+    showOnHomepage: boolean
+    showOnCheckout: boolean
+    defaultDiscount: string
   }
 }
 
@@ -104,6 +110,11 @@ const defaultSettings: WebsiteSettings = {
     googleAnalyticsId: "",
     enableIndexing: true,
   },
+  offers: {
+    showOnHomepage: true,
+    showOnCheckout: true,
+    defaultDiscount: "10% OFF",
+  },
 }
 
 export default function WebsiteCustomization() {
@@ -112,6 +123,7 @@ export default function WebsiteCustomization() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [previewMode, setPreviewMode] = useState(false)
   const { toast } = useToast()
   const supabase = createClientComponentClient()
 
@@ -135,6 +147,10 @@ export default function WebsiteCustomization() {
 
         if (data?.settings) {
           const loadedSettings = data.settings as WebsiteSettings
+          // Ensure the offers section exists
+          if (!loadedSettings.offers) {
+            loadedSettings.offers = defaultSettings.offers
+          }
           setSettings(loadedSettings)
           setOriginalSettings(loadedSettings)
         } else {
@@ -219,6 +235,14 @@ export default function WebsiteCustomization() {
     }
   }
 
+  const handleResetToDefaults = () => {
+    setSettings(defaultSettings)
+    toast({
+      title: "Reset to defaults",
+      description: "Settings have been reset to default values. Click Save to apply.",
+    })
+  }
+
   const hasChanges = originalSettings && JSON.stringify(settings) !== JSON.stringify(originalSettings)
 
   const fontOptions = ["Inter", "Poppins", "Roboto", "Open Sans", "Lato", "Montserrat", "Raleway", "Source Sans Pro"]
@@ -243,6 +267,14 @@ export default function WebsiteCustomization() {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Website Customization</h2>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setPreviewMode(!previewMode)} className="gap-2">
+            {previewMode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {previewMode ? "Hide Preview" : "Show Preview"}
+          </Button>
+          <Button variant="outline" onClick={handleResetToDefaults} className="gap-2">
+            <RefreshCw className="h-4 w-4" />
+            Reset to Defaults
+          </Button>
           {hasChanges && (
             <Button variant="outline" onClick={handleReset}>
               <Undo className="mr-2 h-4 w-4" />
@@ -272,10 +304,11 @@ export default function WebsiteCustomization() {
       )}
 
       <Tabs defaultValue="general">
-        <TabsList className="grid grid-cols-4 mb-4">
+        <TabsList className="grid grid-cols-5 mb-4">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
           <TabsTrigger value="homepage">Homepage</TabsTrigger>
+          <TabsTrigger value="offers">Special Offers</TabsTrigger>
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
 
@@ -562,6 +595,62 @@ export default function WebsiteCustomization() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="offers">
+          <Card>
+            <CardHeader>
+              <CardTitle>Special Offers Settings</CardTitle>
+              <CardDescription>Configure how special offers appear on your website</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="showOnHomepage"
+                    checked={settings.offers?.showOnHomepage ?? true}
+                    onCheckedChange={(checked) => handleInputChange("offers", "showOnHomepage", checked)}
+                  />
+                  <Label htmlFor="showOnHomepage">Show offers on homepage</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="showOnCheckout"
+                    checked={settings.offers?.showOnCheckout ?? true}
+                    onCheckedChange={(checked) => handleInputChange("offers", "showOnCheckout", checked)}
+                  />
+                  <Label htmlFor="showOnCheckout">Show offers on checkout page</Label>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="defaultDiscount">Default Discount</Label>
+                <Input
+                  id="defaultDiscount"
+                  value={settings.offers?.defaultDiscount ?? "10% OFF"}
+                  onChange={(e) => handleInputChange("offers", "defaultDiscount", e.target.value)}
+                  placeholder="e.g., 10% OFF"
+                />
+                <p className="text-xs text-muted-foreground">
+                  This will be used as the default discount for new offers
+                </p>
+              </div>
+
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="offers-management">
+                  <AccordionTrigger>Manage Special Offers</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      You can manage your special offers from the dedicated Offers Management page.
+                    </p>
+                    <Button asChild>
+                      <a href="/admin/offers">Go to Offers Management</a>
+                    </Button>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="homepage">
           <Card>
             <CardHeader>
@@ -785,6 +874,94 @@ export default function WebsiteCustomization() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {previewMode && (
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle>Preview</CardTitle>
+            <CardDescription>Preview how your settings will look on the website</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="border rounded-lg p-6 bg-white dark:bg-gray-800">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold" style={{ color: settings.appearance.primaryColor }}>
+                  {settings.general.siteName}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{settings.general.tagline}</p>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-2">Hero Section</h3>
+                <div className="border rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                  <h1 className="text-2xl font-bold mb-2" style={{ color: settings.appearance.secondaryColor }}>
+                    {settings.homepage.heroTitle}
+                  </h1>
+                  <p className="text-gray-600 dark:text-gray-300">{settings.homepage.heroSubtitle}</p>
+                  <button
+                    className="mt-4 px-4 py-2 rounded-md text-white"
+                    style={{
+                      backgroundColor: settings.appearance.primaryColor,
+                      borderRadius: `${settings.appearance.borderRadius}px`,
+                    }}
+                  >
+                    {settings.homepage.ctaButtonText}
+                  </button>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-2">Colors</h3>
+                <div className="flex gap-4">
+                  <div className="text-center">
+                    <div
+                      className="w-16 h-16 rounded-md mx-auto mb-2"
+                      style={{ backgroundColor: settings.appearance.primaryColor }}
+                    ></div>
+                    <p className="text-xs">Primary</p>
+                  </div>
+                  <div className="text-center">
+                    <div
+                      className="w-16 h-16 rounded-md mx-auto mb-2"
+                      style={{ backgroundColor: settings.appearance.secondaryColor }}
+                    ></div>
+                    <p className="text-xs">Secondary</p>
+                  </div>
+                  <div className="text-center">
+                    <div
+                      className="w-16 h-16 rounded-md mx-auto mb-2"
+                      style={{ backgroundColor: settings.appearance.accentColor }}
+                    ></div>
+                    <p className="text-xs">Accent</p>
+                  </div>
+                </div>
+              </div>
+
+              {settings.offers?.showOnHomepage && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold mb-2">Special Offer Example</h3>
+                  <div
+                    className="border rounded-md p-4"
+                    style={{
+                      background: `linear-gradient(to right, ${settings.appearance.primaryColor}10, ${settings.appearance.secondaryColor}10)`,
+                      borderRadius: `${settings.appearance.borderRadius}px`,
+                    }}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-bold">Summer Special</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Get a discount on your next order!</p>
+                      </div>
+                      <div className="text-lg font-bold" style={{ color: settings.appearance.primaryColor }}>
+                        {settings.offers?.defaultDiscount}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

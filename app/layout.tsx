@@ -103,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <AuthProvider>
           <StatsigWrapper>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
               {/* Google Analytics */}
               <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
               <ErrorBoundaryClient>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Lock, CreditCard, Smartphone } from "lucide-react"
+import { ArrowLeft, Lock, CreditCard, Smartphone, Tag, CheckCircle, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import RazorpayCheckout from "@/components/payment/razorpay-checkout"
 import { formatCurrency } from "@/utils/currency"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function CheckoutForm() {
   const router = useRouter()
@@ -20,6 +21,11 @@ export default function CheckoutForm() {
   const [cartItems, setCartItems] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [discountCode, setDiscountCode] = useState("")
+  const [appliedDiscount, setAppliedDiscount] = useState(null)
+  const [availableOffers, setAvailableOffers] = useState([])
+  const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
+  const [showOffers, setShowOffers] = useState(false)
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -37,6 +43,12 @@ export default function CheckoutForm() {
     // Load cart items from localStorage
     const storedCart = JSON.parse(localStorage.getItem("cart") || "[]")
     setCartItems(storedCart)
+
+    // Load available offers
+    const storedOffers = JSON.parse(localStorage.getItem("specialOffers") || "[]")
+    const activeOffers = storedOffers.filter((offer) => offer.isActive)
+    setAvailableOffers(activeOffers)
+
     setIsLoading(false)
 
     // Pre-fill form with user data if available
@@ -54,13 +66,27 @@ export default function CheckoutForm() {
     return cartItems.reduce((total, item) => total + item.price, 0)
   }
 
+  const calculateDiscount = () => {
+    if (!appliedDiscount) return 0
+
+    const subtotal = calculateSubtotal()
+    const discountValue = appliedDiscount.discount.replace(/[^0-9.]/g, "")
+    const isPercentage = appliedDiscount.discount.includes("%")
+
+    if (isPercentage) {
+      return Math.round(subtotal * (Number.parseFloat(discountValue) / 100))
+    } else {
+      return Math.min(Number.parseFloat(discountValue), subtotal)
+    }
+  }
+
   const calculateTax = () => {
-    // Calculate 18% GST
-    return Math.round(calculateSubtotal() * 0.18)
+    // Calculate 18% GST on the discounted amount
+    return Math.round((calculateSubtotal() - calculateDiscount()) * 0.18)
   }
 
   const calculateTotal = () => {
-    return calculateSubtotal() + calculateTax()
+    return calculateSubtotal() - calculateDiscount() + calculateTax()
   }
 
   const handleChange = (e) => {
@@ -69,6 +95,54 @@ export default function CheckoutForm() {
       ...prev,
       [name]: value,
     }))
+  }
+
+  const handleApplyDiscount = () => {
+    setIsApplyingDiscount(true)
+
+    // Find the discount code in available offers
+    const foundOffer = availableOffers.find((offer) => offer.code.toLowerCase() === discountCode.toLowerCase())
+
+    if (foundOffer) {
+      // Check if the offer is still valid
+      if (foundOffer.validUntil && new Date(foundOffer.validUntil) < new Date()) {
+        toast({
+          title: "Expired discount code",
+          description: "This discount code has expired.",
+          variant: "destructive",
+        })
+        setAppliedDiscount(null)
+      } else {
+        setAppliedDiscount(foundOffer)
+        toast({
+          title: "Discount applied",
+          description: `${foundOffer.discount} discount has been applied to your order.`,
+        })
+      }
+    } else {
+      toast({
+        title: "Invalid discount code",
+        description: "Please enter a valid discount code.",
+        variant: "destructive",
+      })
+      setAppliedDiscount(null)
+    }
+
+    setIsApplyingDiscount(false)
+  }
+
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null)
+    setDiscountCode("")
+    toast({
+      title: "Discount removed",
+      description: "The discount has been removed from your order.",
+    })
+  }
+
+  const handleSelectOffer = (offer) => {
+    setDiscountCode(offer.code)
+    setShowOffers(false)
   }
 
   const handlePaymentSuccess = (data) => {
@@ -262,6 +336,7 @@ export default function CheckoutForm() {
                     notes={{
                       address: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.postalCode}, ${formData.country}`,
                       items: JSON.stringify(cartItems.map((item) => item.template.name)),
+                      discount: appliedDiscount ? appliedDiscount.code : "None",
                     }}
                     onSuccess={handlePaymentSuccess}
                     onError={handlePaymentError}
@@ -292,7 +367,7 @@ export default function CheckoutForm() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-              <Card className="border-0 shadow-md">
+              <Card className="border-0 shadow-md mb-6">
                 <CardHeader className="bg-gray-50 dark:bg-gray-800/50 px-6 py-4">
                   <CardTitle>Order Summary</CardTitle>
                 </CardHeader>
@@ -312,6 +387,16 @@ export default function CheckoutForm() {
                       <span>{formatCurrency(calculateSubtotal())}</span>
                     </div>
 
+                    {appliedDiscount && (
+                      <div className="flex justify-between text-green-600 dark:text-green-400">
+                        <span className="flex items-center">
+                          <Tag className="h-4 w-4 mr-1" />
+                          Discount ({appliedDiscount.code})
+                        </span>
+                        <span>-{formatCurrency(calculateDiscount())}</span>
+                      </div>
+                    )}
+
                     <div className="flex justify-between">
                       <span>GST (18%)</span>
                       <span>{formatCurrency(calculateTax())}</span>
@@ -323,6 +408,77 @@ export default function CheckoutForm() {
                       <span>Total</span>
                       <span>{formatCurrency(calculateTotal())}</span>
                     </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <Label htmlFor="discountCode" className="text-sm font-medium">
+                      Discount Code
+                    </Label>
+                    <div className="flex mt-1">
+                      <Input
+                        id="discountCode"
+                        placeholder="Enter code"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                        className="rounded-r-none"
+                        disabled={!!appliedDiscount}
+                      />
+                      {appliedDiscount ? (
+                        <Button variant="outline" className="rounded-l-none border-l-0" onClick={handleRemoveDiscount}>
+                          <X className="h-4 w-4" />
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleApplyDiscount}
+                          disabled={!discountCode || isApplyingDiscount}
+                          className="rounded-l-none"
+                        >
+                          Apply
+                        </Button>
+                      )}
+                    </div>
+
+                    {availableOffers.length > 0 && !appliedDiscount && (
+                      <div className="mt-2">
+                        <button
+                          type="button"
+                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center"
+                          onClick={() => setShowOffers(!showOffers)}
+                        >
+                          <Tag className="h-3 w-3 mr-1" />
+                          {showOffers ? "Hide available offers" : "View available offers"}
+                        </button>
+
+                        {showOffers && (
+                          <div className="mt-2 space-y-2 max-h-40 overflow-y-auto p-2 border rounded-md">
+                            {availableOffers.map((offer) => (
+                              <div
+                                key={offer.id}
+                                className="p-2 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                                onClick={() => handleSelectOffer(offer)}
+                              >
+                                <div className="flex justify-between items-center">
+                                  <div className="font-medium">{offer.name}</div>
+                                  <div className="text-green-600 dark:text-green-400 font-bold">{offer.discount}</div>
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  Code: <span className="font-mono">{offer.code}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {appliedDiscount && (
+                      <Alert className="mt-2 bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800">
+                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        <AlertDescription className="text-green-600 dark:text-green-400 text-sm">
+                          {appliedDiscount.discount} discount applied!
+                        </AlertDescription>
+                      </Alert>
+                    )}
                   </div>
 
                   <div className="mt-6 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-md flex items-center text-sm">
