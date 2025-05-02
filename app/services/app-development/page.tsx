@@ -1,35 +1,35 @@
+import type { Metadata } from "next"
 import { Smartphone } from "lucide-react"
 import ServiceCategoryTemplate from "@/components/service-category-template"
-import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Mobile App Development Services | StandaloneCoders",
   description:
-    "Professional mobile app development services for iOS and Android. Native and cross-platform solutions for businesses of all sizes.",
+    "Professional mobile app development services for iOS and Android platforms. We create native and cross-platform applications tailored to your business needs.",
 }
 
 export default function AppDevelopmentPage() {
   return (
     <ServiceCategoryTemplate
       title="Mobile App Development"
-      description="We develop high-quality mobile applications for iOS and Android platforms that help businesses connect with their customers, streamline operations, and drive growth."
-      icon={<Smartphone className="h-8 w-8 text-green-600" />}
+      description="We develop high-performance, feature-rich mobile applications for iOS and Android platforms. Our mobile app development services focus on creating intuitive user experiences with robust functionality."
+      icon={<Smartphone className="w-12 h-12 text-green-600" />}
       image="/blue-mobile-banking.png"
       features={[
-        "iOS App Development (Swift)",
-        "Android App Development (Kotlin/Java)",
-        "Cross-Platform Development (React Native, Flutter)",
-        "UI/UX Design for Mobile",
-        "App Store Optimization",
-        "Ongoing Maintenance and Support",
+        "Native iOS and Android app development",
+        "Cross-platform development with React Native and Flutter",
+        "Intuitive user interface and experience design",
+        "Integration with device features (camera, GPS, etc.)",
+        "Push notification implementation",
+        "Offline functionality and data synchronization",
       ]}
       benefits={[
-        "Reach customers on their preferred devices",
-        "Enhance customer engagement and loyalty",
-        "Create new revenue streams",
-        "Improve business processes and efficiency",
+        "Reach users on their preferred mobile platforms",
+        "Provide seamless experiences across devices",
+        "Increase customer engagement and retention",
+        "Enable new revenue streams through mobile",
         "Collect valuable user data and insights",
-        "Stay competitive in the mobile-first world",
+        "Stay connected with customers on the go",
       ]}
     />
   )

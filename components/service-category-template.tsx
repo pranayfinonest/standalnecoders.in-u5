@@ -1,6 +1,6 @@
 "use client"
-
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type React from "react"
@@ -95,45 +95,53 @@ export default function ServiceCategoryTemplate({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
         <div>
           {icon && <div className="bg-blue-100 p-6 rounded-full inline-block mb-6">{icon}</div>}
-          <h1 className="text-4xl font-bold mb-6">{title}</h1>
-          <p className="text-lg text-gray-700 mb-8">{description}</p>
+          <h1 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">{title}</h1>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">{description}</p>
           <Button asChild size="lg">
-            <Link href="/contact?service=${encodeURIComponent(title)}">Request a Quote</Link>
+            <Link href={`/contact?service=${encodeURIComponent(title)}`}>Request a Quote</Link>
           </Button>
         </div>
-        <div>
-          <img src={image || "/placeholder.svg"} alt={title} className="rounded-lg shadow-lg w-full h-auto" />
+        <div className="relative h-[300px] rounded-lg overflow-hidden shadow-lg">
+          <Image
+            src={image || "/placeholder.svg?height=300&width=500"}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Key Features</h2>
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Key Features</h2>
           <ul className="space-y-4">
             {features.map((feature, index) => (
               <li key={index} className="flex items-start">
                 <CheckCircle className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" />
-                <span>{feature}</span>
+                <span className="text-gray-700 dark:text-gray-300">{feature}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Benefits</h2>
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Benefits</h2>
           <ul className="space-y-4">
             {benefits.map((benefit, index) => (
               <li key={index} className="flex items-start">
                 <CheckCircle className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" />
-                <span>{benefit}</span>
+                <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-lg p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
-        <p className="text-lg mb-6">Contact us today to discuss your project requirements.</p>
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-8 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Ready to get started?</h2>
+        <p className="text-lg mb-6 text-gray-700 dark:text-gray-300">
+          Contact us today to discuss your project requirements.
+        </p>
         <Button asChild size="lg">
           <Link href="/contact">Contact Us</Link>
         </Button>
