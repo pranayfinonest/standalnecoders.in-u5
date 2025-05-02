@@ -17,10 +17,23 @@ export default function AdminRouteGuard({ children }: { children: React.ReactNod
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        // Skip verification for login and setup pages
+        if (pathname === "/admin/login" || pathname === "/admin/setup") {
+          setIsVerifying(false)
+          return
+        }
+
         // Check if user is authenticated
         const {
           data: { session },
+          error: sessionError,
         } = await supabase.auth.getSession()
+
+        if (sessionError) {
+          console.error("Session error:", sessionError)
+          router.push("/admin/login")
+          return
+        }
 
         if (!session) {
           // Not authenticated, redirect to login
@@ -35,7 +48,13 @@ export default function AdminRouteGuard({ children }: { children: React.ReactNod
           .eq("id", session.user.id)
           .single()
 
-        if (adminError || !adminData) {
+        if (adminError) {
+          console.error("Admin check error:", adminError)
+          router.push("/")
+          return
+        }
+
+        if (!adminData) {
           // Not an admin, redirect to home
           console.log("Not authorized as admin")
           router.push("/")
@@ -50,12 +69,6 @@ export default function AdminRouteGuard({ children }: { children: React.ReactNod
       } finally {
         setIsVerifying(false)
       }
-    }
-
-    // Skip verification for login and setup pages
-    if (pathname === "/admin/login" || pathname === "/admin/setup") {
-      setIsVerifying(false)
-      return
     }
 
     checkAdminStatus()

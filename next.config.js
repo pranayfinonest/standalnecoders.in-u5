@@ -28,8 +28,6 @@ const nextConfig = {
   },
   // Enable compression
   compress: true,
-  // Enable SWC minification for JS/CSS
-  swcMinify: true,
   // Add performance headers
   async headers() {
     return [

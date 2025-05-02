@@ -15,13 +15,15 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching exchange rate:", error)
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to fetch exchange rate",
-      },
-      { status: 500 },
-    )
+    // Return a fallback rate if there's an error
+    return NextResponse.json({
+      success: true,
+      rate: 83.0, // Fallback rate
+      currency: "INR",
+      base: "USD",
+      timestamp: Date.now(),
+      fallback: true,
+    })
   }
 }
 

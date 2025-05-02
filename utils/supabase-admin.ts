@@ -4,9 +4,10 @@ import { cache } from "react"
 
 // Cached function to check if a user is an admin
 export const getAdminUser = cache(async () => {
-  const supabase = createServerComponentClient({ cookies })
-
   try {
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+
     // Get the current session
     const {
       data: { session },
@@ -32,20 +33,26 @@ export const getAdminUser = cache(async () => {
 
 // Server action to require admin authentication
 export async function requireAdmin() {
-  const admin = await getAdminUser()
+  try {
+    const admin = await getAdminUser()
 
-  if (!admin) {
+    if (!admin) {
+      throw new Error("Unauthorized: Admin access required")
+    }
+
+    return admin
+  } catch (error) {
+    console.error("Error requiring admin:", error)
     throw new Error("Unauthorized: Admin access required")
   }
-
-  return admin
 }
 
 // Server action to update admin password
 export async function updateAdminPassword(currentPassword: string, newPassword: string) {
-  const supabase = createServerActionClient({ cookies })
-
   try {
+    const cookieStore = cookies()
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
     const { error } = await supabase.auth.updateUser({
       password: newPassword,
     })

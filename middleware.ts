@@ -23,16 +23,22 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin/login", request.url))
     }
 
-    // Check if user is admin
-    const { data: adminUser, error } = await supabase
-      .from("admin_users")
-      .select("id")
-      .eq("id", session.user.id)
-      .single()
+    try {
+      // Check if user is admin
+      const { data: adminUser, error } = await supabase
+        .from("admin_users")
+        .select("id")
+        .eq("id", session.user.id)
+        .single()
 
-    // Not an admin, redirect to home
-    if (error || !adminUser) {
-      return NextResponse.redirect(new URL("/", request.url))
+      // Not an admin, redirect to home
+      if (error || !adminUser) {
+        return NextResponse.redirect(new URL("/", request.url))
+      }
+    } catch (error) {
+      console.error("Error checking admin status:", error)
+      // If there's an error checking admin status, redirect to login
+      return NextResponse.redirect(new URL("/admin/login", request.url))
     }
   }
 
