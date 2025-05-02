@@ -1,9 +1,8 @@
 import { createServerComponentClient, createServerActionClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
-import { cache } from "react"
 
-// Cached function to check if a user is an admin
-export const getAdminUser = cache(async () => {
+// Function to check if a user is an admin - no longer cached to avoid SSR issues
+export async function getAdminUser() {
   try {
     const cookieStore = cookies()
     const supabase = createServerComponentClient({ cookies: () => cookieStore })
@@ -29,7 +28,7 @@ export const getAdminUser = cache(async () => {
     console.error("Error checking admin status:", error)
     return null
   }
-})
+}
 
 // Server action to require admin authentication
 export async function requireAdmin() {

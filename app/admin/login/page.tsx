@@ -1,21 +1,14 @@
-import { getAdminUser } from "@/utils/supabase-admin"
-import { redirect } from "next/navigation"
 import AdminLoginForm from "@/components/admin/admin-login-form"
 import type { Metadata } from "next"
+
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Admin Login | StandaloneCoders",
   description: "Login to the admin dashboard",
 }
 
-export default async function AdminLoginPage() {
-  // Check if already logged in as admin
-  const admin = await getAdminUser()
-
-  if (admin) {
-    redirect("/admin")
-  }
-
+export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-sm py-4">

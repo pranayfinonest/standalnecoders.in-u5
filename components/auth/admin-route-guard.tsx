@@ -44,17 +44,11 @@ export default function AdminRouteGuard({ children }: { children: React.ReactNod
         // Check if user is in admin_users table
         const { data: adminData, error: adminError } = await supabase
           .from("admin_users")
-          .select("*")
+          .select("id") // Only select the ID field to minimize data transfer
           .eq("id", session.user.id)
           .single()
 
-        if (adminError) {
-          console.error("Admin check error:", adminError)
-          router.push("/")
-          return
-        }
-
-        if (!adminData) {
+        if (adminError || !adminData) {
           // Not an admin, redirect to home
           console.log("Not authorized as admin")
           router.push("/")

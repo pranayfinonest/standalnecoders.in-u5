@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
 
   // Handle admin routes
   if (request.nextUrl.pathname.startsWith("/admin")) {
-    // Allow access to login and setup pages
+    // Allow access to login and setup pages without further checks
     if (request.nextUrl.pathname === "/admin/login" || request.nextUrl.pathname === "/admin/setup") {
       return response
     }
