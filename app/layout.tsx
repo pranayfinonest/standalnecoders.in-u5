@@ -18,6 +18,9 @@ import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
 import SEOOptimizer from "@/components/seo/seo-optimizer"
 import SchemaGenerator from "@/components/seo/schema-generator"
 import { AuthProvider } from "@/contexts/auth-context"
+import { WebVitals } from "@/components/performance/web-vitals"
+import { ResourceHints } from "@/components/performance/resource-hints"
+import { PerformanceMonitor } from "@/components/performance/performance-monitor"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -99,28 +102,53 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <SchemaGenerator pageType="home" />
+        <ResourceHints />
       </head>
       <body className={inter.className}>
         <AuthProvider>
           <StatsigWrapper>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-              {/* Google Analytics */}
-              <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
+              {/* Google Analytics - load with lower priority */}
+              <Suspense fallback={null}>
+                <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
+              </Suspense>
+
               <ErrorBoundaryClient>
                 <SEOOptimizer>
-                  <Suspense fallback={`Loading UI...`}>
+                  <Suspense
+                    fallback={
+                      <div className="min-h-screen flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                      </div>
+                    }
+                  >
                     <ScrollToTopOnNavigation />
                     <Header />
                     <main>{children}</main>
                     <Footer />
-                    <WhatsAppButton />
+
+                    {/* Load WhatsApp button with lower priority */}
+                    <Suspense fallback={null}>
+                      <WhatsAppButton />
+                    </Suspense>
                   </Suspense>
                 </SEOOptimizer>
                 <Toaster />
-                <GlobalScripts />
+
+                {/* Load scripts with lower priority */}
+                <Suspense fallback={null}>
+                  <GlobalScripts />
+                </Suspense>
               </ErrorBoundaryClient>
-              {/* Vercel Analytics */}
-              <Analytics />
+
+              {/* Vercel Analytics - load with lower priority */}
+              <Suspense fallback={null}>
+                <Analytics />
+              </Suspense>
+
+              {/* Performance monitoring */}
+              <WebVitals />
+              <PerformanceMonitor />
             </ThemeProvider>
           </StatsigWrapper>
         </AuthProvider>

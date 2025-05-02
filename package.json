@@ -69,7 +69,13 @@
     "statsig-node": "latest",
     "framer-motion": "latest",
     "@supabase/auth-helpers-nextjs": "latest",
-    "@vercel/analytics": "latest"
+    "web-vitals": "latest",
+    "lru-cache": "latest",
+    "react-colorful": "latest",
+    "@vercel/analytics": "latest",
+    "@supabase/postgrest-js": "latest",
+    "react-intersection-observer": "latest",
+    "uuid": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

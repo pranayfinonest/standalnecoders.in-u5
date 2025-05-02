@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, ChevronDown, LogIn, User } from "lucide-react"
+import { Menu, ChevronDown, LogIn, User, ShoppingCart } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/contexts/auth-context"
 import UserProfileDropdown from "@/components/auth/user-profile-dropdown"
 import UserProfileSidebar from "@/components/auth/user-profile-sidebar"
+import { useCart } from "@/utils/cart-utils" // Add this import
 
 export default function Header() {
   const { user } = useAuth()
@@ -18,6 +19,9 @@ export default function Header() {
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
+
+  const { cart, isLoading: isCartLoading, getCartItemCount } = useCart()
+  const [cartCount, setCartCount] = useState(0)
 
   useEffect(() => {
     setMounted(true)
@@ -33,6 +37,12 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  useEffect(() => {
+    if (!isCartLoading) {
+      setCartCount(getCartItemCount())
+    }
+  }, [cart, isCartLoading, getCartItemCount])
 
   const toggleServices = () => {
     setIsServicesOpen(!isServicesOpen)
@@ -143,6 +153,20 @@ export default function Header() {
             ),
           )}
 
+          {/* Add cart icon */}
+          <Link
+            href="/cart"
+            className="relative p-2 rounded-md hover:bg-gray-50 transition-colors"
+            aria-label="Shopping Cart"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+
           {/* Add login/logout button */}
           {mounted &&
             (user ? (
@@ -173,6 +197,18 @@ export default function Header() {
                 <LogIn size={18} />
               </Button>
             ))}
+
+          {/* Add cart icon for mobile */}
+          <Link href="/cart" className="relative mr-2" aria-label="Shopping Cart">
+            <Button variant="ghost" size="icon">
+              <ShoppingCart size={18} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Button>
+          </Link>
 
           <Sheet>
             <SheetTrigger asChild>

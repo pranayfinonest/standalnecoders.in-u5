@@ -1,61 +1,53 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
-import {
-  getResponsiveImageSizes,
-  generateBlurPlaceholder,
-  getOptimalImageDimensions,
-  shouldPrioritizeImage,
-} from "../utils/image-optimizer"
+import { useState, useEffect } from "react"
+import { getOptimalImageDimensions, shouldPrioritizeImage, generateBlurPlaceholder } from "@/utils/image-optimizer"
 
-interface ResponsiveImageProps {
+interface OptimizedImageProps {
   src: string
   alt: string
-  className?: string
   width?: number
   height?: number
-  priority?: boolean
+  className?: string
+  position?: "hero" | "above-fold" | "below-fold" | "lazy"
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
+  quality?: number
   sizes?: string
   fill?: boolean
-  quality?: number
-  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
-  position?: "hero" | "above-fold" | "below-fold" | "lazy"
-  blurDataURL?: string
 }
 
-export function ResponsiveImage({
+export function OptimizedImage({
   src,
   alt,
-  className = "",
   width,
   height,
-  priority = false,
-  sizes,
-  fill = false,
-  quality = 85,
-  objectFit = "cover",
+  className = "",
   position = "below-fold",
-  blurDataURL,
-}: ResponsiveImageProps) {
+  objectFit = "cover",
+  quality = 75,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  fill = false,
+}: OptimizedImageProps) {
   const [loaded, setLoaded] = useState(false)
+  const [dimensions, setDimensions] = useState({ width: width || 0, height: height || 0 })
   const [error, setError] = useState(false)
 
-  // Default sizes if not provided
-  const imageSizes = sizes || getResponsiveImageSizes()
+  // Generate placeholder
+  const blurDataURL = generateBlurPlaceholder(dimensions.width || 16, dimensions.height || 9)
+
+  // Determine if image should be prioritized
+  const isPriority = shouldPrioritizeImage(position)
+
+  // Calculate optimal dimensions if width and height are provided
+  useEffect(() => {
+    if (width && height && !fill) {
+      setDimensions(getOptimalImageDimensions(width, height))
+    }
+  }, [width, height, fill])
 
   // Object fit classes
   const objectFitClass = `object-${objectFit}`
-
-  // Generate blur placeholder if not provided
-  const placeholder = "blur"
-  const blurData = blurDataURL || (width && height ? generateBlurPlaceholder(width, height) : undefined)
-
-  // Auto-prioritize hero and above-fold images
-  const shouldPrioritize = priority || shouldPrioritizeImage(position)
-
-  // Calculate optimal dimensions if width and height are provided
-  const dimensions = width && height && !fill ? getOptimalImageDimensions(width, height) : { width, height }
 
   // Handle loading state
   const handleLoad = () => {
@@ -84,13 +76,13 @@ export function ResponsiveImage({
           className={`transition-opacity duration-300 ${objectFitClass} ${loaded ? "opacity-100" : "opacity-0"}`}
           onLoad={handleLoad}
           onError={handleError}
-          priority={shouldPrioritize}
+          priority={isPriority}
           quality={quality}
-          sizes={imageSizes}
-          placeholder={placeholder}
-          blurDataURL={blurData}
+          sizes={sizes}
+          placeholder="blur"
+          blurDataURL={blurDataURL}
           fill={fill}
-          loading={shouldPrioritize ? "eager" : "lazy"}
+          loading={isPriority ? "eager" : "lazy"}
         />
       )}
     </div>

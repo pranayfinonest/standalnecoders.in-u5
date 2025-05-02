@@ -18,6 +18,15 @@ export default function CustomizeForm() {
   const router = useRouter()
   const template = searchParams.get("template") || ""
 
+  const [currentTab, setCurrentTab] = useState("basic")
+  const [completedTabs, setCompletedTabs] = useState({
+    basic: false,
+    design: false,
+    features: false,
+    technical: false,
+    pages: false,
+  })
+
   const [formData, setFormData] = useState({
     businessName: "",
     businessType: "",
@@ -43,6 +52,14 @@ export default function CustomizeForm() {
       contact: true,
       blog: false,
       shop: false,
+    },
+    technical: {
+      frontendFramework: "",
+      backendLanguage: "",
+      database: "",
+      hosting: "",
+      cms: "",
+      additionalTechnologies: [],
     },
     additionalNotes: "",
   })
@@ -184,8 +201,91 @@ export default function CustomizeForm() {
     }))
   }
 
+  const handleTechnicalChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      technical: {
+        ...prev.technical,
+        [field]: value,
+      },
+    }))
+  }
+
+  const handleAdditionalTechChange = (tech, checked) => {
+    setFormData((prev) => {
+      const currentTechs = [...prev.technical.additionalTechnologies]
+
+      if (checked && !currentTechs.includes(tech)) {
+        currentTechs.push(tech)
+      } else if (!checked && currentTechs.includes(tech)) {
+        const index = currentTechs.indexOf(tech)
+        currentTechs.splice(index, 1)
+      }
+
+      return {
+        ...prev,
+        technical: {
+          ...prev.technical,
+          additionalTechnologies: currentTechs,
+        },
+      }
+    })
+  }
+
+  const validateCurrentTab = () => {
+    let isValid = true
+
+    if (currentTab === "basic") {
+      // Check if business name and type are filled
+      if (!formData.businessName.trim() || !formData.businessType) {
+        isValid = false
+        alert("Please enter your business name and select business type")
+      }
+    } else if (currentTab === "technical") {
+      // Make the frontend framework and backend language required fields
+      if (!formData.technical.frontendFramework) {
+        isValid = false
+        alert("Please select a frontend framework")
+      } else if (!formData.technical.backendLanguage) {
+        isValid = false
+        alert("Please select a backend language")
+      }
+    }
+
+    if (isValid) {
+      // Mark current tab as completed
+      setCompletedTabs((prev) => ({
+        ...prev,
+        [currentTab]: true,
+      }))
+
+      // Navigate to next tab
+      if (currentTab === "basic") setCurrentTab("design")
+      else if (currentTab === "design") setCurrentTab("features")
+      else if (currentTab === "features") setCurrentTab("technical")
+      else if (currentTab === "technical") setCurrentTab("pages")
+    }
+
+    return isValid
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Validate pages tab
+    if (currentTab === "pages") {
+      setCompletedTabs((prev) => ({
+        ...prev,
+        pages: true,
+      }))
+    }
+
+    // Check if all tabs are completed
+    if (!Object.values(completedTabs).every((tab) => tab)) {
+      alert("Please complete all sections before proceeding to checkout")
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -214,11 +314,12 @@ export default function CustomizeForm() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Tabs defaultValue="basic" className="w-full">
-              <TabsList className="grid grid-cols-4 mb-4">
+            <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
+              <TabsList className="grid grid-cols-5 mb-4">
                 <TabsTrigger value="basic">Basic Info</TabsTrigger>
                 <TabsTrigger value="design">Design</TabsTrigger>
                 <TabsTrigger value="features">Features</TabsTrigger>
+                <TabsTrigger value="technical">Technical</TabsTrigger>
                 <TabsTrigger value="pages">Pages</TabsTrigger>
               </TabsList>
 
@@ -461,6 +562,197 @@ export default function CustomizeForm() {
                 </Card>
               </TabsContent>
 
+              <TabsContent value="technical" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Technical Specifications</CardTitle>
+                    <CardDescription>Select the technical stack for your website</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <Label htmlFor="frontendFramework" className="text-base">
+                        Frontend Framework
+                      </Label>
+                      <Select
+                        value={formData.technical.frontendFramework}
+                        onValueChange={(value) => handleTechnicalChange("frontendFramework", value)}
+                      >
+                        <SelectTrigger id="frontendFramework" className="mt-1">
+                          <SelectValue placeholder="Select frontend framework" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="react">React</SelectItem>
+                          <SelectItem value="nextjs">Next.js</SelectItem>
+                          <SelectItem value="vue">Vue.js</SelectItem>
+                          <SelectItem value="angular">Angular</SelectItem>
+                          <SelectItem value="vanilla">Vanilla JavaScript</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="backendLanguage" className="text-base">
+                        Backend Language
+                      </Label>
+                      <Select
+                        value={formData.technical.backendLanguage}
+                        onValueChange={(value) => handleTechnicalChange("backendLanguage", value)}
+                      >
+                        <SelectTrigger id="backendLanguage" className="mt-1">
+                          <SelectValue placeholder="Select backend language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="node">Node.js</SelectItem>
+                          <SelectItem value="php">PHP</SelectItem>
+                          <SelectItem value="python">Python</SelectItem>
+                          <SelectItem value="ruby">Ruby</SelectItem>
+                          <SelectItem value="java">Java</SelectItem>
+                          <SelectItem value="dotnet">.NET</SelectItem>
+                          <SelectItem value="go">Go</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="database" className="text-base">
+                        Database
+                      </Label>
+                      <Select
+                        value={formData.technical.database}
+                        onValueChange={(value) => handleTechnicalChange("database", value)}
+                      >
+                        <SelectTrigger id="database" className="mt-1">
+                          <SelectValue placeholder="Select database" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="mysql">MySQL</SelectItem>
+                          <SelectItem value="postgresql">PostgreSQL</SelectItem>
+                          <SelectItem value="mongodb">MongoDB</SelectItem>
+                          <SelectItem value="sqlite">SQLite</SelectItem>
+                          <SelectItem value="firestore">Firestore</SelectItem>
+                          <SelectItem value="supabase">Supabase</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="hosting" className="text-base">
+                        Hosting Platform
+                      </Label>
+                      <Select
+                        value={formData.technical.hosting}
+                        onValueChange={(value) => handleTechnicalChange("hosting", value)}
+                      >
+                        <SelectTrigger id="hosting" className="mt-1">
+                          <SelectValue placeholder="Select hosting platform" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="vercel">Vercel</SelectItem>
+                          <SelectItem value="netlify">Netlify</SelectItem>
+                          <SelectItem value="aws">AWS</SelectItem>
+                          <SelectItem value="gcp">Google Cloud</SelectItem>
+                          <SelectItem value="azure">Microsoft Azure</SelectItem>
+                          <SelectItem value="digitalocean">DigitalOcean</SelectItem>
+                          <SelectItem value="heroku">Heroku</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="cms" className="text-base">
+                        Content Management System
+                      </Label>
+                      <Select
+                        value={formData.technical.cms}
+                        onValueChange={(value) => handleTechnicalChange("cms", value)}
+                      >
+                        <SelectTrigger id="cms" className="mt-1">
+                          <SelectValue placeholder="Select CMS (optional)" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">None</SelectItem>
+                          <SelectItem value="wordpress">WordPress</SelectItem>
+                          <SelectItem value="strapi">Strapi</SelectItem>
+                          <SelectItem value="contentful">Contentful</SelectItem>
+                          <SelectItem value="sanity">Sanity</SelectItem>
+                          <SelectItem value="custom">Custom CMS</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label className="text-base mb-2 block">Additional Technologies</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-typescript"
+                            checked={formData.technical.additionalTechnologies.includes("typescript")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("typescript", checked)}
+                          />
+                          <Label htmlFor="tech-typescript">TypeScript</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-redux"
+                            checked={formData.technical.additionalTechnologies.includes("redux")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("redux", checked)}
+                          />
+                          <Label htmlFor="tech-redux">Redux</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-graphql"
+                            checked={formData.technical.additionalTechnologies.includes("graphql")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("graphql", checked)}
+                          />
+                          <Label htmlFor="tech-graphql">GraphQL</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-tailwind"
+                            checked={formData.technical.additionalTechnologies.includes("tailwind")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("tailwind", checked)}
+                          />
+                          <Label htmlFor="tech-tailwind">Tailwind CSS</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-sass"
+                            checked={formData.technical.additionalTechnologies.includes("sass")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("sass", checked)}
+                          />
+                          <Label htmlFor="tech-sass">SASS/SCSS</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-docker"
+                            checked={formData.technical.additionalTechnologies.includes("docker")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("docker", checked)}
+                          />
+                          <Label htmlFor="tech-docker">Docker</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-jest"
+                            checked={formData.technical.additionalTechnologies.includes("jest")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("jest", checked)}
+                          />
+                          <Label htmlFor="tech-jest">Jest (Testing)</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="tech-pwa"
+                            checked={formData.technical.additionalTechnologies.includes("pwa")}
+                            onCheckedChange={(checked) => handleAdditionalTechChange("pwa", checked)}
+                          />
+                          <Label htmlFor="tech-pwa">PWA Support</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="pages" className="space-y-4">
                 <Card>
                   <CardHeader>
@@ -563,10 +855,20 @@ export default function CustomizeForm() {
               </TabsContent>
             </Tabs>
 
-            <CardFooter className="flex justify-end px-0">
-              <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
-                {isSubmitting ? "Processing..." : "Continue to Checkout"}
-              </Button>
+            <CardFooter className="flex justify-end px-0 space-x-2">
+              {currentTab !== "pages" ? (
+                <Button type="button" onClick={validateCurrentTab} className="w-full md:w-auto">
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !Object.values(completedTabs).every((tab) => tab)}
+                  className="w-full md:w-auto"
+                >
+                  {isSubmitting ? "Processing..." : "Continue to Checkout"}
+                </Button>
+              )}
             </CardFooter>
           </form>
         </div>
@@ -615,6 +917,38 @@ export default function CustomizeForm() {
                       </li>
                     ))}
                 </ul>
+
+                {formData.technical.frontendFramework && (
+                  <>
+                    <h3 className="font-medium text-lg mt-4">Technical Stack:</h3>
+                    <ul className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
+                      {formData.technical.frontendFramework && (
+                        <li className="flex items-start">
+                          <div className="min-w-[80px] font-medium">Frontend:</div>
+                          <div>{formData.technical.frontendFramework}</div>
+                        </li>
+                      )}
+                      {formData.technical.backendLanguage && (
+                        <li className="flex items-start">
+                          <div className="min-w-[80px] font-medium">Backend:</div>
+                          <div>{formData.technical.backendLanguage}</div>
+                        </li>
+                      )}
+                      {formData.technical.database && (
+                        <li className="flex items-start">
+                          <div className="min-w-[80px] font-medium">Database:</div>
+                          <div>{formData.technical.database}</div>
+                        </li>
+                      )}
+                      {formData.technical.additionalTechnologies.length > 0 && (
+                        <li className="flex items-start">
+                          <div className="min-w-[80px] font-medium">Other:</div>
+                          <div>{formData.technical.additionalTechnologies.join(", ")}</div>
+                        </li>
+                      )}
+                    </ul>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
