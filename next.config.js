@@ -18,6 +18,10 @@ const nextConfig = {
     formats: ["image/webp", "image/avif"],
     // Increase quality slightly
     minimumCacheTTL: 60,
+    // Enable dangerously allow SVG
+    dangerouslyAllowSVG: true,
+    // Set content security policy
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // These are valid options for faster builds
   eslint: {

@@ -156,10 +156,10 @@ export default function Header() {
           {/* Add cart icon */}
           <Link
             href="/cart"
-            className="relative p-2 rounded-md hover:bg-gray-50 transition-colors"
+            className="relative p-2 rounded-md bg-blue-50 hover:bg-blue-100 transition-colors flex items-center justify-center"
             aria-label="Shopping Cart"
           >
-            <ShoppingCart className="h-5 w-5" />
+            <ShoppingCart className="h-5 w-5 text-blue-600" />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {cartCount}
@@ -200,8 +200,8 @@ export default function Header() {
 
           {/* Add cart icon for mobile */}
           <Link href="/cart" className="relative mr-2" aria-label="Shopping Cart">
-            <Button variant="ghost" size="icon">
-              <ShoppingCart size={18} />
+            <Button variant="outline" size="icon" className="bg-blue-50 hover:bg-blue-100">
+              <ShoppingCart size={18} className="text-blue-600" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartCount}

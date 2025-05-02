@@ -2,12 +2,9 @@
  * Image optimization utilities
  */
 
-// Define image quality tiers
-export const imageQualityTiers = {
-  low: 60,
-  medium: 75,
-  high: 85,
-  max: 100,
+// Calculate responsive image sizes based on viewport
+export function getResponsiveImageSizes(mobileSizes = "100vw", tabletSizes = "50vw", desktopSizes = "33vw"): string {
+  return `(max-width: 640px) ${mobileSizes}, (max-width: 1024px) ${tabletSizes}, ${desktopSizes}`
 }
 
 // Calculate optimal image dimensions based on display size
@@ -41,22 +38,24 @@ export function getOptimalImageDimensions(
   }
 }
 
-// Generate srcset for responsive images
-export function generateSrcSet(basePath: string, widths: number[] = [640, 750, 828, 1080, 1200, 1920, 2048]): string {
-  // Extract file extension
-  const extension = basePath.split(".").pop()
-  const baseWithoutExtension = basePath.substring(0, basePath.lastIndexOf("."))
-
-  // Generate srcset string
-  return widths.map((width) => `${baseWithoutExtension}-${width}w.${extension} ${width}w`).join(", ")
-}
-
-// Determine if image should be loaded with priority
-export function shouldPrioritizeImage(position: "hero" | "above-fold" | "below-fold" | "lazy" = "below-fold"): boolean {
-  return ["hero", "above-fold"].includes(position)
-}
-
-// Generate placeholder blur data URL
+// Generate blur placeholder data URL for images
 export function generateBlurPlaceholder(width = 16, height = 9): string {
   return `data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${width} ${height}'%3E%3C/svg%3E`
+}
+
+// Format image URL for WebP if supported
+export function getOptimizedImageUrl(url: string): string {
+  // If URL is from an image optimization service or internal, add optimization params
+  if (url.includes("standalonecoders.in")) {
+    // Add query params for internal image optimization
+    return `${url}?quality=85&format=webp`
+  }
+
+  // Return original URL for external images
+  return url
+}
+
+// Custom priority logic to prioritize above-the-fold images
+export function shouldPrioritizeImage(imagePosition: "hero" | "above-fold" | "below-fold" | "lazy"): boolean {
+  return ["hero", "above-fold"].includes(imagePosition)
 }
