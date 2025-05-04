@@ -1,10 +1,7 @@
 import { Suspense } from "react"
 import WebsiteTemplates from "@/components/booking/website-templates"
 
-export const metadata = {
-  title: "Website Templates | StandaloneCoders",
-  description: "Choose from our professionally designed website templates for your business or personal website.",
-}
+export const dynamic = "force-static"
 
 export default function TemplatesPage() {
   return (

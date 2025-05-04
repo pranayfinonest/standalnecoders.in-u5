@@ -121,35 +121,6 @@ body {
   }
 }
 
-/* Fix for button text visibility */
-button,
-.button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  color: inherit;
-  font-weight: 500;
-}
-
-/* Fix for specific button types */
-button.bg-blue-600,
-.bg-blue-600,
-.btn-primary,
-[type="button"].bg-blue-600,
-[type="reset"].bg-blue-600,
-[type="submit"].bg-blue-600 {
-  color: white !important;
-}
-
-button.bg-white,
-.bg-white,
-.btn-secondary,
-[type="button"].bg-white,
-[type="reset"].bg-white,
-[type="submit"].bg-white {
-  color: #1f2937 !important;
-}
-
 /* Modern animations */
 @keyframes fadeIn {
   from {

@@ -1,51 +1,29 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next()
-  const supabase = createMiddlewareClient({ req: request, res: response })
+export function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl
 
-  // Check auth session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  // Handle authentication code in root URL
+  if (pathname === "/" && searchParams.has("code")) {
+    const code = searchParams.get("code")
+    const type = searchParams.get("type") || "signup"
+    const next = searchParams.get("next") || "/"
 
-  // Handle admin routes
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    // Allow access to login and setup pages without further checks
-    if (request.nextUrl.pathname === "/admin/login" || request.nextUrl.pathname === "/admin/setup") {
-      return response
-    }
+    console.log("Redirecting auth code from root to callback")
 
-    // No session, redirect to login
-    if (!session) {
-      return NextResponse.redirect(new URL("/admin/login", request.url))
-    }
+    // Create the callback URL
+    const callbackUrl = new URL("/auth/callback", request.url)
+    callbackUrl.searchParams.set("code", code!)
+    if (type) callbackUrl.searchParams.set("type", type)
+    if (next) callbackUrl.searchParams.set("next", next)
 
-    try {
-      // Check if user is admin
-      const { data: adminUser, error } = await supabase
-        .from("admin_users")
-        .select("id")
-        .eq("id", session.user.id)
-        .single()
-
-      // Not an admin, redirect to home
-      if (error || !adminUser) {
-        return NextResponse.redirect(new URL("/", request.url))
-      }
-    } catch (error) {
-      console.error("Error checking admin status:", error)
-      // If there's an error checking admin status, redirect to login
-      return NextResponse.redirect(new URL("/admin/login", request.url))
-    }
+    return NextResponse.redirect(callbackUrl)
   }
 
-  return response
+  return NextResponse.next()
 }
 
-// Only run middleware on admin routes
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/"],
 }

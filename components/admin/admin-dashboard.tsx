@@ -18,10 +18,6 @@ import {
   Cell,
   Legend,
 } from "recharts"
-import { Settings, ImageIcon, Tag, Calendar, Layout } from "lucide-react"
-import Link from "next/link"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
 
 interface DashboardStats {
   totalUsers: number
@@ -36,11 +32,7 @@ interface DashboardStats {
   orderChange: number
 }
 
-interface AdminDashboardProps {
-  adminName?: string
-}
-
-export default function AdminDashboard({ adminName = "Admin" }: AdminDashboardProps) {
+export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalOrders: 0,
@@ -53,8 +45,6 @@ export default function AdminDashboard({ adminName = "Admin" }: AdminDashboardPr
     userChange: 0,
     orderChange: 0,
   })
-  const router = useRouter()
-  const supabase = createClientComponentClient()
 
   useEffect(() => {
     // In a real app, you would fetch this data from your API
@@ -100,13 +90,6 @@ export default function AdminDashboard({ adminName = "Admin" }: AdminDashboardPr
     })
   }, [])
 
-  // Handle logout
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push("/admin/login")
-    router.refresh()
-  }
-
   // Sample data for charts
   const revenueData = [
     { name: "Jan", revenue: 4000 },
@@ -137,278 +120,190 @@ export default function AdminDashboard({ adminName = "Admin" }: AdminDashboardPr
   ]
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Admin Header */}
-      <header className="bg-white shadow-sm py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link href="/admin" className="text-xl font-bold">
-            <span className="text-blue-600">Admin</span>
-            <span className="text-gray-900">Dashboard</span>
-          </Link>
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-700">Welcome, {adminName}</span>
-            <button
-              onClick={handleLogout}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
 
-      {/* Main content */}
-      <div className="container mx-auto px-6 py-8 flex-grow">
-        <div className="space-y-6">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Total Users</p>
-                    <h3 className="text-2xl font-bold">{stats.totalUsers}</h3>
-                    <div className="flex items-center mt-1">
-                      {stats.userChange > 0 ? (
-                        <>
-                          <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
-                          <span className="text-xs text-green-500">{stats.userChange}%</span>
-                        </>
-                      ) : (
-                        <>
-                          <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                          <span className="text-xs text-red-500">{Math.abs(stats.userChange)}%</span>
-                        </>
-                      )}
-                      <span className="text-xs text-gray-500 ml-1">vs last month</span>
-                    </div>
-                  </div>
-                  <div className="bg-blue-100 p-3 rounded-full">
-                    <Users className="h-6 w-6 text-blue-600" />
-                  </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Total Users</p>
+                <h3 className="text-2xl font-bold">{stats.totalUsers}</h3>
+                <div className="flex items-center mt-1">
+                  {stats.userChange > 0 ? (
+                    <>
+                      <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
+                      <span className="text-xs text-green-500">{stats.userChange}%</span>
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
+                      <span className="text-xs text-red-500">{Math.abs(stats.userChange)}%</span>
+                    </>
+                  )}
+                  <span className="text-xs text-gray-500 ml-1">vs last month</span>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Total Orders</p>
-                    <h3 className="text-2xl font-bold">{stats.totalOrders}</h3>
-                    <div className="flex items-center mt-1">
-                      {stats.orderChange > 0 ? (
-                        <>
-                          <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
-                          <span className="text-xs text-green-500">{stats.orderChange}%</span>
-                        </>
-                      ) : (
-                        <>
-                          <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                          <span className="text-xs text-red-500">{Math.abs(stats.orderChange)}%</span>
-                        </>
-                      )}
-                      <span className="text-xs text-gray-500 ml-1">vs last month</span>
-                    </div>
-                  </div>
-                  <div className="bg-purple-100 p-3 rounded-full">
-                    <ShoppingCart className="h-6 w-6 text-purple-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                    <h3 className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</h3>
-                    <div className="flex items-center mt-1">
-                      {stats.revenueChange > 0 ? (
-                        <>
-                          <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
-                          <span className="text-xs text-green-500">{stats.revenueChange}%</span>
-                        </>
-                      ) : (
-                        <>
-                          <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                          <span className="text-xs text-red-500">{Math.abs(stats.revenueChange)}%</span>
-                        </>
-                      )}
-                      <span className="text-xs text-gray-500 ml-1">vs last month</span>
-                    </div>
-                  </div>
-                  <div className="bg-green-100 p-3 rounded-full">
-                    <DollarSign className="h-6 w-6 text-green-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Active Users</p>
-                    <h3 className="text-2xl font-bold">{stats.activeUsers}</h3>
-                    <div className="flex items-center mt-1">
-                      <span className="text-xs text-gray-500">Last 30 days</span>
-                    </div>
-                  </div>
-                  <div className="bg-orange-100 p-3 rounded-full">
-                    <TrendingUp className="h-6 w-6 text-orange-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Link href="/admin/offers" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center mb-4">
-                <Tag className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Offers Management</h3>
               </div>
-              <p className="text-gray-600">Create and manage special offers and discounts</p>
-            </Link>
-
-            <Link
-              href="/admin/services"
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center mb-4">
-                <Settings className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Services Management</h3>
+              <div className="bg-blue-100 p-3 rounded-full">
+                <Users className="h-6 w-6 text-blue-600" />
               </div>
-              <p className="text-gray-600">Add, edit, and organize service offerings</p>
-            </Link>
+            </div>
+          </CardContent>
+        </Card>
 
-            <Link href="/admin/media" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center mb-4">
-                <ImageIcon className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Media Library</h3>
-              </div>
-              <p className="text-gray-600">Upload and manage website images and media</p>
-            </Link>
-
-            <Link href="/admin/pricing" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center mb-4">
-                <DollarSign className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Pricing Management</h3>
-              </div>
-              <p className="text-gray-600">Configure service pricing and packages</p>
-            </Link>
-
-            <Link
-              href="/admin/bookings"
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center mb-4">
-                <Calendar className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Booking Management</h3>
-              </div>
-              <p className="text-gray-600">View and manage project bookings</p>
-            </Link>
-
-            <Link
-              href="/admin/customize"
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center mb-4">
-                <Layout className="text-blue-600 mr-2" size={24} />
-                <h3 className="text-xl font-semibold">Website Customization</h3>
-              </div>
-              <p className="text-gray-600">Customize website appearance and content</p>
-            </Link>
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Revenue Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={revenueData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line
-                        type="monotone"
-                        dataKey="revenue"
-                        stroke="#3b82f6"
-                        strokeWidth={2}
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Total Orders</p>
+                <h3 className="text-2xl font-bold">{stats.totalOrders}</h3>
+                <div className="flex items-center mt-1">
+                  {stats.orderChange > 0 ? (
+                    <>
+                      <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
+                      <span className="text-xs text-green-500">{stats.orderChange}%</span>
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
+                      <span className="text-xs text-red-500">{Math.abs(stats.orderChange)}%</span>
+                    </>
+                  )}
+                  <span className="text-xs text-gray-500 ml-1">vs last month</span>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="bg-purple-100 p-3 rounded-full">
+                <ShoppingCart className="h-6 w-6 text-purple-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Order Status</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={orderStatusData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      >
-                        {orderStatusData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Total Revenue</p>
+                <h3 className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</h3>
+                <div className="flex items-center mt-1">
+                  {stats.revenueChange > 0 ? (
+                    <>
+                      <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
+                      <span className="text-xs text-green-500">{stats.revenueChange}%</span>
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
+                      <span className="text-xs text-red-500">{Math.abs(stats.revenueChange)}%</span>
+                    </>
+                  )}
+                  <span className="text-xs text-gray-500 ml-1">vs last month</span>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="bg-green-100 p-3 rounded-full">
+                <DollarSign className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle>User Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={userActivityData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="users" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Active Users</p>
+                <h3 className="text-2xl font-bold">{stats.activeUsers}</h3>
+                <div className="flex items-center mt-1">
+                  <span className="text-xs text-gray-500">Last 30 days</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+              </div>
+              <div className="bg-orange-100 p-3 rounded-full">
+                <TrendingUp className="h-6 w-6 text-orange-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Admin Footer */}
-      <footer className="bg-white py-4 border-t">
-        <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-          &copy; {new Date().getFullYear()} StandaloneCoders Admin Panel. All rights reserved.
-        </div>
-      </footer>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue Overview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={revenueData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    dot={{ r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Order Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={orderStatusData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {orderStatusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>User Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={userActivityData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="users" fill="#3b82f6" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

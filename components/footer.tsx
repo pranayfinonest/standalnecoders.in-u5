@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, Github, MapPin, Phone, Mail } from "lucide-react"
+import { useEffect } from "react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -25,10 +28,24 @@ export default function Footer() {
     {
       name: "LinkedIn",
       icon: <Linkedin className="w-5 h-5" />,
-      href: "https://www.linkedin.com/company/standalonecoders",
+      href: "https://www.linkedin.com/in/standalone-coders-769b62363/",
     },
     { name: "GitHub", icon: <Github className="w-5 h-5" />, href: "https://github.com/standalonecoders" },
   ]
+
+  useEffect(() => {
+    // Load LinkedIn badge script
+    const script = document.createElement("script")
+    script.src = "https://platform.linkedin.com/badges/js/profile.js"
+    script.async = true
+    script.defer = true
+    document.body.appendChild(script)
+
+    return () => {
+      // Clean up
+      document.body.removeChild(script)
+    }
+  }, [])
 
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 pt-12 sm:pt-16 pb-8 border-t border-gray-200 dark:border-gray-800">
@@ -43,17 +60,35 @@ export default function Footer() {
             <p className="text-gray-700 dark:text-gray-400 mb-6">
               Providing cybersecurity, AI, digital marketing, and complete technology solutions.
             </p>
-            <div className="flex flex-wrap gap-3">
-              {socialLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  href={link.href}
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm hover:shadow"
-                  aria-label={link.name}
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap gap-3">
+                {socialLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    href={link.href}
+                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm hover:shadow"
+                    aria-label={link.name}
+                  >
+                    {link.icon}
+                  </Link>
+                ))}
+              </div>
+              <div
+                className="badge-base LI-profile-badge"
+                data-locale="en_US"
+                data-size="large"
+                data-theme="dark"
+                data-type="HORIZONTAL"
+                data-vanity="standalone-coders-769b62363"
+                data-version="v1"
+              >
+                <a
+                  className="badge-base__link LI-simple-link"
+                  href="https://in.linkedin.com/in/standalone-coders-769b62363?trk=profile-badge"
                 >
-                  {link.icon}
-                </Link>
-              ))}
+                  StandAlone Coders
+                </a>
+              </div>
             </div>
           </div>
 

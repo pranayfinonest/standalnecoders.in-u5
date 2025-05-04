@@ -1,15 +1,6 @@
-import AdminRouteGuard from "@/components/auth/admin-route-guard"
-import type React from "react"
-import AdminAuth from "@/components/auth/admin-auth"
+import type { ReactNode } from "react"
+import AdminLayout from "@/components/admin/admin-layout"
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <AdminAuth>
-      <AdminRouteGuard>{children}</AdminRouteGuard>
-    </AdminAuth>
-  )
+export default function AdminPageLayout({ children }: { children: ReactNode }) {
+  return <AdminLayout>{children}</AdminLayout>
 }

@@ -1,4 +1,4 @@
-"\"use client"
+"use client"
 
 const faqs = [
   {
@@ -37,27 +37,3 @@ const faqs = [
       "We use a wide range of modern technologies depending on the project requirements. For web development, we commonly use React, Next.js, Node.js, and PHP/Laravel. For mobile apps, we work with React Native, Flutter, and native iOS/Android development. We stay updated with the latest technologies to ensure we deliver cutting-edge solutions.",
   },
 ]
-
-export default function FAQ() {
-  return (
-    <section className="py-16 sm:py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Have questions? We've got answers. Here are some of the most common questions we receive about our services.
-          </p>
-        </div>
-
-        <div className="max-w-3xl mx-auto space-y-6">
-          {faqs.map((faq, index) => (
-            <div key={index} className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-2">{faq.question}</h3>
-              <p className="text-gray-700 dark:text-gray-300">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}

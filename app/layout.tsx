@@ -18,9 +18,6 @@ import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
 import SEOOptimizer from "@/components/seo/seo-optimizer"
 import SchemaGenerator from "@/components/seo/schema-generator"
 import { AuthProvider } from "@/contexts/auth-context"
-import { WebVitals } from "@/components/performance/web-vitals"
-import { ResourceHints } from "@/components/performance/resource-hints"
-import { PerformanceMonitor } from "@/components/performance/performance-monitor"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -102,53 +99,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <SchemaGenerator pageType="home" />
-        <ResourceHints />
       </head>
       <body className={inter.className}>
         <AuthProvider>
           <StatsigWrapper>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-              {/* Google Analytics - load with lower priority */}
-              <Suspense fallback={null}>
-                <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
-              </Suspense>
-
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {/* Google Analytics */}
+              <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
               <ErrorBoundaryClient>
                 <SEOOptimizer>
-                  <Suspense
-                    fallback={
-                      <div className="min-h-screen flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                      </div>
-                    }
-                  >
+                  <Suspense fallback={`Loading UI...`}>
                     <ScrollToTopOnNavigation />
                     <Header />
                     <main>{children}</main>
                     <Footer />
-
-                    {/* Load WhatsApp button with lower priority */}
-                    <Suspense fallback={null}>
-                      <WhatsAppButton />
-                    </Suspense>
+                    <WhatsAppButton />
                   </Suspense>
                 </SEOOptimizer>
                 <Toaster />
-
-                {/* Load scripts with lower priority */}
-                <Suspense fallback={null}>
-                  <GlobalScripts />
-                </Suspense>
+                <GlobalScripts />
               </ErrorBoundaryClient>
-
-              {/* Vercel Analytics - load with lower priority */}
-              <Suspense fallback={null}>
-                <Analytics />
-              </Suspense>
-
-              {/* Performance monitoring */}
-              <WebVitals />
-              <PerformanceMonitor />
+              {/* Vercel Analytics */}
+              <Analytics />
             </ThemeProvider>
           </StatsigWrapper>
         </AuthProvider>

@@ -1,13 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
-import {
-  getResponsiveImageSizes,
-  generateBlurPlaceholder,
-  getOptimalImageDimensions,
-  shouldPrioritizeImage,
-} from "../utils/image-optimizer"
+import { getResponsiveImageSizes } from "../utils/responsive"
 
 interface ResponsiveImageProps {
   src: string
@@ -20,8 +14,6 @@ interface ResponsiveImageProps {
   fill?: boolean
   quality?: number
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
-  position?: "hero" | "above-fold" | "below-fold" | "lazy"
-  blurDataURL?: string
 }
 
 export function ResponsiveImage({
@@ -35,64 +27,24 @@ export function ResponsiveImage({
   fill = false,
   quality = 85,
   objectFit = "cover",
-  position = "below-fold",
-  blurDataURL,
 }: ResponsiveImageProps) {
-  const [loaded, setLoaded] = useState(false)
-  const [error, setError] = useState(false)
-
   // Default sizes if not provided
   const imageSizes = sizes || getResponsiveImageSizes()
 
   // Object fit classes
   const objectFitClass = `object-${objectFit}`
 
-  // Generate blur placeholder if not provided
-  const placeholder = "blur"
-  const blurData = blurDataURL || (width && height ? generateBlurPlaceholder(width, height) : undefined)
-
-  // Auto-prioritize hero and above-fold images
-  const shouldPrioritize = priority || shouldPrioritizeImage(position)
-
-  // Calculate optimal dimensions if width and height are provided
-  const dimensions = width && height && !fill ? getOptimalImageDimensions(width, height) : { width, height }
-
-  // Handle loading state
-  const handleLoad = () => {
-    setLoaded(true)
-  }
-
-  // Handle error state
-  const handleError = () => {
-    setError(true)
-  }
-
   return (
-    <div className={`relative ${className}`} style={fill ? { width: "100%", height: "100%" } : undefined}>
-      {!loaded && !error && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded" aria-hidden="true" />}
-
-      {error ? (
-        <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded">
-          <span className="text-gray-500">Image not available</span>
-        </div>
-      ) : (
-        <Image
-          src={src || "/placeholder.svg"}
-          alt={alt}
-          width={fill ? undefined : dimensions.width}
-          height={fill ? undefined : dimensions.height}
-          className={`transition-opacity duration-300 ${objectFitClass} ${loaded ? "opacity-100" : "opacity-0"}`}
-          onLoad={handleLoad}
-          onError={handleError}
-          priority={shouldPrioritize}
-          quality={quality}
-          sizes={imageSizes}
-          placeholder={placeholder}
-          blurDataURL={blurData}
-          fill={fill}
-          loading={shouldPrioritize ? "eager" : "lazy"}
-        />
-      )}
-    </div>
+    <Image
+      src={src || "/placeholder.svg"}
+      alt={alt}
+      className={`${objectFitClass} ${className}`}
+      width={fill ? undefined : width}
+      height={fill ? undefined : height}
+      fill={fill}
+      sizes={imageSizes}
+      priority={priority}
+      quality={quality}
+    />
   )
 }

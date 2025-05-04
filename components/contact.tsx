@@ -86,8 +86,8 @@ export default function Contact() {
                   <div>
                     <h4 className="font-semibold text-lg">Email Address</h4>
                     <p className="text-gray-700">
-                      <a href="mailto:standalonecoders@gmail.com" className="hover:text-blue-600">
-                        standalonecoders@gmail.com
+                      <a href="mailto:Yogendra6378@gmail.com" className="hover:text-blue-600">
+                        Yogendra6378@gmail.com
                       </a>
                     </p>
                   </div>

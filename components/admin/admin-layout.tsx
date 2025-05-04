@@ -5,86 +5,37 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import {
-  LayoutDashboard,
-  Users,
-  ShoppingCart,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  Bell,
-  Tag,
-  DollarSign,
-  Calendar,
-  Layout,
-  ImageIcon,
-} from "lucide-react"
+import { LayoutDashboard, Users, ShoppingCart, Settings, LogOut, Menu, X, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Skeleton } from "@/components/ui/skeleton"
 
 interface AdminLayoutProps {
   children: React.ReactNode
 }
 
-// Changed from default export to named export
-export function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [adminUser, setAdminUser] = useState<any>(null)
   const pathname = usePathname()
   const router = useRouter()
-  const supabase = createClientComponentClient()
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Get current session
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-
-        if (!session) {
-          // No session, redirect to login
-          router.push("/admin/login")
-          return
-        }
-
-        // Check if user is in admin_users table
-        const { data: adminData, error: adminError } = await supabase
-          .from("admin_users")
-          .select("*")
-          .eq("id", session.user.id)
-          .single()
-
-        if (adminError || !adminData) {
-          // Not an admin, sign out and redirect
-          await supabase.auth.signOut()
-          router.push("/admin/login")
-          return
-        }
-
-        // User is authenticated and is an admin
-        setIsAuthenticated(true)
-        setAdminUser(adminData)
-      } catch (error) {
-        console.error("Auth check error:", error)
+    // Check if admin is logged in
+    const adminData = localStorage.getItem("adminData")
+    if (!adminData) {
+      // Redirect to admin login if not on login page
+      if (pathname !== "/admin/login") {
         router.push("/admin/login")
-      } finally {
-        setIsLoading(false)
       }
+    } else {
+      setIsAuthenticated(true)
     }
+  }, [pathname, router])
 
-    checkAuth()
-  }, [router, supabase])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
+  const handleLogout = () => {
+    localStorage.removeItem("adminData")
     router.push("/admin/login")
   }
 
@@ -92,50 +43,17 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Users", href: "/admin/users", icon: Users },
     { name: "Orders", href: "/admin/orders", icon: ShoppingCart },
-    { name: "Offers", href: "/admin/offers", icon: Tag },
-    { name: "Services", href: "/admin/services", icon: Settings },
-    { name: "Media", href: "/admin/media", icon: ImageIcon },
-    { name: "Pricing", href: "/admin/pricing", icon: DollarSign },
-    { name: "Bookings", href: "/admin/bookings", icon: Calendar },
-    { name: "Customize", href: "/admin/customize", icon: Layout },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ]
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div className="flex h-screen bg-gray-100">
-        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-          <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-white border-r">
-            <div className="flex items-center flex-shrink-0 px-4">
-              <Skeleton className="h-8 w-40" />
-            </div>
-            <div className="mt-8 flex-1 flex flex-col">
-              <nav className="flex-1 px-2 pb-4 space-y-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Skeleton key={i} className="h-10 w-full" />
-                ))}
-              </nav>
-            </div>
-          </div>
-        </div>
-        <div className="md:pl-64 flex flex-col flex-1">
-          <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
-            <Skeleton className="h-full w-full" />
-          </div>
-          <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
-            <div className="flex items-center justify-center h-full">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-            </div>
-          </main>
-        </div>
-      </div>
-    )
+  // If not authenticated and not on login page, don't render the layout
+  if (!isAuthenticated && pathname !== "/admin/login") {
+    return null
   }
 
-  // If not authenticated, don't render the layout
-  if (!isAuthenticated) {
-    return null
+  // If on login page, just render the children without the admin layout
+  if (pathname === "/admin/login") {
+    return <>{children}</>
   }
 
   return (
@@ -294,9 +212,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="ml-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-500 text-white">
-                        {adminUser?.name?.charAt(0) || "A"}
-                      </AvatarFallback>
+                      <AvatarFallback className="bg-blue-500 text-white">AD</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -318,6 +234,3 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     </div>
   )
 }
-
-// Add this default export that re-exports the named export for backward compatibility
-export default AdminLayout
