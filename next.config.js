@@ -17,6 +17,16 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Add redirects for problematic routes
+  async redirects() {
+    return [
+      {
+        source: "/auth/forgot-password",
+        destination: "/auth/forgot-password-static",
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

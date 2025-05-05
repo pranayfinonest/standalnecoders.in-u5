@@ -1,7 +1,7 @@
-export default function ForgotPasswordPage() {
+export default function ForgotPasswordStaticPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">Reset Password</h1>
         <p className="text-center mb-8">
           Please contact support at support@standalonecoders.in to reset your password.
