@@ -14,7 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useSearchParams } from "next/navigation"
 import OtpInput from "@/components/auth/otp-input"
 
-export default function ForgotPasswordForm() {
+export default function ForgotPasswordClient() {
   const [email, setEmail] = useState("")
   const [otp, setOtp] = useState("")
   const [password, setPassword] = useState("")
