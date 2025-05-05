@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,17 +28,22 @@ export default function ForgotPasswordPage() {
   const { forgotPassword, verifyOtp, resetPassword, resendOtp } = useAuth()
   const searchParams = useSearchParams()
 
-  // Check for error in URL
-  const urlError = searchParams?.get("error")
+  // Create a client component that uses searchParams
+  function SearchParamsHandler({ setError }: { setError: (error: string | null) => void }) {
+    const searchParams = useSearchParams()
 
-  useState(() => {
-    if (urlError) {
-      setError(decodeURIComponent(urlError))
-    }
-  })
+    useEffect(() => {
+      const urlError = searchParams?.get("error")
+      if (urlError) {
+        setError(decodeURIComponent(urlError))
+      }
+    }, [searchParams, setError])
+
+    return null
+  }
 
   // Handle countdown timer
-  useState(() => {
+  useEffect(() => {
     let timer: NodeJS.Timeout | null = null
 
     if (step === "otp" && countdown > 0) {
@@ -50,7 +55,7 @@ export default function ForgotPasswordPage() {
     return () => {
       if (timer) clearInterval(timer)
     }
-  })
+  }, [step, countdown])
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -169,6 +174,9 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+      <Suspense fallback={null}>
+        <SearchParamsHandler setError={setError} />
+      </Suspense>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
