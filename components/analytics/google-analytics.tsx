@@ -4,7 +4,7 @@ import Script from "next/script"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 
-export default function GoogleAnalytics({ measurementId }: { measurementId: string }) {
+export default function GoogleAnalytics({ measurementId = "G-LW984C7D4H" }: { measurementId?: string }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -27,9 +27,7 @@ export default function GoogleAnalytics({ measurementId }: { measurementId: stri
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${measurementId}', {
-              page_path: window.location.pathname,
-            });
+            gtag('config', '${measurementId}');
           `,
         }}
       />

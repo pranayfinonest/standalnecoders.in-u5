@@ -99,13 +99,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <SchemaGenerator pageType="home" />
+        <GoogleAnalytics />
       </head>
       <body className={inter.className}>
         <AuthProvider>
           <StatsigWrapper>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              {/* Google Analytics */}
-              <GoogleAnalytics measurementId="G-MEASUREMENT_ID" />
               <ErrorBoundaryClient>
                 <SEOOptimizer>
                   <Suspense fallback={`Loading UI...`}>
