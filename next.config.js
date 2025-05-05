@@ -22,7 +22,12 @@ const nextConfig = {
     return [
       {
         source: "/auth/forgot-password",
-        destination: "/auth/forgot-password-static",
+        destination: "/password-reset",
+        permanent: false,
+      },
+      {
+        source: "/auth/forgot-password-static",
+        destination: "/password-reset",
         permanent: false,
       },
     ]
