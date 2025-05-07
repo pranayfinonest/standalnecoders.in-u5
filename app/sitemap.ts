@@ -41,6 +41,50 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "custom-software",
   ]
 
+  // Cybersecurity sub-services
+  const cybersecurityServices = [
+    "vulnerability-assessment",
+    "risk-assessment",
+    "compliance-audits",
+    "application-security",
+    "code-review",
+    "firewall-ids",
+    "vpn-setup",
+    "wireless-security",
+    "network-architecture",
+    "cloud-security",
+    "threat-monitoring",
+    "incident-response",
+    "malware-analysis",
+    "ransomware-protection",
+    "siem",
+    "data-loss-prevention",
+    "encryption",
+    "identity-access-management",
+    "file-integrity-monitoring",
+    "privacy-compliance",
+    "iso-27001-implementation",
+    "iso-27001-audits",
+    "iso-27701",
+    "iso-22301",
+    "iso-20000",
+    "ethical-hacking-training",
+    "phishing-awareness",
+    "secure-development-training",
+    "incident-response-training",
+    "compliance-training",
+    "security-monitoring",
+    "risk-management",
+    "patch-management",
+    "dark-web-monitoring",
+    "soc-as-service",
+    "iot-security",
+    "blockchain-security",
+    "ai-threat-detection",
+    "digital-forensics",
+    "zero-trust-security",
+  ]
+
   const servicePages = [
     {
       url: `${baseUrl}/services`,
@@ -53,6 +97,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    })),
+    ...cybersecurityServices.map((subService) => ({
+      url: `${baseUrl}/services/cybersecurity/${subService}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
     })),
   ]
 

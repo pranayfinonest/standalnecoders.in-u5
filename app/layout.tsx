@@ -18,6 +18,7 @@ import ScrollToTopOnNavigation from "@/components/scroll-to-top-on-navigation"
 import SEOOptimizer from "@/components/seo/seo-optimizer"
 import SchemaGenerator from "@/components/seo/schema-generator"
 import { AuthProvider } from "@/contexts/auth-context"
+import { ForceLightTheme } from "@/components/force-light-theme"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -104,7 +105,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <AuthProvider>
           <StatsigWrapper>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+              <ForceLightTheme />
               <ErrorBoundaryClient>
                 <SEOOptimizer>
                   <Suspense fallback={`Loading UI...`}>

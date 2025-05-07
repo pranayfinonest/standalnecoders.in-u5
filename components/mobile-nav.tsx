@@ -53,7 +53,7 @@ export function MobileNav({ items, className = "" }: MobileNavProps) {
           <div className="flex justify-end p-4">
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
+              className="p-3 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 focus:outline-none"
               aria-label="Close menu"
             >
               <X size={24} />
@@ -95,6 +95,39 @@ export function MobileNav({ items, className = "" }: MobileNavProps) {
               ))}
             </ul>
           </nav>
+          {isOpen && items.some((item) => item.label === "Services") && (
+            <div className="mt-4 grid grid-cols-2 gap-2 px-4">
+              <h3 className="col-span-2 text-sm font-semibold text-gray-500 mb-2">Popular Services</h3>
+              <Link
+                href="/services/cybersecurity/vulnerability-assessment"
+                onClick={() => setIsOpen(false)}
+                className="p-3 bg-gray-50 rounded-md text-sm hover:bg-gray-100"
+              >
+                Vulnerability Assessment
+              </Link>
+              <Link
+                href="/services/digital-marketing"
+                onClick={() => setIsOpen(false)}
+                className="p-3 bg-gray-50 rounded-md text-sm hover:bg-gray-100"
+              >
+                Digital Marketing
+              </Link>
+              <Link
+                href="/services/ai-technology"
+                onClick={() => setIsOpen(false)}
+                className="p-3 bg-gray-50 rounded-md text-sm hover:bg-gray-100"
+              >
+                AI Solutions
+              </Link>
+              <Link
+                href="/services/website-development"
+                onClick={() => setIsOpen(false)}
+                className="p-3 bg-gray-50 rounded-md text-sm hover:bg-gray-100"
+              >
+                Website Development
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

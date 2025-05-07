@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import CityServicePage from "@/components/seo/city-service-page"
+import { CYBERSECURITY_SUBPATHS } from "@/utils/route-utils"
 
 // Define valid services and cities
 const validServices = {
@@ -40,6 +41,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { service, city } = params
 
+  // Check if this is the main cybersecurity page - if so, return early to avoid conflicts
+  if (service === "cybersecurity" && !city) {
+    return {
+      title: "Cybersecurity Services | StandaloneCoders",
+      description: "Comprehensive cybersecurity solutions to protect your business from evolving digital threats.",
+    }
+  }
+
+  // Check if this is a cybersecurity subpath - if so, return early to avoid conflicts
+  if (service === "cybersecurity" && CYBERSECURITY_SUBPATHS.includes(city)) {
+    return {
+      title: "Not Found",
+      description: "This page could not be found.",
+    }
+  }
+
   // Check if service and city are valid
   if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
     return {
@@ -66,6 +83,9 @@ export async function generateStaticParams() {
   const params = []
 
   for (const service of Object.keys(validServices)) {
+    // Skip generating cybersecurity/* paths as they have their own specific routes
+    if (service === "cybersecurity") continue
+
     for (const city of validCities) {
       params.push({ service, city })
     }
@@ -77,9 +97,30 @@ export async function generateStaticParams() {
 export default function ServiceCityPage({ params }: { params: { service: string; city: string } }) {
   const { service, city } = params
 
-  // Check if service and city are valid
-  if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
+  // Special handling for main cybersecurity page
+  if (service === "cybersecurity" && !city) {
     notFound()
+    return null // Add this to satisfy TypeScript
+  }
+
+  // Special handling for cybersecurity subpaths
+  if (service === "cybersecurity" && CYBERSECURITY_SUBPATHS.includes(city)) {
+    // This is a cybersecurity subservice path, not a city path
+    // Return notFound() to let Next.js handle it with the appropriate route
+    notFound()
+    return null // Add this to satisfy TypeScript
+  }
+
+  // Check if service and city are valid
+  if (!validServices[service as keyof typeof validServices]) {
+    notFound()
+    return null // Add this to satisfy TypeScript
+  }
+
+  if (!validCities.includes(city)) {
+    // This might be a direct service page without a city
+    notFound()
+    return null // Add this to satisfy TypeScript
   }
 
   const serviceInfo = validServices[service as keyof typeof validServices]
