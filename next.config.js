@@ -31,6 +31,12 @@ const nextConfig = {
         destination: "/password-reset",
         permanent: false,
       },
+      // Redirect reset-password to static page
+      {
+        source: "/auth/reset-password",
+        destination: "/password-reset",
+        permanent: false,
+      },
       // Common misspellings and old URLs
       {
         source: "/service/:path*",
@@ -95,12 +101,10 @@ const nextConfig = {
       },
     ]
   },
-  // Disable problematic features
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
-  // Remove output: "export" to allow API routes
-  // output: "export",
+  // Remove the unrecognized experimental option
+  // experimental: {
+  //   missingSuspenseWithCSRBailout: false,
+  // },
   // Ensure static HTML fallback for 404
   trailingSlash: true,
 }
