@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   images: {
-    domains: ["standalonecoders.in"],
+    domains: ["localhost", "standalonecoders.com", "cdn.standalonecoders.com", "standalonecoders.in"],
     remotePatterns: [
       {
         protocol: "https",
@@ -24,7 +25,7 @@ const nextConfig = {
       {
         source: "/auth/forgot-password",
         destination: "/password-reset",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/auth/forgot-password-static",
@@ -97,7 +98,7 @@ const nextConfig = {
       {
         source: "/404",
         destination: "/404.html",
-        permanent: false,
+        permanent: true,
       },
     ]
   },
@@ -106,7 +107,9 @@ const nextConfig = {
   //   missingSuspenseWithCSRBailout: false,
   // },
   // Ensure static HTML fallback for 404
+  staticPageGenerationTimeout: 180,
   trailingSlash: true,
+  poweredByHeader: false,
 }
 
 module.exports = nextConfig
