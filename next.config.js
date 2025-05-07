@@ -103,7 +103,7 @@ const nextConfig = {
   experimental: {
     // Enable static generation for all pages by default
     // This helps with build-time errors related to client-side hooks
-    staticPageGenerationTimeout: 120,
+    staticPageGenerationTimeout: 180,
   },
   staticPageGenerationTimeout: 180,
   trailingSlash: true,
