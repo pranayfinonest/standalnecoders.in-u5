@@ -99,8 +99,8 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
-  // Disable built-in not-found page
-  output: "export",
+  // Remove output: "export" to allow API routes
+  // output: "export",
   // Ensure static HTML fallback for 404
   trailingSlash: true,
 }

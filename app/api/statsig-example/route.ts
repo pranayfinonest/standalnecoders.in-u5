@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { Statsig } from "statsig-node"
 
+// Add dynamic = 'force-dynamic' to ensure this is treated as a dynamic API route
+export const dynamic = "force-dynamic"
+
 let initialized = false
 
 const initializeStatsig = async () => {
