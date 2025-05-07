@@ -2,61 +2,37 @@
  * Currency conversion utility for fetching and caching exchange rates
  */
 
-// Cache for storing exchange rates with expiration
-type RateCache = {
-  rate: number
-  timestamp: number
-  expiry: number
-}
-
-// Cache object to store rates
-const ratesCache: Record<string, RateCache> = {}
-
-// Cache expiration time (6 hours in milliseconds)
-const CACHE_EXPIRY = 6 * 60 * 60 * 1000
+// Fallback rate to use when API is unavailable
+const FALLBACK_RATE = 83.0
 
 /**
  * Fetches the latest USD to INR exchange rate
  * Falls back to a reasonable estimate if the API fails
  */
 export async function getUSDtoINRRate(): Promise<number> {
-  // Check if we have a valid cached rate
-  if (ratesCache["USD_INR"] && Date.now() < ratesCache["USD_INR"].expiry) {
-    return ratesCache["USD_INR"].rate
+  // During build time, always return the fallback rate
+  if (process.env.NODE_ENV === "production") {
+    return FALLBACK_RATE
   }
 
   try {
-    // Fetch the latest exchange rate from a public API
-    const response = await fetch(
-      "https://api.exchangerate.host/latest?base=USD&symbols=INR",
-      { next: { revalidate: 21600 } }, // Revalidate every 6 hours
-    )
+    // Only attempt to fetch in development/runtime
+    const response = await fetch("/api/exchange-rates")
 
     if (!response.ok) {
-      throw new Error("Failed to fetch exchange rate")
+      return FALLBACK_RATE
     }
 
     const data = await response.json()
-    const rate = data.rates.INR
 
-    // Cache the rate
-    ratesCache["USD_INR"] = {
-      rate,
-      timestamp: Date.now(),
-      expiry: Date.now() + CACHE_EXPIRY,
+    if (!data || !data.success || typeof data.rate !== "number") {
+      return FALLBACK_RATE
     }
 
-    return rate
+    return data.rate
   } catch (error) {
     console.error("Error fetching exchange rate:", error)
-
-    // If we have an expired cache entry, use it as fallback
-    if (ratesCache["USD_INR"]) {
-      return ratesCache["USD_INR"].rate
-    }
-
-    // Otherwise use a reasonable estimate (83 INR per USD as of 2023)
-    return 83
+    return FALLBACK_RATE
   }
 }
 
@@ -78,7 +54,7 @@ export async function convertUSDtoINR(usdAmount: number): Promise<number> {
 export function extractNumericValue(priceString: string): number {
   // Remove currency symbol and any non-numeric characters except decimal point
   const numericString = priceString.replace(/[^0-9.]/g, "")
-  return Number.parseFloat(numericString)
+  return Number.parseFloat(numericString) || 0 // Return 0 if parsing fails
 }
 
 /**
