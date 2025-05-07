@@ -2,28 +2,27 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(request: NextRequest) {
-  const { pathname, searchParams } = request.nextUrl
+  // Clone the request headers
+  const requestHeaders = new Headers(request.headers)
 
-  // Handle authentication code in root URL
-  if (pathname === "/" && searchParams.has("code")) {
-    const code = searchParams.get("code")
-    const type = searchParams.get("type") || "signup"
-    const next = searchParams.get("next") || "/"
+  // Add the full URL to the request headers
+  // This allows server components to access search params
+  requestHeaders.set("x-url", request.url)
 
-    console.log("Redirecting auth code from root to callback")
-
-    // Create the callback URL
-    const callbackUrl = new URL("/auth/callback", request.url)
-    callbackUrl.searchParams.set("code", code!)
-    if (type) callbackUrl.searchParams.set("type", type)
-    if (next) callbackUrl.searchParams.set("next", next)
-
-    return NextResponse.redirect(callbackUrl)
-  }
-
-  return NextResponse.next()
+  // Return the response with the modified headers
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: [
+    // Add all paths that need access to search params
+    "/profile/:path*",
+    "/auth/:path*",
+    "/dashboard/:path*",
+    "/booking/:path*",
+  ],
 }
