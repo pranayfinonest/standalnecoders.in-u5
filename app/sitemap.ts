@@ -1,21 +1,10 @@
 import type { MetadataRoute } from "next"
-import rajasthanCities from "@/data/rajasthan-cities"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://standalonecoders.in"
 
-  // Define the services we offer
-  const services = [
-    "website-development",
-    "app-development",
-    "digital-marketing",
-    "ai-technology",
-    "cybersecurity",
-    "creative-services",
-  ]
-
-  // Basic pages
-  const staticPages = [
+  // Main pages
+  const mainPages = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -29,12 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -43,32 +26,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/portfolio`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
   ]
 
   // Service pages
-  const servicePages = services.map((service) => ({
-    url: `${baseUrl}/services/${service}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.9,
-  }))
+  const services = [
+    "website-development",
+    "cybersecurity",
+    "digital-marketing",
+    "ai-technology",
+    "creative-services",
+    "custom-software",
+  ]
 
-  // City-specific service pages
-  const cityServicePages = []
+  const servicePages = [
+    {
+      url: `${baseUrl}/services`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    ...services.map((service) => ({
+      url: `${baseUrl}/services/${service}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    })),
+  ]
+
+  // Location pages for SEO
+  const locations = ["jaipur", "udaipur", "jodhpur", "kota", "ajmer", "bikaner", "alwar", "bharatpur", "sikar", "pali"]
+
+  const locationPages = []
 
   for (const service of services) {
-    for (const city of rajasthanCities) {
-      cityServicePages.push({
-        url: `${baseUrl}/services/${service}/${city.toLowerCase().replace(/\s+/g, "-")}`,
+    for (const location of locations) {
+      locationPages.push({
+        url: `${baseUrl}/services/${service}/${location}`,
         lastModified: new Date(),
         changeFrequency: "monthly",
-        priority: 0.8,
+        priority: 0.7,
       })
     }
   }
 
-  return [...staticPages, ...servicePages, ...cityServicePages]
+  return [...mainPages, ...servicePages, ...locationPages]
 }

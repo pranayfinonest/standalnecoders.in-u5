@@ -5,8 +5,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/"],
+      disallow: ["/admin/", "/dashboard/", "/api/"],
     },
     sitemap: "https://standalonecoders.in/sitemap.xml",
+    host: "https://standalonecoders.in",
   }
 }

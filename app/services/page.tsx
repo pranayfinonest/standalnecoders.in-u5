@@ -61,6 +61,20 @@ export default function ServicesPage() {
       ],
     },
     {
+      title: "Custom Software Development",
+      description: "Tailored software solutions designed to solve your unique business challenges and drive growth.",
+      icon: <Code className="w-16 h-16 text-blue-600 mb-6" />,
+      link: "/services/custom-software",
+      services: [
+        "Enterprise Applications",
+        "CRM & ERP Systems",
+        "Workflow Automation",
+        "Legacy System Modernization",
+        "Secure Financial Software",
+        "Custom Integrations",
+      ],
+    },
+    {
       title: "Quality Assurance & Testing",
       description: "Comprehensive testing services to ensure your software meets the highest quality standards.",
       icon: <CheckCircle className="w-16 h-16 text-blue-600 mb-6" />,

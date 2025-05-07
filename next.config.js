@@ -17,9 +17,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Add redirects for problematic routes
+  // Add redirects for problematic routes and common missing pages
   async redirects() {
     return [
+      // Fix auth routes
       {
         source: "/auth/forgot-password",
         destination: "/password-reset",
@@ -29,6 +30,62 @@ const nextConfig = {
         source: "/auth/forgot-password-static",
         destination: "/password-reset",
         permanent: false,
+      },
+      // Common misspellings and old URLs
+      {
+        source: "/service/:path*",
+        destination: "/services/:path*",
+        permanent: true,
+      },
+      {
+        source: "/about-us",
+        destination: "/about",
+        permanent: true,
+      },
+      {
+        source: "/contact-us",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
+        source: "/projects",
+        destination: "/portfolio",
+        permanent: true,
+      },
+      {
+        source: "/web-development",
+        destination: "/services/website-development",
+        permanent: true,
+      },
+      {
+        source: "/digital-marketing",
+        destination: "/services/digital-marketing",
+        permanent: true,
+      },
+      {
+        source: "/cyber-security",
+        destination: "/services/cybersecurity",
+        permanent: true,
+      },
+      {
+        source: "/ai-solutions",
+        destination: "/services/ai-technology",
+        permanent: true,
+      },
+      {
+        source: "/services/custom-software-development",
+        destination: "/services/custom-software",
+        permanent: true,
+      },
+      {
+        source: "/custom-software",
+        destination: "/services/custom-software",
+        permanent: true,
+      },
+      {
+        source: "/custom-software-development",
+        destination: "/services/custom-software",
+        permanent: true,
       },
     ]
   },

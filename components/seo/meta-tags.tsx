@@ -2,6 +2,7 @@
 
 import Head from "next/head"
 import { usePathname } from "next/navigation"
+import { Suspense } from "react"
 
 interface MetaTagsProps {
   title?: string
@@ -17,10 +18,10 @@ interface MetaTagsProps {
   twitterHandle?: string
 }
 
-export default function MetaTags({
+function MetaTagsContent({
   title = "StandaloneCoders.in | Cybersecurity, AI & Digital Solutions",
-  description = "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations.",
-  keywords = "web development, cybersecurity, AI solutions, digital marketing, technology services",
+  description = "Professional cybersecurity, AI, digital marketing, and technology solutions for businesses and organizations across Rajasthan.",
+  keywords = "web development, cybersecurity, AI solutions, digital marketing, technology services, Rajasthan, Jaipur",
   ogImage = "https://standalonecoders.in/og-image.jpg",
   ogType = "website",
   canonicalUrl,
@@ -51,6 +52,7 @@ export default function MetaTags({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:site_name" content="StandaloneCoders.in" content={ogImage} />
       <meta property="og:site_name" content="StandaloneCoders.in" />
       <meta property="og:locale" content="en_US" />
       {publishedTime && <meta property="article:published_time" content={publishedTime} />}
@@ -69,5 +71,13 @@ export default function MetaTags({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       )}
     </Head>
+  )
+}
+
+export default function MetaTags(props: MetaTagsProps) {
+  return (
+    <Suspense fallback={null}>
+      <MetaTagsContent {...props} />
+    </Suspense>
   )
 }

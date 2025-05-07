@@ -1,13 +1,10 @@
 User-agent: *
 Allow: /
 
-# Disallow admin and API routes
+# Disallow admin and dashboard areas
 Disallow: /admin/
-Disallow: /api/
 Disallow: /dashboard/
+Disallow: /api/
 
 # Sitemap location
 Sitemap: https://standalonecoders.in/sitemap.xml
-
-# Crawl delay to prevent server overload
-Crawl-delay: 1

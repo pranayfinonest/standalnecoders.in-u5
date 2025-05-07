@@ -1,100 +1,95 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import CityLandingPage from "@/components/city-landing-page"
-import rajasthanCities from "@/data/rajasthan-cities"
+import CityServicePage from "@/components/seo/city-service-page"
 
-interface ServiceCityPageProps {
-  params: {
-    service: string
-    city: string
-  }
+// Define valid services and cities
+const validServices = {
+  "website-development": {
+    title: "Website Development",
+    description: "Custom website development and design",
+  },
+  cybersecurity: {
+    title: "Cybersecurity",
+    description: "Comprehensive cybersecurity solutions",
+  },
+  "digital-marketing": {
+    title: "Digital Marketing",
+    description: "Result-driven digital marketing strategies",
+  },
+  "ai-technology": {
+    title: "AI Technology",
+    description: "Innovative artificial intelligence solutions",
+  },
+  "creative-services": {
+    title: "Creative Services",
+    description: "Professional creative and design services",
+  },
+  "custom-software": {
+    title: "Custom Software Development",
+    description: "Tailored software solutions for your business",
+  },
 }
 
-// Define the services we offer
-const validServices = [
-  "website-development",
-  "app-development",
-  "digital-marketing",
-  "ai-technology",
-  "cybersecurity",
-  "creative-services",
-]
+const validCities = ["jaipur", "udaipur", "jodhpur", "kota", "ajmer", "bikaner", "alwar", "bharatpur", "sikar", "pali"]
 
-// Generate metadata dynamically
-export async function generateMetadata({ params }: ServiceCityPageProps): Promise<Metadata> {
+// Generate metadata for the page
+export async function generateMetadata({
+  params,
+}: {
+  params: { service: string; city: string }
+}): Promise<Metadata> {
   const { service, city } = params
 
-  // Format the service name for display
-  const formattedService = service
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
+  // Check if service and city are valid
+  if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
+    return {
+      title: "Page Not Found | StandaloneCoders",
+      description: "The requested page could not be found.",
+    }
+  }
 
-  // Format the city name for display
-  const formattedCity = city
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
+  const serviceInfo = validServices[service as keyof typeof validServices]
+  const cityName = city.charAt(0).toUpperCase() + city.slice(1)
 
   return {
-    title: `${formattedService} in ${formattedCity}, Rajasthan | StandaloneCoders`,
-    description: `Professional ${formattedService.toLowerCase()} services in ${formattedCity}, Rajasthan. StandaloneCoders offers custom solutions for businesses of all sizes. Contact us for a free consultation.`,
-    keywords: `${formattedService.toLowerCase()}, ${formattedCity}, Rajasthan, web development, app development, digital marketing, technology services, software development, IT company`,
+    title: `${serviceInfo.title} in ${cityName}, Rajasthan | StandaloneCoders`,
+    description: `Professional ${serviceInfo.description.toLowerCase()} services in ${cityName}, Rajasthan. Contact StandaloneCoders for expert solutions tailored to your business needs.`,
+    keywords: `${serviceInfo.title.toLowerCase()}, ${cityName}, Rajasthan, ${serviceInfo.description.toLowerCase()}, StandaloneCoders, technology services`,
+    alternates: {
+      canonical: `https://standalonecoders.in/services/${service}/${city}`,
+    },
   }
 }
 
-// Generate static paths for all service-city combinations
+// Generate static params for all valid service-city combinations
 export async function generateStaticParams() {
-  const paths: { service: string; city: string }[] = []
+  const params = []
 
-  validServices.forEach((service) => {
-    rajasthanCities.forEach((city) => {
-      paths.push({
-        service,
-        city: city.toLowerCase().replace(/\s+/g, "-"),
-      })
-    })
-  })
+  for (const service of Object.keys(validServices)) {
+    for (const city of validCities) {
+      params.push({ service, city })
+    }
+  }
 
-  return paths
+  return params
 }
 
-export default function ServiceCityPage({ params }: ServiceCityPageProps) {
+export default function ServiceCityPage({ params }: { params: { service: string; city: string } }) {
   const { service, city } = params
 
-  // Check if the service is valid
-  if (!validServices.includes(service)) {
-    return notFound()
+  // Check if service and city are valid
+  if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
+    notFound()
   }
 
-  // Check if the city is valid (case-insensitive)
-  const formattedCity = city
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
+  const serviceInfo = validServices[service as keyof typeof validServices]
 
-  if (!rajasthanCities.map((c) => c.toLowerCase()).includes(formattedCity.toLowerCase())) {
-    return notFound()
-  }
-
-  // Format the service name for display
-  const formattedService = service
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-
-  // Generate primary keywords based on service and city
-  const primaryKeywords = [
-    `${formattedService} in ${formattedCity}`,
-    `${formattedService} company ${formattedCity}`,
-    `best ${formattedService.toLowerCase()} services in ${formattedCity}`,
-    `affordable ${formattedService.toLowerCase()} ${formattedCity}`,
-    `${formattedService.toLowerCase()} agency near me`,
-    `top ${formattedService.toLowerCase()} company in Rajasthan`,
-    `professional ${formattedService.toLowerCase()} services`,
-    `${formattedCity} ${formattedService.toLowerCase()} experts`,
-    `custom ${formattedService.toLowerCase()} solutions ${formattedCity}`,
-  ]
-
-  return <CityLandingPage city={formattedCity} primaryKeywords={primaryKeywords} />
+  return (
+    <CityServicePage
+      city={city}
+      service={service}
+      serviceTitle={serviceInfo.title}
+      serviceDescription={serviceInfo.description}
+    />
+  )
 }
