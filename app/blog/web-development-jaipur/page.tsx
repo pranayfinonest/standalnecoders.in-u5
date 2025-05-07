@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     "web development Jaipur, website design Jaipur, web developers in Jaipur, Jaipur web development company, affordable web development Rajasthan",
 }
 
+// Force static rendering for this page
+export const dynamic = "force-static"
+
 export default function WebDevelopmentJaipurPage() {
   const primaryKeywords = [
     "web development Jaipur",
