@@ -87,8 +87,22 @@ const nextConfig = {
         destination: "/services/custom-software",
         permanent: true,
       },
+      // Redirect 404 page to static version
+      {
+        source: "/404",
+        destination: "/404.html",
+        permanent: false,
+      },
     ]
   },
+  // Disable problematic features
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
+  // Disable built-in not-found page
+  output: "export",
+  // Ensure static HTML fallback for 404
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
