@@ -1,21 +1,14 @@
 import { Suspense } from "react"
-import SEODashboardContent from "@/components/seo/seo-dashboard-content"
+import SEODashboardContentClient from "@/components/seo/seo-dashboard-content-client"
 
 export const dynamic = "force-static"
 
-export default function SEOPage() {
+export default function SEODashboardPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-12 flex justify-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
-        </div>
-      }
-    >
-      <SEODashboardContent />
-    </Suspense>
+    <div className="container mx-auto px-4 py-8">
+      <Suspense fallback={<div>Loading SEO dashboard...</div>}>
+        <SEODashboardContentClient />
+      </Suspense>
+    </div>
   )
 }

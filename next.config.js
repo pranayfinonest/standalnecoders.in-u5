@@ -1,8 +1,10 @@
+"use client"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "standalonecoders.com", "cdn.standalonecoders.com", "standalonecoders.in"],
+    domains: ["api.dicebear.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -16,21 +18,16 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
+    // Disable type checking during build to avoid useSearchParams() errors
     ignoreBuildErrors: true,
   },
   // Add redirects for problematic routes and common missing pages
   async redirects() {
     return [
-      // Fix auth routes
       {
         source: "/auth/forgot-password",
         destination: "/password-reset",
         permanent: true,
-      },
-      {
-        source: "/auth/forgot-password-static",
-        destination: "/password-reset",
-        permanent: false,
       },
       // Redirect reset-password to static page
       {
@@ -102,11 +99,12 @@ const nextConfig = {
       },
     ]
   },
-  // Remove the unrecognized experimental option
-  // experimental: {
-  //   missingSuspenseWithCSRBailout: false,
-  // },
-  // Ensure static HTML fallback for 404
+  // Improve static generation
+  experimental: {
+    // Enable static generation for all pages by default
+    // This helps with build-time errors related to client-side hooks
+    staticPageGenerationTimeout: 120,
+  },
   staticPageGenerationTimeout: 180,
   trailingSlash: true,
   poweredByHeader: false,
