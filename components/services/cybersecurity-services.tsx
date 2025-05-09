@@ -174,7 +174,7 @@ export default function CybersecurityServicesPage() {
               size="default"
               variant="outline"
               asChild
-              className="w-full sm:w-auto border-white text-white hover:bg-white/10"
+              className="w-full sm:w-auto border-2 border-white bg-blue-800/50 text-white hover:bg-white/20 font-bold"
             >
               <Link href="#cybersecurity-services">Explore Services</Link>
             </Button>
@@ -336,7 +336,7 @@ export default function CybersecurityServicesPage() {
             asChild
             size="default"
             variant="outline"
-            className="w-full sm:w-auto border-white text-white hover:bg-white/10"
+            className="w-full sm:w-auto border-2 border-white bg-blue-800/50 text-white hover:bg-white/20 font-bold"
           >
             <Link href="/services">View All Services</Link>
           </Button>
