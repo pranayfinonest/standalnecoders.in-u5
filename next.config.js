@@ -101,8 +101,11 @@ const nextConfig = {
   },
   // Improve static generation
   experimental: {
-    // Enable server actions
-    serverActions: true,
+    // Enable server actions with proper configuration
+    serverActions: {
+      allowedOrigins: ["localhost:3000", "standalonecoders.com"],
+      bodySizeLimit: "2mb",
+    },
   },
   staticPageGenerationTimeout: 180,
   trailingSlash: true,
