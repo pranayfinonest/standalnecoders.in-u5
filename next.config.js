@@ -103,13 +103,27 @@ const nextConfig = {
   experimental: {
     // Enable server actions with proper configuration
     serverActions: {
-      allowedOrigins: ["localhost:3000", "standalonecoders.com"],
+      allowedOrigins: ["localhost:3000", "standalone-coders.vercel.app"],
       bodySizeLimit: "2mb",
     },
   },
   staticPageGenerationTimeout: 180,
   trailingSlash: true,
   poweredByHeader: false,
+  output: "standalone",
+  async headers() {
+    return [
+      {
+        source: "/case-studies/:path*",
+        headers: [
+          {
+            key: "x-nextjs-skip-trailing-slash-redirect",
+            value: "true",
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

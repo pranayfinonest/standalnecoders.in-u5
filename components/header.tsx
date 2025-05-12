@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/contexts/auth-context"
 import UserProfileDropdown from "@/components/auth/user-profile-dropdown"
 import UserProfileSidebar from "@/components/auth/user-profile-sidebar"
+import SpecialOffersMarquee from "@/components/special-offers-marquee-enhanced"
 
 export default function Header() {
   const { user } = useAuth()
@@ -78,6 +79,9 @@ export default function Header() {
         scrolled ? "bg-white/95 backdrop-blur-sm shadow-md" : "bg-white"
       }`}
     >
+      {/* Special Offers Marquee */}
+      <SpecialOffersMarquee />
+
       <div className="container-custom py-3 md:py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center z-10" onClick={handleLinkClick}>
           <div className="logo-3d-container">
