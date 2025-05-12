@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import Link from "next/link"
 import { CheckCircle, XCircle } from "lucide-react"
 
-export default function VerifyClient() {
+export default function VerifyTokenClient() {
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
   const email = searchParams.get("email")
