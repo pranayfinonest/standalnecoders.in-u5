@@ -1,5 +1,7 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import QueryComponent from "@/components/QueryComponent"
 import CityServicePage from "@/components/seo/city-service-page"
 import { CYBERSECURITY_SUBPATHS } from "@/utils/route-utils"
 
@@ -41,22 +43,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { service, city } = params
 
-  // Check if this is the main cybersecurity page - if so, return early to avoid conflicts
-  if (service === "cybersecurity" && !city) {
-    return {
-      title: "Cybersecurity Services | StandaloneCoders",
-      description: "Comprehensive cybersecurity solutions to protect your business from evolving digital threats.",
-    }
-  }
-
-  // Check if this is a cybersecurity subpath - if so, return early to avoid conflicts
-  if (service === "cybersecurity" && CYBERSECURITY_SUBPATHS.includes(city)) {
-    return {
-      title: "Not Found",
-      description: "This page could not be found.",
-    }
-  }
-
   // Check if service and city are valid
   if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
     return {
@@ -78,59 +64,47 @@ export async function generateMetadata({
   }
 }
 
-// Generate static params for all valid service-city combinations
-export async function generateStaticParams() {
-  const params = []
-
-  for (const service of Object.keys(validServices)) {
-    // Skip generating cybersecurity/* paths as they have their own specific routes
-    if (service === "cybersecurity") continue
-
-    for (const city of validCities) {
-      params.push({ service, city })
-    }
-  }
-
-  return params
-}
+// Disable static generation for this page to prevent build errors with useSearchParams
+export const dynamic = "force-dynamic"
 
 export default function ServiceCityPage({ params }: { params: { service: string; city: string } }) {
   const { service, city } = params
 
-  // Special handling for main cybersecurity page
-  if (service === "cybersecurity" && !city) {
-    notFound()
-    return null // Add this to satisfy TypeScript
-  }
-
   // Special handling for cybersecurity subpaths
   if (service === "cybersecurity" && CYBERSECURITY_SUBPATHS.includes(city)) {
-    // This is a cybersecurity subservice path, not a city path
-    // Return notFound() to let Next.js handle it with the appropriate route
     notFound()
-    return null // Add this to satisfy TypeScript
+    return null
   }
 
   // Check if service and city are valid
-  if (!validServices[service as keyof typeof validServices]) {
+  if (!validServices[service as keyof typeof validServices] || !validCities.includes(city)) {
     notFound()
-    return null // Add this to satisfy TypeScript
-  }
-
-  if (!validCities.includes(city)) {
-    // This might be a direct service page without a city
-    notFound()
-    return null // Add this to satisfy TypeScript
+    return null
   }
 
   const serviceInfo = validServices[service as keyof typeof validServices]
 
   return (
-    <CityServicePage
-      city={city}
-      service={service}
-      serviceTitle={serviceInfo.title}
-      serviceDescription={serviceInfo.description}
-    />
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">
+        {serviceInfo.title} in {city.charAt(0).toUpperCase() + city.slice(1)}
+      </h1>
+
+      {/* Client component with useSearchParams wrapped in Suspense */}
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        <h2 className="text-xl font-semibold mb-2">Referral Information</h2>
+        <Suspense fallback={<p className="text-gray-500">Loading referral information...</p>}>
+          <QueryComponent />
+        </Suspense>
+      </div>
+
+      {/* Main content */}
+      <CityServicePage
+        city={city}
+        service={service}
+        serviceTitle={serviceInfo.title}
+        serviceDescription={serviceInfo.description}
+      />
+    </div>
   )
 }
