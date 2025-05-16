@@ -1,273 +1,227 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import type { Session, User } from "@supabase/supabase-js"
-import { createClientSupabaseClient } from "@/utils/supabase"
+import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+
+// Define User type based on Nhost user structure
+type User = {
+  id: string
+  email: string
+  displayName?: string
+  metadata?: {
+    name?: string
+    avatar_url?: string
+  }
+}
 
 type AuthContextType = {
   user: User | null
-  session: Session | null
   isLoading: boolean
-  signUp: (
-    email: string,
-    password: string,
-    metadata?: { name?: string },
-  ) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
-  signIn: (
-    email: string,
-    password: string,
-  ) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
-  verifyOtp: (
-    email: string,
-    token: string,
-    type: "signup" | "recovery" | "invite",
-  ) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
-  resendOtp: (
-    email: string,
-    type: "signup" | "recovery" | "invite",
-  ) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
+  isAuthenticated: boolean
+  signIn: (email: string, password: string) => Promise<{ error: Error | null; success: boolean }>
+  signUp: (email: string, password: string, metadata?: any) => Promise<{ error: Error | null; success: boolean }>
   signOut: () => Promise<void>
   refreshSession: () => Promise<void>
-  forgotPassword: (email: string) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
-  resetPassword: (password: string) => Promise<{
-    error: Error | null
-    success: boolean
-  }>
+  verifyOtp: (email: string, token: string, type: string) => Promise<{ error: Error | null; success: boolean }>
+  resendOtp: (email: string, type: string) => Promise<{ error: Error | null; success: boolean }>
+  forgotPassword: (email: string) => Promise<{ error: Error | null; success: boolean }>
+  resetPassword: (password: string, token: string) => Promise<{ error: Error | null; success: boolean }>
+  session: any
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const supabase = createClientSupabaseClient()
+
+  // Function to fetch user data from Nhost
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("/api/auth/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        const userData = await response.json()
+        setUser(userData)
+        return true
+      } else {
+        setUser(null)
+        return false
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error)
+      setUser(null)
+      return false
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-    if (!supabase) {
-      console.error("Supabase client not initialized")
-      setIsLoading(false)
-      return
-    }
-
-    // Get initial session
-    const initializeAuth = async () => {
-      setIsLoading(true)
-      try {
-        const { data, error } = await supabase.auth.getSession()
-
-        if (error) {
-          console.error("Error getting session:", error)
-          return
-        }
-
-        setSession(data.session)
-        setUser(data.session?.user || null)
-
-        // Set up auth state change listener
-        const { data: authListener } = supabase.auth.onAuthStateChange((event, newSession) => {
-          console.log(`Auth state changed: ${event}`)
-          setSession(newSession)
-          setUser(newSession?.user || null)
-          router.refresh()
-        })
-
-        return () => {
-          authListener.subscription.unsubscribe()
-        }
-      } catch (error) {
-        console.error("Error initializing auth:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    initializeAuth()
-  }, [supabase, router])
-
-  const signUp = async (email: string, password: string, metadata?: { name?: string }) => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: metadata,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      })
-
-      if (error) throw error
-
-      return { error: null, success: true }
-    } catch (error) {
-      console.error("Error signing up:", error)
-      return { error: error as Error, success: false }
-    }
-  }
+    fetchUserData()
+  }, [])
 
   const signIn = async (email: string, password: string) => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
     try {
-      console.log("Attempting to sign in with:", { email })
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        console.error("Supabase auth error:", error)
-        throw error
-      }
-
-      console.log("Sign in successful:", data)
-      return { error: null, success: true }
-    } catch (error) {
-      console.error("Error signing in:", error)
-      return { error: error as Error, success: false }
-    }
-  }
-
-  const verifyOtp = async (email: string, token: string, type: "signup" | "recovery" | "invite") => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
-    try {
-      console.log(`Verifying OTP for ${email} with type ${type}`)
-      const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token,
-        type,
-      })
-
-      if (error) {
-        console.error("OTP verification error:", error)
-        throw error
-      }
-
-      console.log("OTP verification successful:", data)
-      return { error: null, success: true }
-    } catch (error) {
-      console.error("Error verifying OTP:", error)
-      return { error: error as Error, success: false }
-    }
-  }
-
-  const resendOtp = async (email: string, type: "signup" | "recovery" | "invite") => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
-    try {
-      console.log(`Resending OTP for ${email} with type ${type}`)
-      const { data, error } = await supabase.auth.resend({
-        type,
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+      setIsLoading(true)
+      const response = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ email, password }),
       })
 
-      if (error) {
-        console.error("OTP resend error:", error)
-        throw error
+      if (response.ok) {
+        await fetchUserData()
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "Sign in failed"), success: false }
       }
-
-      console.log("OTP resend successful")
-      return { error: null, success: true }
     } catch (error) {
-      console.error("Error resending OTP:", error)
+      console.error("Sign in error:", error)
       return { error: error as Error, success: false }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const signUp = async (email: string, password: string, metadata?: any) => {
+    try {
+      setIsLoading(true)
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, metadata }),
+      })
+
+      if (response.ok) {
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "Sign up failed"), success: false }
+      }
+    } catch (error) {
+      console.error("Sign up error:", error)
+      return { error: error as Error, success: false }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const signOut = async () => {
-    if (!supabase) return
-
     try {
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error("Error signing out:", error)
-        return
-      }
-      router.push("/auth/login")
+      await fetch("/api/auth/signout", {
+        method: "POST",
+        credentials: "include",
+      })
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Sign out error:", error)
+    } finally {
+      setUser(null)
+      router.push("/auth/login")
     }
   }
 
   const refreshSession = async () => {
-    if (!supabase) return
-
-    try {
-      const { data, error } = await supabase.auth.getSession()
-      if (error) {
-        console.error("Error refreshing session:", error)
-        return
-      }
-      setSession(data.session)
-      setUser(data.session?.user || null)
-    } catch (error) {
-      console.error("Error refreshing session:", error)
-    }
+    await fetchUserData()
   }
 
-  const forgotPassword = async (email: string) => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
+  const verifyOtp = async (email: string, token: string, type: string) => {
     try {
-      console.log("Requesting password reset OTP for:", email)
-
-      // For OTP-based password reset, we use the resend method with type 'recovery'
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        // We're not using redirectTo here since we're handling OTP verification in our app
+      const response = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, token, type }),
       })
 
-      if (error) {
-        console.error("Password reset request error:", error)
-        throw error
+      if (response.ok) {
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "OTP verification failed"), success: false }
       }
-
-      return { error: null, success: true }
     } catch (error) {
-      console.error("Error sending password reset email:", error)
+      console.error("OTP verification error:", error)
       return { error: error as Error, success: false }
     }
   }
 
-  const resetPassword = async (password: string) => {
-    if (!supabase) return { error: new Error("Supabase client not initialized"), success: false }
-
+  const resendOtp = async (email: string, type: string) => {
     try {
-      console.log("Attempting to reset password")
-      const { error } = await supabase.auth.updateUser({
-        password,
+      const response = await fetch("/api/auth/resend-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, type }),
       })
 
-      if (error) {
-        console.error("Password update error:", error)
-        throw error
+      if (response.ok) {
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "Failed to resend OTP"), success: false }
       }
-
-      return { error: null, success: true }
     } catch (error) {
-      console.error("Error resetting password:", error)
+      console.error("Resend OTP error:", error)
+      return { error: error as Error, success: false }
+    }
+  }
+
+  const forgotPassword = async (email: string) => {
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      if (response.ok) {
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "Password reset request failed"), success: false }
+      }
+    } catch (error) {
+      console.error("Forgot password error:", error)
+      return { error: error as Error, success: false }
+    }
+  }
+
+  const resetPassword = async (password: string, token: string) => {
+    try {
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password, token }),
+      })
+
+      if (response.ok) {
+        return { error: null, success: true }
+      } else {
+        const errorData = await response.json()
+        return { error: new Error(errorData.message || "Password reset failed"), success: false }
+      }
+    } catch (error) {
+      console.error("Reset password error:", error)
       return { error: error as Error, success: false }
     }
   }
@@ -276,16 +230,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        session,
         isLoading,
-        signUp,
+        isAuthenticated: !!user,
         signIn,
-        verifyOtp,
-        resendOtp,
+        signUp,
         signOut,
         refreshSession,
+        verifyOtp,
+        resendOtp,
         forgotPassword,
         resetPassword,
+        session: user ? { user } : null,
       }}
     >
       {children}

@@ -1,7 +1,5 @@
-import { Suspense } from "react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import QueryComponent from "@/components/QueryComponent"
 import CityServicePage from "@/components/seo/city-service-page"
 import { CYBERSECURITY_SUBPATHS } from "@/utils/route-utils"
 
@@ -64,11 +62,16 @@ export async function generateMetadata({
   }
 }
 
-// Disable static generation for this page to prevent build errors with useSearchParams
-export const dynamic = "force-dynamic"
-
-export default function ServiceCityPage({ params }: { params: { service: string; city: string } }) {
+// The page component now receives both params and searchParams
+export default function ServiceCityPage({
+  params,
+  searchParams,
+}: {
+  params: { service: string; city: string }
+  searchParams: { ref?: string }
+}) {
   const { service, city } = params
+  const referralCode = searchParams.ref || ""
 
   // Special handling for cybersecurity subpaths
   if (service === "cybersecurity" && CYBERSECURITY_SUBPATHS.includes(city)) {
@@ -83,19 +86,24 @@ export default function ServiceCityPage({ params }: { params: { service: string;
   }
 
   const serviceInfo = validServices[service as keyof typeof validServices]
+  const cityName = city.charAt(0).toUpperCase() + city.slice(1)
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">
-        {serviceInfo.title} in {city.charAt(0).toUpperCase() + city.slice(1)}
+        {serviceInfo.title} in {cityName}
       </h1>
 
-      {/* Client component with useSearchParams wrapped in Suspense */}
+      {/* Referral information - now using searchParams directly */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h2 className="text-xl font-semibold mb-2">Referral Information</h2>
-        <Suspense fallback={<p className="text-gray-500">Loading referral information...</p>}>
-          <QueryComponent />
-        </Suspense>
+        {referralCode ? (
+          <p>
+            Referral Code: <strong>{referralCode}</strong>
+          </p>
+        ) : (
+          <p>No referral code found.</p>
+        )}
       </div>
 
       {/* Main content */}
