@@ -1,25 +1,14 @@
-import { NhostClient } from "@nhost/nhost-js"
 import { cookies } from "next/headers"
+import { NhostClient } from "@nhost/nhost-js"
 
-export function createServerNhostClient() {
-  const nhostClient = new NhostClient({
-    backendUrl: process.env.NEXT_PUBLIC_NHOST_BACKEND_URL || "",
+export function getServerNhost() {
+  return new NhostClient({
+    backendUrl: process.env.NEXT_PUBLIC_NHOST_BACKEND_URL ?? "",
+    clientStorageType: "cookie",
+    clientStorage: {
+      setItem: (key, value) => cookies().set(key, value),
+      getItem: (key) => cookies().get(key)?.value ?? null,
+      removeItem: (key) => cookies().delete(key),
+    },
   })
-
-  // Get the refresh token from cookies
-  const cookieStore = cookies()
-  const refreshToken = cookieStore.get("nhostRefreshToken")?.value
-
-  if (refreshToken) {
-    // Set the refresh token in the client
-    nhostClient.auth.setSession({
-      refreshToken,
-    })
-  }
-
-  return nhostClient
-}
-
-export function getServerNhostClient() {
-  return createServerNhostClient()
 }

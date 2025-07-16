@@ -1,26 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-
   images: {
     domains: ["api.dicebear.com"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
     unoptimized: true,
   },
-
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
   async redirects() {
     return [
       { source: "/auth/forgot-password", destination: "/password-reset", permanent: true },
@@ -39,32 +26,22 @@ const nextConfig = {
       { source: "/404", destination: "/404.html", permanent: true },
     ]
   },
-
   experimental: {
     serverActions: {
       allowedOrigins: ["localhost:3000", "standalone-coders.vercel.app"],
       bodySizeLimit: "2mb",
     },
   },
-
   staticPageGenerationTimeout: 180,
   trailingSlash: true,
   poweredByHeader: false,
   output: "standalone",
-
   async headers() {
     return [
       {
         source: "/case-studies/:path*",
-        headers: [
-          {
-            key: "x-nextjs-skip-trailing-slash-redirect",
-            value: "true",
-          },
-        ],
+        headers: [{ key: "x-nextjs-skip-trailing-slash-redirect", value: "true" }],
       },
     ]
   },
 }
-
-export default nextConfig

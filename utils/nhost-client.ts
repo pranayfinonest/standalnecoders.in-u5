@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import nhost from "./nhost"
 
@@ -54,3 +53,5 @@ export function verifyNhostWebhook(signature: string, payload: string): boolean 
 export function createClientNhostClient() {
   return nhost
 }
+
+export { nhost }
