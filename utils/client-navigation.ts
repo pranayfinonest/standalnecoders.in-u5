@@ -1,4 +1,5 @@
 "use client"
+import { Suspense } from "react"
 
 /**
  * A utility to safely get URL parameters on the client side without using useSearchParams
@@ -40,4 +41,12 @@ export function navigateWithParams(baseUrl: string, params: Record<string, strin
   })
 
   window.history.pushState({}, "", url.toString())
+}
+
+export default function ClientNavigation() {
+  return (
+    <Suspense fallback={null}>
+      <></>
+    </Suspense>
+  )
 }

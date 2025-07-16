@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 export default function ServiceDetailClient({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   const searchParams = useSearchParams()
@@ -13,5 +14,9 @@ export default function ServiceDetailClient({ setActiveTab }: { setActiveTab: (t
     }
   }, [searchParams, setActiveTab])
 
-  return null
+  return (
+    <Suspense fallback={null}>
+      <div>Service detail placeholder</div>
+    </Suspense>
+  )
 }

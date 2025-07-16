@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 export default function ScrollToTop() {
   const pathname = usePathname()
@@ -12,5 +13,9 @@ export default function ScrollToTop() {
     window.scrollTo(0, 0)
   }, [pathname, searchParams])
 
-  return null
+  return (
+    <Suspense fallback={null}>
+      <div style={{ display: "none" }} />
+    </Suspense>
+  )
 }

@@ -1,13 +1,7 @@
 "use client"
+import { Suspense } from "react"
+import type React from "react"
 
-import { useSearchParams } from "next/navigation"
-import type { ReactNode } from "react"
-
-interface CaseStudyClientWrapperProps {
-  children: (searchParams: URLSearchParams) => ReactNode
-}
-
-export default function CaseStudyClientWrapper({ children }: CaseStudyClientWrapperProps) {
-  const searchParams = useSearchParams()
-  return <>{children(searchParams)}</>
+export default function CaseStudyWrapper({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={null}>{children}</Suspense>
 }

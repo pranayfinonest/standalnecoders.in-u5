@@ -1,7 +1,6 @@
 "use client"
-
 import type React from "react"
-
+import { Suspense } from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +13,14 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function ResetPasswordForm() {
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordFormComponent />
+    </Suspense>
+  )
+}
+
+function ResetPasswordFormComponent() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)

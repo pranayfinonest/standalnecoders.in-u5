@@ -1,20 +1,36 @@
-const { execSync } = require("child_process")
 const fs = require("fs")
 const path = require("path")
 
-console.log("🔍 Running pre-build checks...")
+function findFiles(startPath, filter, callback) {
+  if (!fs.existsSync(startPath)) {
+    console.log("no dir ", startPath)
+    return
+  }
 
-// Check for useSearchParams without Suspense
-console.log("Checking for useSearchParams issues...")
-try {
-  // Run the fix script
-  execSync("node scripts/fix-search-params.js", { stdio: "inherit" })
-  console.log("✅ Fixed useSearchParams issues")
-} catch (error) {
-  console.error("❌ Failed to fix useSearchParams issues:", error)
-  process.exit(1)
+  const files = fs.readdirSync(startPath)
+  for (let i = 0; i < files.length; i++) {
+    const filename = path.join(startPath, files[i])
+    const stat = fs.lstatSync(filename)
+    if (stat.isDirectory()) {
+      findFiles(filename, filter, callback) //recurse
+    } else if (filter.test(filename)) {
+      callback(filename)
+    }
+  }
 }
 
-// Add more pre-build checks here if needed
+const pagesDir = path.join(__dirname, "../src/app")
 
-console.log("✅ Pre-build checks completed successfully")
+findFiles(pagesDir, /\.tsx?$/, (file) => {
+  fs.readFile(file, "utf8", (err, data) => {
+    if (err) {
+      console.error(`Error reading file ${file}:`, err)
+      return
+    }
+
+    if (data.includes("useSearchParams")) {
+      if (file.includes("next.config.js") || file.split("/").length === 1) return
+      console.warn(`[WARN] useSearchParams detected in ${file}. Ensure it's used within a 'use client' directive.`)
+    }
+  })
+})

@@ -1,5 +1,5 @@
 "use client"
-
+import { Suspense } from "react"
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
@@ -168,7 +168,7 @@ const completePackageFeatures = [
   "Mobile-Friendly Design",
 ]
 
-export default function CustomizeForm() {
+function CustomizeFormComponent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { toast } = useToast()
@@ -1114,5 +1114,13 @@ export default function CustomizeForm() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CustomizeForm() {
+  return (
+    <Suspense fallback={null}>
+      <CustomizeFormComponent />
+    </Suspense>
   )
 }

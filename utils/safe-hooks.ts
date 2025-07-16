@@ -64,3 +64,12 @@ export function getSafeSearchParams(): Record<string, string> {
 
   return paramsObject
 }
+
+/**
+ * Safe way to use state that works during build
+ * @param value - Initial state value
+ * @returns A tuple containing the state value and a no-op function
+ */
+export function useSafeState<T>(value: T) {
+  return [value, () => {}] as const
+}
