@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import nhost from "./nhost"
 
 // Simple client-side utility for Nhost operations
 export function useNhostClient() {
@@ -48,4 +49,8 @@ export function verifyNhostWebhook(signature: string, payload: string): boolean 
   // This should be implemented on the server side
   // Client-side placeholder
   return true
+}
+
+export function createClientNhostClient() {
+  return nhost
 }

@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/utils/supabase-server"
+import { createServerNhostClient } from "@/utils/nhost-server"
 
 export async function getServerSession() {
   const supabase = createServerSupabaseClient()
@@ -14,8 +15,14 @@ export async function getServerSession() {
 }
 
 export async function getServerUser() {
-  const session = await getServerSession()
-  return session?.user || null
+  try {
+    const nhost = createServerNhostClient()
+    const { user } = await nhost.auth.getUser()
+    return user
+  } catch (error) {
+    console.error("Error getting server user:", error)
+    return null
+  }
 }
 
 export async function isAuthenticated() {

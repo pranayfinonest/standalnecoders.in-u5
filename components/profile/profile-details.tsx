@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import type { User } from "@supabase/supabase-js"
+import type { User } from "@nhost/nhost-js"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createClientSupabaseClient } from "@/utils/supabase"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
+import nhost from "@/utils/nhost"
 
 interface ProfileDetailsProps {
   user: User
@@ -17,15 +17,18 @@ interface ProfileDetailsProps {
 export default function ProfileDetails({ user }: ProfileDetailsProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [name, setName] = useState(user.user_metadata?.name || "")
-  const [phone, setPhone] = useState(user.user_metadata?.phone || "")
+  const [name, setName] = useState(user.metadata?.name || "")
+  const [phone, setPhone] = useState(user.metadata?.phone || "")
+  const { toast } = useToast()
 
   const handleSave = async () => {
     setIsLoading(true)
     try {
-      const supabase = createClientSupabaseClient()
-      const { error } = await supabase.auth.updateUser({
-        data: { name, phone },
+      const { error } = await nhost.auth.updateUserMetadata({
+        metadata: {
+          name,
+          phone,
+        },
       })
 
       if (error) throw error

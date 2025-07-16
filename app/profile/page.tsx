@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import { getServerUser } from "@/app/actions/auth"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import ProfileClient from "@/components/profile/profile-client"
+import { createServerNhostClient } from "@/utils/nhost-server"
 
 export const dynamic = "force-dynamic"
 
@@ -15,7 +15,8 @@ export const metadata = {
 
 export default async function ProfilePage() {
   // Get user from server-side session
-  const user = await getServerUser()
+  const nhost = createServerNhostClient()
+  const { user } = await nhost.auth.getUser()
 
   // Redirect if not logged in
   if (!user) {
@@ -24,7 +25,7 @@ export default async function ProfilePage() {
 
   // Get user initials for avatar fallback
   const getInitials = () => {
-    const name = user.user_metadata?.name || user.email || ""
+    const name = user.metadata?.name || user.email || ""
     return name
       .split(" ")
       .map((n) => n[0])
@@ -42,10 +43,10 @@ export default async function ProfilePage() {
         <Card className="md:col-span-1">
           <CardHeader className="text-center">
             <Avatar className="h-24 w-24 mx-auto">
-              <AvatarImage src={user.user_metadata?.avatar_url || ""} alt={user.user_metadata?.name || "User"} />
+              <AvatarImage src={user.metadata?.avatar_url || ""} alt={user.metadata?.name || "User"} />
               <AvatarFallback className="text-xl">{getInitials()}</AvatarFallback>
             </Avatar>
-            <CardTitle className="mt-4">{user.user_metadata?.name || "User"}</CardTitle>
+            <CardTitle className="mt-4">{user.metadata?.name || "User"}</CardTitle>
             <CardDescription className="truncate max-w-full">{user.email}</CardDescription>
           </CardHeader>
           <CardContent>

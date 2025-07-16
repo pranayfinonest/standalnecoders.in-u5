@@ -1,31 +1,40 @@
 "use server"
 
-import { getServerSupabaseClient } from "@/utils/supabase"
+import { createServerNhostClient } from "@/utils/nhost-server"
 
-export async function debugSupabaseConnection() {
+export async function debugNhostConnection() {
   try {
-    const supabase = getServerSupabaseClient()
+    const nhost = createServerNhostClient()
 
-    // Test basic connection
-    const { data: connectionTest, error: connectionError } = await supabase
-      .from("_dummy_query")
-      .select("*")
-      .limit(1)
-      .catch((err) => ({ data: null, error: err }))
+    // Test basic connection with a simple query
+    const { data: connectionTest, error: connectionError } = await nhost.graphql.request(`
+      query TestConnection {
+        __typename
+      }
+    `)
 
-    // Check if todos table exists
-    const { data: tables, error: tablesError } = await supabase
-      .from("information_schema.tables")
-      .select("table_name")
-      .eq("table_schema", "public")
-      .catch((err) => ({ data: null, error: err }))
+    // Check if todos table exists by querying its structure
+    const { data: tablesData, error: tablesError } = await nhost.graphql.request(`
+      query GetTables {
+        __type(name: "todos") {
+          name
+          fields {
+            name
+            type {
+              name
+              kind
+            }
+          }
+        }
+      }
+    `)
 
     return {
       success: true,
-      connectionWorking: !!connectionError, // Ironically, an error means the connection works
-      tables: tables || [],
-      tablesError: tablesError ? `${tablesError.code}: ${tablesError.message}` : null,
-      connectionError: connectionError ? `${connectionError.code}: ${connectionError.message}` : null,
+      connectionWorking: !connectionError,
+      tables: tablesData?.__type?.fields || [],
+      tablesError: tablesError ? `${tablesError.message}` : null,
+      connectionError: connectionError ? `${connectionError.message}` : null,
     }
   } catch (error) {
     return {

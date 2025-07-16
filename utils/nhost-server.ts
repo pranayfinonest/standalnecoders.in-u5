@@ -1,44 +1,25 @@
-import crypto from "crypto"
+import { NhostClient } from "@nhost/nhost-js"
+import { cookies } from "next/headers"
 
-// Verify Nhost webhook signature
-export function verifyNhostWebhook(signature: string, payload: string): boolean {
-  if (!process.env.NHOST_WEBHOOK_SECRET) {
-    console.error("NHOST_WEBHOOK_SECRET is not defined")
-    return false
+export function createServerNhostClient() {
+  const nhostClient = new NhostClient({
+    backendUrl: process.env.NEXT_PUBLIC_NHOST_BACKEND_URL || "",
+  })
+
+  // Get the refresh token from cookies
+  const cookieStore = cookies()
+  const refreshToken = cookieStore.get("nhostRefreshToken")?.value
+
+  if (refreshToken) {
+    // Set the refresh token in the client
+    nhostClient.auth.setSession({
+      refreshToken,
+    })
   }
 
-  const hmac = crypto.createHmac("sha256", process.env.NHOST_WEBHOOK_SECRET)
-  const computedSignature = hmac.update(payload).digest("hex")
-
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature))
+  return nhostClient
 }
 
-// Create a Nhost admin client for server-side operations
-export async function nhostAdminRequest(endpoint: string, method = "GET", body?: any) {
-  if (!process.env.NHOST_ADMIN_SECRET) {
-    throw new Error("NHOST_ADMIN_SECRET is not defined")
-  }
-
-  const url = `${process.env.NEXT_PUBLIC_NHOST_BACKEND_URL}${endpoint}`
-
-  const options: RequestInit = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      "x-hasura-admin-secret": process.env.NHOST_ADMIN_SECRET,
-    },
-  }
-
-  if (body) {
-    options.body = JSON.stringify(body)
-  }
-
-  const response = await fetch(url, options)
-
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(`Nhost admin request failed: ${errorText}`)
-  }
-
-  return response.json()
+export function getServerNhostClient() {
+  return createServerNhostClient()
 }

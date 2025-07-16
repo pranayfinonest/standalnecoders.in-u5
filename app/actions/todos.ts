@@ -1,60 +1,116 @@
 "use server"
 
-import { createServerSupabaseClient } from "@/utils/supabase"
+import { createServerNhostClient } from "@/utils/nhost-server"
 
 export async function getTodos() {
-  const supabase = createServerSupabaseClient()
+  const nhost = createServerNhostClient()
 
-  const { data, error } = await supabase.from("todos").select("*")
+  try {
+    const { data, error } = await nhost.graphql.request(`
+      query GetTodos {
+        todos {
+          id
+          title
+          completed
+          created_at
+        }
+      }
+    `)
 
-  if (error) {
+    if (error) {
+      console.error("Error fetching todos:", error)
+      return { todos: [], error: error.message }
+    }
+
+    return { todos: data?.todos || [], error: null }
+  } catch (error) {
     console.error("Error fetching todos:", error)
-    return { todos: [], error: error.message }
+    return { todos: [], error: error instanceof Error ? error.message : "Unknown error" }
   }
-
-  return { todos: data || [], error: null }
 }
 
 export async function addTodo(formData: FormData) {
-  const supabase = createServerSupabaseClient()
+  const nhost = createServerNhostClient()
   const title = formData.get("title") as string
 
   if (!title?.trim()) {
     return { success: false, error: "Title is required" }
   }
 
-  const { error } = await supabase.from("todos").insert([{ title, completed: false }])
+  try {
+    const { data, error } = await nhost.graphql.request(
+      `
+      mutation AddTodo($title: String!) {
+        insert_todos_one(object: { title: $title, completed: false }) {
+          id
+        }
+      }
+    `,
+      { title },
+    )
 
-  if (error) {
+    if (error) {
+      console.error("Error adding todo:", error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, error: null }
+  } catch (error) {
     console.error("Error adding todo:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
-
-  return { success: true, error: null }
 }
 
 export async function toggleTodo(id: string, completed: boolean) {
-  const supabase = createServerSupabaseClient()
+  const nhost = createServerNhostClient()
 
-  const { error } = await supabase.from("todos").update({ completed }).eq("id", id)
+  try {
+    const { data, error } = await nhost.graphql.request(
+      `
+      mutation ToggleTodo($id: Int!, $completed: Boolean!) {
+        update_todos_by_pk(pk_columns: { id: $id }, _set: { completed: $completed }) {
+          id
+        }
+      }
+    `,
+      { id: Number.parseInt(id), completed: !completed },
+    )
 
-  if (error) {
+    if (error) {
+      console.error("Error updating todo:", error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, error: null }
+  } catch (error) {
     console.error("Error updating todo:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
-
-  return { success: true, error: null }
 }
 
 export async function deleteTodo(id: string) {
-  const supabase = createServerSupabaseClient()
+  const nhost = createServerNhostClient()
 
-  const { error } = await supabase.from("todos").delete().eq("id", id)
+  try {
+    const { data, error } = await nhost.graphql.request(
+      `
+      mutation DeleteTodo($id: Int!) {
+        delete_todos_by_pk(id: $id) {
+          id
+        }
+      }
+    `,
+      { id: Number.parseInt(id) },
+    )
 
-  if (error) {
+    if (error) {
+      console.error("Error deleting todo:", error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, error: null }
+  } catch (error) {
     console.error("Error deleting todo:", error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
-
-  return { success: true, error: null }
 }

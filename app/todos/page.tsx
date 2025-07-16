@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClientSupabaseClient } from "@/utils/supabase"
 import { Loader2, AlertCircle, Plus } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import ProtectedRoute from "@/components/auth/protected-route"
@@ -9,6 +8,7 @@ import UserProfile from "@/components/auth/user-profile"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
+import nhost from "@/utils/nhost"
 
 interface Todo {
   id: number
@@ -33,23 +33,25 @@ export default function TodosPage() {
     const fetchTodos = async () => {
       try {
         setLoading(true)
-        const supabase = createClientSupabaseClient()
 
-        if (!supabase) {
-          throw new Error("Could not initialize Supabase client")
-        }
-
-        const { data, error } = await supabase
-          .from("todos")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
+        const { data, error } = await nhost.graphql.request(`
+          query GetTodos {
+            todos(where: { user_id: { _eq: "${user.id}" } }, order_by: { created_at: desc }) {
+              id
+              title
+              completed
+              description
+              user_id
+              created_at
+            }
+          }
+        `)
 
         if (error) {
-          throw error
+          throw new Error(error.message)
         }
 
-        setTodos(data || [])
+        setTodos(data?.todos || [])
       } catch (err) {
         console.error("Error fetching todos:", err)
         setError(err instanceof Error ? err.message : "Failed to fetch todos")
@@ -65,29 +67,30 @@ export default function TodosPage() {
     if (!newTodo.trim() || !user) return
 
     try {
-      const supabase = createClientSupabaseClient()
-
-      if (!supabase) {
-        throw new Error("Could not initialize Supabase client")
-      }
-
-      const { data, error } = await supabase
-        .from("todos")
-        .insert([
-          {
-            title: newTodo.trim(),
-            completed: false,
-            user_id: user.id,
-          },
-        ])
-        .select()
+      const { data, error } = await nhost.graphql.request(
+        `
+        mutation AddTodo($title: String!, $user_id: uuid!) {
+          insert_todos_one(object: { title: $title, completed: false, user_id: $user_id }) {
+            id
+            title
+            completed
+            user_id
+            created_at
+          }
+        }
+      `,
+        {
+          title: newTodo.trim(),
+          user_id: user.id,
+        },
+      )
 
       if (error) {
-        throw error
+        throw new Error(error.message)
       }
 
-      if (data && data.length > 0) {
-        setTodos([data[0], ...todos])
+      if (data?.insert_todos_one) {
+        setTodos([data.insert_todos_one, ...todos])
         setNewTodo("")
         toast({
           title: "Todo added",
@@ -106,20 +109,23 @@ export default function TodosPage() {
 
   const toggleTodo = async (id: number, completed: boolean) => {
     try {
-      const supabase = createClientSupabaseClient()
-
-      if (!supabase) {
-        throw new Error("Could not initialize Supabase client")
-      }
-
-      const { error } = await supabase
-        .from("todos")
-        .update({ completed: !completed })
-        .eq("id", id)
-        .eq("user_id", user?.id)
+      const { data, error } = await nhost.graphql.request(
+        `
+        mutation ToggleTodo($id: Int!, $completed: Boolean!) {
+          update_todos_by_pk(pk_columns: { id: $id }, _set: { completed: $completed }) {
+            id
+            completed
+          }
+        }
+      `,
+        {
+          id,
+          completed: !completed,
+        },
+      )
 
       if (error) {
-        throw error
+        throw new Error(error.message)
       }
 
       setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !completed } : todo)))
@@ -135,16 +141,19 @@ export default function TodosPage() {
 
   const deleteTodo = async (id: number) => {
     try {
-      const supabase = createClientSupabaseClient()
-
-      if (!supabase) {
-        throw new Error("Could not initialize Supabase client")
-      }
-
-      const { error } = await supabase.from("todos").delete().eq("id", id).eq("user_id", user?.id)
+      const { data, error } = await nhost.graphql.request(
+        `
+        mutation DeleteTodo($id: Int!) {
+          delete_todos_by_pk(id: $id) {
+            id
+          }
+        }
+      `,
+        { id },
+      )
 
       if (error) {
-        throw error
+        throw new Error(error.message)
       }
 
       setTodos(todos.filter((todo) => todo.id !== id))
